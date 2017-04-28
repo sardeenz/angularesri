@@ -1,8 +1,8 @@
 - This is a sample angular-cli app that uses angular 4 and material and esri map
 
 - install material
-npm install --save @angular/material
-npm install --save @angular/animations
+```npm install --save @angular/material
+npm install --save @angular/animations```
 
 - import in app.module.ts
 import {MdButtonModule, MdCheckboxModule} from '@angular/material';

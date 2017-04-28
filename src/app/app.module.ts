@@ -5,16 +5,29 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
+// for angular material
+import {MdButtonModule, MdCheckboxModule} from '@angular/material';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MaterialModule} from '@angular/material';
+import { EsriMapComponent } from './esri-map/esri-map.component';
+
+import { EsriLoaderService } from 'angular2-esri-loader';
+
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    EsriMapComponent
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    MdButtonModule,
+    MdCheckboxModule,
+    MaterialModule.forRoot(),
   ],
-  providers: [],
+  providers: [EsriLoaderService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

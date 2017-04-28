@@ -1,3 +1,28 @@
+npm install --save @angular/material
+npm install --save @angular/animations
+
+- import in app.module.ts
+import {MdButtonModule, MdCheckboxModule} from '@angular/material';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
+import {MaterialModule} from '@angular/material';
+```
+  imports: [
+    BrowserModule,
+    BrowserAnimationsModule,
+    FormsModule,
+    HttpModule,
+    MdButtonModule,
+    MdCheckboxModule,
+    MaterialModule.forRoot(),
+  ],
+```
+
+- add to styles.css
+@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+
+- inside index.html (after favicon)
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
 # Servicerequest
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0.

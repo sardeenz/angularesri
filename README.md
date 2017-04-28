@@ -18,10 +18,14 @@ import {MaterialModule} from '@angular/material';
 ```
 
 - add to styles.css
-@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";
+`@import "../node_modules/@angular/material/prebuilt-themes/indigo-pink.css";`
 
 - inside index.html (after favicon)
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+`<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">`
+
+- add the map
+https://gist.github.com/tomwayson/e6260adfd56c2529313936528b8adacd
+
 
 # Servicerequest
 

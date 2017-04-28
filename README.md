@@ -1,3 +1,6 @@
+- This is a sample angular-cli app that uses angular 4 and material and esri map
+
+- install material
 npm install --save @angular/material
 npm install --save @angular/animations
 

@@ -35,7 +35,8 @@ export class EsriMapComponent implements OnInit {
         MapView
       ]) => {
         const mapProperties: any = {
-          basemap: 'hybrid'
+          //basemap: 'hybrid'
+          basemap: 'streets-navigation-vector'
         };
 
         const map: any = new Map(mapProperties);

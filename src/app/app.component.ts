@@ -19,6 +19,17 @@ export class AppComponent implements OnInit {
         console.log(f);
     }
 
+  // public addressSelected(address) {
+  //       if (address) {
+  //           view.goTo({
+  //               center: [address.geometry.x, address.geometry.y],
+  //               zoom: 17
+  //           });
+  //           self.data.address = self.selectedAddress.attributes.ADDRESS;
+  //           self.addAddressToMap(address);
+  //       }
+  //   };  
+
   ngOnInit() {
       this.user = {
         firstname: '',
@@ -27,7 +38,7 @@ export class AppComponent implements OnInit {
         phone: '',
         requestType: [this.requestType[0].value],
         comments: ''
-    }
-    }
+    };
+  }
 
 }

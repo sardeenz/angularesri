@@ -8,17 +8,62 @@ import { EsriLoaderService } from 'angular2-esri-loader';
   templateUrl: './esri-map.component.html',
   styleUrls: ['./esri-map.component.css']
 })
+
 export class EsriMapComponent implements OnInit {
+    options: { zoom: number; };
 
   // for JSAPI 4.x you can use the "any for TS types
   public mapView: any;
+  public point: any;
 
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
+  
+
   constructor(
     private esriLoader: EsriLoaderService
   ) { }
+
+    public gotoView() {
+
+         this.esriLoader.load({
+      // use a specific version of the JSAPI
+      url: 'https://js.arcgis.com/4.3/'
+    }).then(() => {
+      // load the needed Map and MapView modules from the JSAPI
+      this.esriLoader.loadModules([
+        'esri/geometry/Point',
+        'esri/geometry/SpatialReference'
+      ]).then(([
+        Point,
+        SpatialReference
+      ]) => {
+        const mapProperties: any = {
+          basemap: 'hybrid'
+        };
+
+        this.point = new Point({
+                longitude: -84.3852995,
+                latitude: 33.7678835,
+                spatialReference: SpatialReference.WGS84,
+                zoom: 1
+            });
+
+        this.options = {
+                zoom: 1
+            };
+        
+        this.mapView.goTo(this.point, this.options);
+      console.log('this.point', this.point);
+      console.log('this.point', this.options);
+
+      
+    });
+      });
+
+      
+  }
 
   public ngOnInit() {
     // only load the ArcGIS API for JavaScript when this component is loaded
@@ -29,14 +74,17 @@ export class EsriMapComponent implements OnInit {
       // load the needed Map and MapView modules from the JSAPI
       this.esriLoader.loadModules([
         'esri/Map',
-        'esri/views/MapView'
+        'esri/views/MapView',
+        'esri/geometry/Point',
+        'esri/geometry/SpatialReference'
       ]).then(([
         Map,
-        MapView
+        MapView,
+        Point,
+        SpatialReference
       ]) => {
         const mapProperties: any = {
-          //basemap: 'hybrid'
-          basemap: 'streets-navigation-vector'
+          basemap: 'hybrid'
         };
 
         const map: any = new Map(mapProperties);
@@ -51,6 +99,17 @@ export class EsriMapComponent implements OnInit {
         };
 
         this.mapView = new MapView(mapViewProperties);
+
+        // this.point = new Point({
+        //         longitude: -84.3852995,
+        //         latitude: 34.7678835,
+        //         spatialReference: SpatialReference.WGS84
+        //     });
+
+        // this.options = {
+        //         zoom: 5
+        //     };
+
       });
     });
   }

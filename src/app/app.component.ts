@@ -28,7 +28,8 @@ export class AppComponent implements OnInit {
 
   public save(isValid: boolean, f: User) {
         console.log(f);
-        this.esriMapComponent.gotoView();
+        console.log(this.user.address);
+        this.esriMapComponent.gotoView(this.user.address);
             //this.map = this.mapViewEl.nativeElement;
             // console.log("is loaded?", this.esriLoaderService);
             
@@ -41,7 +42,7 @@ export class AppComponent implements OnInit {
       this.user = {
         firstname: '',
         lastname: '',
-        address: '1413 Scales St. Raleigh, NC 27608',
+        address: '1413 Scales St',
         phone: '',
         requestType: [this.requestType[0].value],
         comments: ''

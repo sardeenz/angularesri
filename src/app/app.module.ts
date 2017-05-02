@@ -11,7 +11,9 @@ import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MaterialModule} from '@angular/material';
 import { EsriMapComponent } from './esri-map/esri-map.component';
 
+// for ESRI GIS stuff
 import { EsriLoaderService } from 'angular2-esri-loader';
+import { GeocodeService } from 'app/geocode.service';
 
 @NgModule({
   declarations: [
@@ -27,7 +29,7 @@ import { EsriLoaderService } from 'angular2-esri-loader';
     MdCheckboxModule,
     MaterialModule.forRoot(),
   ],
-  providers: [EsriLoaderService],
+  providers: [EsriLoaderService, GeocodeService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

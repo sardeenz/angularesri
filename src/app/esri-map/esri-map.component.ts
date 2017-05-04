@@ -12,7 +12,7 @@ import { EsriLoaderService } from 'angular2-esri-loader';
 })
 
 export class EsriMapComponent implements OnInit {
-    options: { zoom: number; };
+  options: { zoom: number; };
 
   // for JSAPI 4.x you can use the "any for TS types
   public mapView: any;
@@ -27,14 +27,14 @@ export class EsriMapComponent implements OnInit {
     private esriLoader: EsriLoaderService, private geocodeService: GeocodeService
   ) { }
 
-    public gotoView(address) {
-
-      this.geocodeService.getGeometry(address).subscribe(data => this.data = data, 
+  public gotoView(address) {
+    this.geocodeService.getGeometry(address).subscribe(data => this.data = data,
       err => console.error(err),
-      () => console.log('geoCode Service Result data = ',JSON.stringify(this.data.features) ));
+      //() => console.log('geoCode Service Result data = ', JSON.stringify(this.data.features[0].geometry.x)));
+      () => console.log('geoCode Service Result data = ', JSON.stringify(this.data)));
 
 
-      this.esriLoader.load({
+    this.esriLoader.load({
       // use a specific version of the JSAPI
       url: 'https://js.arcgis.com/4.3/'
     }).then(() => {
@@ -47,38 +47,32 @@ export class EsriMapComponent implements OnInit {
         SpatialReference
       ]) => {
         const mapProperties: any = {
-          basemap: 'hybrid'
+          basemap: 'gray-vector'
         };
 
-        this.point = new Point({
-                longitude: -84.3852995,
-                latitude: 33.7678835,
-                spatialReference: SpatialReference.WGS84,
-            });
+        // this.point = new Point({
+        //   longitude: -84.3852995,
+        //   latitude: 33.7678835,
+        //   spatialReference: SpatialReference.WGS84,
+        // });
 
-        this.options = {
-                zoom: 1
-            };
+        // this.options = {
+        //   zoom: 1
+        // };
 
-        // view.goTo({
-        //         center: [address.geometry.x, address.geometry.y],
-        //         zoom: 17
-        //     });    
-        
-        //this.mapView.goTo(this.point, this.options);
         this.mapView.goTo({
-                center: [-84.3852995, 33.7678835],
-                //center: [address.geometry.x, address.geometry.y],
-                zoom: 17
-            })
-      console.log('this.point', this.point);
-      console.log('this.point', this.options);
+          center: [-84.3852995, 33.7678835],
+          //center: [this.data.features[0].geometry.x, this.data.features[0].geometry.y],
+          zoom: 17
+        })
+        console.log('this.point', this.point);
+        console.log('this.point', this.options);
 
-      
-    });
+
       });
+    });
 
-      
+
   }
 
   public ngOnInit() {
@@ -90,17 +84,17 @@ export class EsriMapComponent implements OnInit {
       // load the needed Map and MapView modules from the JSAPI
       this.esriLoader.loadModules([
         'esri/Map',
-        'esri/views/MapView',
+        'esri/views/SceneView',
         'esri/geometry/Point',
         'esri/geometry/SpatialReference'
       ]).then(([
         Map,
-        MapView,
+        SceneView,
         Point,
         SpatialReference
       ]) => {
         const mapProperties: any = {
-          basemap: 'hybrid'
+          basemap: 'gray-vector'
         };
 
         const map: any = new Map(mapProperties);
@@ -114,7 +108,7 @@ export class EsriMapComponent implements OnInit {
           map // property shorthand for object literal
         };
 
-        this.mapView = new MapView(mapViewProperties);
+        this.mapView = new SceneView(mapViewProperties);
 
         // this.point = new Point({
         //         longitude: -84.3852995,

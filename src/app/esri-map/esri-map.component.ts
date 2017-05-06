@@ -15,7 +15,7 @@ export class EsriMapComponent implements OnInit {
   public data: any;
   maploaded: boolean = false;
 
-  public map: any;
+  public mymap: any;
 
   // for JSAPI 4.x you can use the "any for TS types
   public mapView: __esri.MapView;
@@ -77,7 +77,7 @@ export class EsriMapComponent implements OnInit {
           zoom: 12,
           map
         };
-        this.map = map;
+        this.mymap = map;
         this.sceneView = new SceneView(mapViewProperties);
         this.maploaded = this.esriLoader.isLoaded();
         console.log(this.maploaded);
@@ -92,9 +92,9 @@ export class EsriMapComponent implements OnInit {
         zoom: 17
       });
 
-        this.esriLoader.require(['esri/layers/GraphicsLayer','esri/layers/Point','esri/layers/SimpleMarkerSymbol','esri/layers/Graphic'], 
-        function(GraphicsLayer, Point, SimpleMarkerSymbol, Graphic){
-           this.graphicsLayer = new GraphicsLayer();
+        this.esriLoader.require(['esri/Map','esri/layers/GraphicsLayer','esri/geometry/Point','esri/symbols/SimpleMarkerSymbol','esri/Graphic'], 
+        (Map, GraphicsLayer, Point, SimpleMarkerSymbol, Graphic) => {
+            console.log('x = ',this.data.features[0].geometry.x);
            this.point = new Point({
               x: this.data.features[0].geometry.x,
               y: this.data.features[0].geometry.y,
@@ -111,9 +111,11 @@ export class EsriMapComponent implements OnInit {
                 width: 2
               }
             });
-            
+            this.mymap = new Map();
 
-        this.map.add(this.graphicsLayer);
+        this.graphicsLayer = new GraphicsLayer();
+        this.mymap.add(this.graphicsLayer);
+        
         this.maploaded = this.esriLoader.isLoaded();
         console.log(this.maploaded);
 

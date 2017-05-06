@@ -10,18 +10,25 @@ import { EsriLoaderService } from 'angular2-esri-loader';
   templateUrl: './esri-map.component.html',
   styleUrls: ['./esri-map.component.css']
 })
-
 export class EsriMapComponent implements OnInit {
-  options: { zoom: number; };
+
+  public data: any;
+  maploaded: boolean = false;
+
+  public map: any;
 
   // for JSAPI 4.x you can use the "any for TS types
-  public mapView: any;
-  public point: any;
+  public mapView: __esri.MapView;
+  public sceneView: __esri.SceneView;
+
+  public graphic: __esri.Graphic;
+  public point: __esri.Point;
+  public markerSymbol: __esri.SimpleMarkerSymbol;
+  public graphicsLayer: __esri.GraphicsLayer;
+
 
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
-
-  data;
 
   constructor(
     private esriLoader: EsriLoaderService, private geocodeService: GeocodeService
@@ -30,98 +37,92 @@ export class EsriMapComponent implements OnInit {
   public gotoView(address) {
     this.geocodeService.getGeometry(address).subscribe(data => this.data = data,
       err => console.error(err),
-      //() => console.log('geoCode Service Result data = ', JSON.stringify(this.data.features[0].geometry.x)));
-      () => console.log('geoCode Service Result data = ', JSON.stringify(this.data)));
-
-
-    this.esriLoader.load({
-      // use a specific version of the JSAPI
-      url: 'https://js.arcgis.com/4.3/'
-    }).then(() => {
-      // load the needed Map and MapView modules from the JSAPI
-      this.esriLoader.loadModules([
-        'esri/geometry/Point',
-        'esri/geometry/SpatialReference'
-      ]).then(([
-        Point,
-        SpatialReference
-      ]) => {
-        const mapProperties: any = {
-          basemap: 'gray-vector'
-        };
-
-        // this.point = new Point({
-        //   longitude: -84.3852995,
-        //   latitude: 33.7678835,
-        //   spatialReference: SpatialReference.WGS84,
-        // });
-
-        // this.options = {
-        //   zoom: 1
-        // };
-
-        this.mapView.goTo({
-          center: [-84.3852995, 33.7678835],
-          //center: [this.data.features[0].geometry.x, this.data.features[0].geometry.y],
-          zoom: 17
-        })
-        console.log('this.point', this.point);
-        console.log('this.point', this.options);
-
-
-      });
-    });
-
+      () => this.setMarker(this.data));
+      //() => this.buildMap());
 
   }
 
   public ngOnInit() {
-    // only load the ArcGIS API for JavaScript when this component is loaded
+    return this.buildMap();
+  }
+
+  public buildMap() {
+
     return this.esriLoader.load({
-      // use a specific version of the JSAPI
       url: 'https://js.arcgis.com/4.3/'
     }).then(() => {
-      // load the needed Map and MapView modules from the JSAPI
       this.esriLoader.loadModules([
         'esri/Map',
         'esri/views/SceneView',
         'esri/geometry/Point',
-        'esri/geometry/SpatialReference'
-      ]).then(([
+        'esri/symbols/SimpleMarkerSymbol',
+        'esri/Graphic',
+        'esri/layers/GraphicsLayer'
+        ]).then(([
         Map,
         SceneView,
         Point,
-        SpatialReference
+        SimpleMarkerSymbol,
+        Graphic,
+        GraphicsLayer
       ]) => {
-        const mapProperties: any = {
+        const mapProperties: __esri.MapProperties = {
           basemap: 'gray-vector'
         };
 
-        const map: any = new Map(mapProperties);
-
-        const mapViewProperties: any = {
-          // create the map view at the DOM element in this component
+        const map = new Map(mapProperties);
+        const mapViewProperties: __esri.MapViewProperties = {
           container: this.mapViewEl.nativeElement,
-          // supply additional options
           center: [-78.65, 35.8],
           zoom: 12,
-          map // property shorthand for object literal
+          map
         };
-
-        this.mapView = new SceneView(mapViewProperties);
-
-        // this.point = new Point({
-        //         longitude: -84.3852995,
-        //         latitude: 34.7678835,
-        //         spatialReference: SpatialReference.WGS84
-        //     });
-
-        // this.options = {
-        //         zoom: 5
-        //     };
-
+        this.map = map;
+        this.sceneView = new SceneView(mapViewProperties);
+        this.maploaded = this.esriLoader.isLoaded();
+        console.log(this.maploaded);
       });
     });
+
+  }
+
+  public setMarker(data) {
+
+    this.sceneView.goTo({center: [this.data.features[0].geometry.x, this.data.features[0].geometry.y],
+        zoom: 17
+      });
+
+        this.esriLoader.require(['esri/layers/GraphicsLayer','esri/layers/Point','esri/layers/SimpleMarkerSymbol','esri/layers/Graphic'], 
+        function(GraphicsLayer, Point, SimpleMarkerSymbol, Graphic){
+           this.graphicsLayer = new GraphicsLayer();
+           this.point = new Point({
+              x: this.data.features[0].geometry.x,
+              y: this.data.features[0].geometry.y,
+              z: 1010
+            });
+            this.graphic = new Graphic({
+              geometry: this.point,
+              symbol: this.markerSymbol
+            });
+            this.markerSymbol = new SimpleMarkerSymbol({
+              color: [226, 119, 40],
+              outline: { // autocasts as new SimpleLineSymbol()
+                color: [255, 255, 255],
+                width: 2
+              }
+            });
+            
+
+        this.map.add(this.graphicsLayer);
+        this.maploaded = this.esriLoader.isLoaded();
+        console.log(this.maploaded);
+
+        console.log('this.graphic', JSON.stringify(this.graphic));
+        this.graphicsLayer.add(this.graphic);
+
+        });
+
+        
   }
 
 }

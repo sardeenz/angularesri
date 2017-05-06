@@ -29,6 +29,8 @@ import {MaterialModule} from '@angular/material';
 - add the map
 https://gist.github.com/tomwayson/e6260adfd56c2529313936528b8adacd
 
+npm install --save @types/arcgis-js-api
+
 
 # Servicerequest
 

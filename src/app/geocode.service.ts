@@ -11,7 +11,6 @@ export class GeocodeService {
   constructor(private http: Http) { }
 
       getGeometry(address): Observable<string>  {
-        console.log("url = ", encodeURI(this.url) + encodeURIComponent(address.toUpperCase() + '%\''));
         return this.http.get(encodeURI(this.url) + encodeURIComponent(address.toUpperCase()) + '%\'').map((res:Response) => res.json());
 
       }

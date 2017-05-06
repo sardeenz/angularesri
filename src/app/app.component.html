@@ -29,18 +29,16 @@
                 </md-input-container>
                 <p>
                     <md-input-container>
-                        <input mdInput placeholder="Address" type="text" name="address" [(ngModel)]="user.address"> user.address | json
+                        <input mdInput placeholder="Address" type="text" name="address" [(ngModel)]="user.address">
                     </md-input-container>
                     <p>
                         <md-input-container>
                             <input mdInput placeholder="Phone #" type="text" name="phone" [(ngModel)]="user.phone">
                         </md-input-container>
                         <p>
-
                             <md-input-container>
                                 <textarea mdInput placeholder="Comments" type="text" name="comments" [(ngModel)]="user.comments"></textarea>
                             </md-input-container>
-
                             <p>
                                 <button md-button type="submit" (click)="save(f.value, f.valid)">Submit</button>
         </form>

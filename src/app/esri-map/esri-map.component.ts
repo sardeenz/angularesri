@@ -19,10 +19,7 @@ export class EsriMapComponent implements OnInit {
 
   // for JSAPI 4.x you can use the "any for TS types
   public mapView: __esri.MapView;
-  public sceneView: __esri.SceneView;
-
-  public graphic: __esri.Graphic;
-  public point: __esri.Point;
+  public pointGraphic: __esri.Graphic;
   public markerSymbol: __esri.SimpleMarkerSymbol;
   public graphicsLayer: __esri.GraphicsLayer;
 
@@ -53,14 +50,14 @@ export class EsriMapComponent implements OnInit {
     }).then(() => {
       this.esriLoader.loadModules([
         'esri/Map',
-        'esri/views/SceneView',
+        'esri/views/MapView',
         'esri/geometry/Point',
         'esri/symbols/SimpleMarkerSymbol',
         'esri/Graphic',
         'esri/layers/GraphicsLayer'
         ]).then(([
         Map,
-        SceneView,
+        MapView,
         Point,
         SimpleMarkerSymbol,
         Graphic,
@@ -78,7 +75,7 @@ export class EsriMapComponent implements OnInit {
           map
         };
         this.mymap = map;
-        this.sceneView = new SceneView(mapViewProperties);
+        this.mapView = new MapView(mapViewProperties);
         this.maploaded = this.esriLoader.isLoaded();
         console.log(this.maploaded);
       });
@@ -88,22 +85,14 @@ export class EsriMapComponent implements OnInit {
 
   public setMarker(data) {
 
-    this.sceneView.goTo({center: [this.data.features[0].geometry.x, this.data.features[0].geometry.y],
+    this.mapView.goTo({center: [this.data.features[0].geometry.x, this.data.features[0].geometry.y],
         zoom: 17
       });
 
-        this.esriLoader.require(['esri/Map','esri/layers/GraphicsLayer','esri/geometry/Point','esri/symbols/SimpleMarkerSymbol','esri/Graphic'], 
+        this.esriLoader.require(['esri/Map','esri/layers/GraphicsLayer','esri/geometry/Point',
+        'esri/symbols/SimpleMarkerSymbol','esri/Graphic'],
         (Map, GraphicsLayer, Point, SimpleMarkerSymbol, Graphic) => {
             console.log('x = ',this.data.features[0].geometry.x);
-           this.point = new Point({
-              x: this.data.features[0].geometry.x,
-              y: this.data.features[0].geometry.y,
-              z: 1010
-            });
-            this.graphic = new Graphic({
-              geometry: this.point,
-              symbol: this.markerSymbol
-            });
             this.markerSymbol = new SimpleMarkerSymbol({
               color: [226, 119, 40],
               outline: { // autocasts as new SimpleLineSymbol()
@@ -111,20 +100,16 @@ export class EsriMapComponent implements OnInit {
                 width: 2
               }
             });
-            this.mymap = new Map();
+            this.pointGraphic = new Graphic({
+              geometry: new Point({
+                        longitude: this.data.features[0].geometry.x,
+                        latitude: this.data.features[0].geometry.y
+                    })
+            });
 
-        this.graphicsLayer = new GraphicsLayer();
-        this.mymap.add(this.graphicsLayer);
-        
-        this.maploaded = this.esriLoader.isLoaded();
-        console.log(this.maploaded);
-
-        console.log('this.graphic', JSON.stringify(this.graphic));
-        this.graphicsLayer.add(this.graphic);
-
+            this.pointGraphic.symbol = this.markerSymbol;
+            this.mapView.graphics.removeAll();
+            this.mapView.graphics.add(this.pointGraphic);
         });
-
-        
   }
-
 }

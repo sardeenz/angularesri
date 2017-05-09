@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
-import { AppComponent } from './app.component';
+import { AppComponent, DialogContent } from './app.component';
 
 // for angular material
 import {MdButtonModule, MdCheckboxModule} from '@angular/material';
@@ -18,7 +18,8 @@ import { GeocodeService } from 'app/geocode.service';
 @NgModule({
   declarations: [
     AppComponent,
-    EsriMapComponent
+    EsriMapComponent,
+    DialogContent
   ],
   imports: [
     BrowserModule,
@@ -29,6 +30,7 @@ import { GeocodeService } from 'app/geocode.service';
     MdCheckboxModule,
     MaterialModule.forRoot(),
   ],
+  entryComponents: [DialogContent],
   providers: [EsriLoaderService, GeocodeService],
   bootstrap: [AppComponent]
 })

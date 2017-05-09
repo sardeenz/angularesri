@@ -1,6 +1,8 @@
 import { GeocodeService } from '../geocode.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
+import 'rxjs/add/observable/throw';
+import 'rxjs/add/operator/catch';
 
 // also import the "angular2-esri-loader" to be able to load JSAPI modules
 import { EsriLoaderService } from 'angular2-esri-loader';
@@ -35,8 +37,6 @@ export class EsriMapComponent implements OnInit {
     this.geocodeService.getGeometry(address).subscribe(data => this.data = data,
       err => console.error(err),
       () => this.setMarker(this.data));
-      //() => this.buildMap());
-
   }
 
   public ngOnInit() {

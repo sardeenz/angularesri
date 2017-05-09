@@ -1,46 +1,59 @@
-<!--<div>
-    Name: {{ person }}
-    <br/> Twitter: {{ person?.twitter.name }}
-    <br/> Website: {{ person?.website.url }}
-</div>-->
 <div class="app-content">
+
+    <md-toolbar color="primary">
+        <span><md-icon>location_city</md-icon></span>
+        <span class="myspan">Solid Waste Services</span>
+        <button md-icon-button [mdMenuTriggerFor]="menu">
+      <md-icon>more_vert</md-icon>
+    </button>
+    </md-toolbar>
+
+    <md-menu #menu="mdMenu">
+        <button md-menu-item>
+        <md-icon>info_outline</md-icon>
+        <span>About</span>
+      </button>
+    </md-menu>
 
     <md-card class="app-input-section">
         <h2>Choose the type(s) of missed collection</h2>
-        <p>
-            <md-select multiple name="requestType" [(ngModel)]="user.requestType">
-                <md-option *ngFor="let requestType of requestType" [value]="requestType.value">
-                    {{requestType.display}}
-                </md-option>
-            </md-select>
+
+        <md-select multiple name="requestType" [(ngModel)]="user.requestType">
+            <md-option *ngFor="let requestType of requestType" [value]="requestType.value">
+                {{requestType.display}}
+            </md-option>
+        </md-select>
     </md-card>
 
     <md-card class="app-input-section">
 
         <form #f="ngForm" novalidate>
 
-
+            <md-input-container>
+                <input mdInput placeholder="First name" type="text" name="firstname" [(ngModel)]="user.firstname">
+            </md-input-container>
+            <md-input-container>
+                <input mdInput placeholder="Last name" type="text" name="lastname" [(ngModel)]="user.lastname">
+            </md-input-container>
+            <p>
+                <md-input-container hintLabel="ex. 123 Main St.">
+                    <input mdInput placeholder="Street Address" type="text" name="address" [(ngModel)]="user.address">
+                </md-input-container>
+            </p>
             <p>
                 <md-input-container>
-                    <input mdInput placeholder="First name" type="text" name="firstname" [(ngModel)]="user.firstname">
+                    <input mdInput placeholder="Email" type="text" name="email" [(ngModel)]="user.email">
                 </md-input-container>
+            </p>
+            <md-input-container>
+                <input mdInput placeholder="Phone Number" type="text" name="phone" [(ngModel)]="user.phone">
+            </md-input-container>
+            <p>
                 <md-input-container>
-                    <input mdInput placeholder="Last name" type="text" name="lastname" [(ngModel)]="user.lastname">
+                    <textarea mdInput placeholder="Comments" type="text" name="comments" [(ngModel)]="user.comments"></textarea>
                 </md-input-container>
-                <p>
-                    <md-input-container>
-                        <input mdInput placeholder="Address" type="text" name="address" [(ngModel)]="user.address">
-                    </md-input-container>
-                    <p>
-                        <md-input-container>
-                            <input mdInput placeholder="Phone #" type="text" name="phone" [(ngModel)]="user.phone">
-                        </md-input-container>
-                        <p>
-                            <md-input-container>
-                                <textarea mdInput placeholder="Comments" type="text" name="comments" [(ngModel)]="user.comments"></textarea>
-                            </md-input-container>
-                            <p>
-                                <button md-button type="submit" (click)="save(f.value, f.valid)">Submit</button>
+            </p>
+            <button md-raised-button color="primary" type="submit" (click)="save(f.value, f.valid)">Submit</button>
         </form>
 
     </md-card>
@@ -50,8 +63,6 @@
             <span md-highlight-text="searchText">{{address.attributes.ADDRESS}}</span>
         </md-autocomplete>
         <p/>-->
-
-
 
     <md-card class="app-input-section">
         <app-esri-map></app-esri-map>

@@ -25,6 +25,12 @@
         </md-select>
     </md-card>
 
+    <md-card *ngIf="user.requestType != '' || user.requestType == 'garbage' && user.requestType == 'recycling'" class="app-input-section">
+        {{user.requestType}}
+        <div *ngIf="user.requestType == 'garbage' || user.requestType == 'garbage,recycling' || user.requestType == 'recycling'">Garbage/Recycling link and info</div>
+        <div *ngIf="user.requestType == 'yard'">Yard Waste link and info</div>
+    </md-card>
+
     <md-card class="app-input-section">
 
         <form #f="ngForm" novalidate>

@@ -19,6 +19,10 @@ export class AppComponent implements OnInit {
 
   map: any;
   public authResponse;
+  public test = '213';
+  public isDone;
+  public submitted = false;
+
 
   public user: User;
   public requestType = [
@@ -32,28 +36,23 @@ export class AppComponent implements OnInit {
         'city_seal',
         sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg')); }
 
-  
-
   public save(isValid: boolean, f: User) {
-        console.log(f);
-        console.log(this.user.address);
+    this.submitted = true;
+    this.isDone = false;
+        console.log('this is f and f = ', f);
+        console.log('user.address = ', this.user.address);
         this.esriMapComponent.gotoView(this.user.address);
-        const dialogRef = this._dialog.open(DialogContentComponent);
 
         console.log('before call to create service request');
         this._servicerequestService.createServiceRequest(this.user).subscribe(
           data => this.authResponse = data,
-      err => console.error(err),
-      () => console.log('done authenticating ', this.authResponse)
-    );
+          err => console.error(err),
+          //() => console.log('this token is ', this.authResponse.Value.Token)
+          () => this.isDone = true
+        );
         console.log('after call to create service request');
-
-
-
-
-
+        //const dialogRef = this._dialog.open(DialogContentComponent);
     }
-
 
   ngOnInit() {
       this.user = {
@@ -69,26 +68,4 @@ export class AppComponent implements OnInit {
 
 }
 
-// @Component({
-//   template: `
-//     <p>This is a dialog</p>
-//     <p>
-//       <label>
-//         This is a text box inside of a dialog.
-//         <input #dialogInput>
-//         <md-spinner color="accent" class="app-spinner"></md-spinner>
-//       </label>
-//     </p>
-//     <p> <button md-button (click)="dialogRef.close(dialogInput.value)">CLOSE</button> </p>
-//   `,
-// })
-// export class DialogContent {
-//     @ViewChild(AppComponent) appComponent: AppComponent;
 
-//     constructor(@Optional() public dialogRef: MdDialogRef<DialogContent>) { 
-//     }
-
-//     // ngOnDestroy() {
-//     //   console.log('data from AppComponent', this.appComponent.authResponse);
-//     // }
-// }

@@ -2,9 +2,12 @@
 <p>
     <label>
       {{title}}
+      <p>
+      {{test}}
+      </p>
         This is a text box inside of a dialog.
         <input #dialogInput>
-        <md-spinner color="accent"></md-spinner>
+        <md-spinner color="accent" class="app-spinner" mode="indeterminate"></md-spinner>
       </label>
 </p>
 <p> <button md-button (click)="dialogRef.close(dialogInput.value)">CLOSE</button> </p>

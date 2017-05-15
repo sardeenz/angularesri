@@ -1,9 +1,9 @@
 export interface User {
-    firstname: string;
-    lastname: string;
+    callerfirstname: string;
+    callerlastname: string;
     address: string;
-    phone?: string;
-    email: string;
+    callerWorkPhone?: string;
+    callerEmail: string;
     requestType?: string[];
-    comments?: string;
+    callerComments?: string;
 }

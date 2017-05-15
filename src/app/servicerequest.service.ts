@@ -5,21 +5,34 @@ import { Injectable } from '@angular/core';
 @Injectable()
 export class ServicerequestService {
 
-    private srUrl = 'http://scfp.raleighnc.gov/cityworks/Services/AMS/Authentication/Authenticate';
+    //private srUrl = 'http://scfp.raleighnc.gov/cityworks/Services/AMS/Authentication/Authenticate';
     //private fuseUrl = 'http://rhsoaprdapp1.ci.raleigh.nc.us:8183/RaleighAPI/cityworks/createServiceRequest';
-    
+    private srUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/createServiceRequest/';
+
     public x;
-    public jdata = JSON.parse('{"LoginName":"pwadmin","Password":"pw2dmin"}');
+    public testAuth = JSON.parse('{"LoginName":"pwadmin","Password":"pw2dmin"}');
+    //public testSr = JSON.parse('{"callerFirstName": "Surender","callerLastName": "Dalal", "callerWorkPhone": "9196708062", "callerEmail": "surender.dalal@raleighnc.gov ", "problemSid": "263574", "x": "", "y": "", "details": "this is a test", "submitTo": "263755", "callerAddress":"726 davenbury way", "callerCity":"cary" , "callerState":"NC" , "callerZip":"27513", "callerComments":"this is a comment", "comments":"chad is testing" }');
+    public testSr = {"callerFirstName": "Surender","callerLastName": "Dalal", "callerWorkPhone": "9196708062", "callerEmail": "surender.dalal@raleighnc.gov ", "problemSid": "263574", "x": "", "y": "", "details": "this is a test", "submitTo": "263755", "callerAddress":"726 davenbury way", "callerCity":"cary" , "callerState":"NC" , "callerZip":"27513", "callerComments":"this is a comment", "comments":"chad is testing" };
+    
+    public formTest =  {"firstname":"","lastname":"","address":"1413 Scales St","phone":"","email":"","requestType":["garbage"],"comments":""}
 
     constructor(private http: Http) { }
 
   createServiceRequest(form): Observable<string> {
-        let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
+
+        console.log('form = ', JSON.stringify(form));
+        // for authentication to Cityworks use urlencoded 
+        //let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
+        //for Cityworks API we need data= prefix
+        //return this.http.post(this.srUrl, 'data= ' + jsonStr, options).map((res: Response) => res.json());
+
+        let headers = new Headers({ 'Content-Type': 'application/json' });
         let options = new RequestOptions({ headers: headers }); // Create a request option
-        //let jsonStr = JSON.stringify(form);
-        let jsonStr = JSON.stringify(this.jdata);
-        return this.http.post(this.srUrl, 'data= ' + jsonStr, options).map((res: Response) => res.json());
+
+        return this.http.post(this.srUrl, this.testSr, options).map((res: Response) => res.json());
 
   }
 
 }
+
+

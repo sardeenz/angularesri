@@ -9,11 +9,11 @@
     </md-toolbar>
 
     <md-menu #menu="mdMenu">
-        <button md-menu-item>
+        <button md-menu-item (click)="openDialog([menu])">
         <md-icon>info_outline</md-icon>
         <span>About</span>
         </button>
-        <button md-menu-item>
+        <button md-menu-item (click)="openDialog()">
             <md-icon>help</md-icon>
       <span>Need Help?</span>
         </button>
@@ -27,61 +27,80 @@
                 {{requestType.display}}
             </md-option>
         </md-select>
+        <div *ngIf="user.requestType == 'garbage' 
+        || user.requestType == 'recycling' 
+        || user.requestType == 'garbage,recycling' 
+        || user.requestType == 'garbage,recycling,yard' 
+        || user.requestType == 'garbage,yard' 
+        || user.requestType == 'recycling,yard'">
+            <p>Garbage/Recycling link and info</p>
+        </div>
+        <div *ngIf="user.requestType == 'yard' 
+        || user.requestType == 'garbage,yard' 
+        || user.requestType == 'garbage,recycling,yard'
+        || user.requestType == 'recycling,yard' ">
+            <p>Yard Waste link and info</p>
+        </div>
+        <!--or if all three selected show both-->
     </md-card>
-
+    <!--
     <md-card *ngIf="user.requestType != '' || user.requestType == 'garbage' && user.requestType == 'recycling'" class="app-input-section">
-        {{user.requestType}}
-        <div *ngIf="user.requestType == 'garbage' || user.requestType == 'recycling' || user.requestType == 'garbage,recycling'">Garbage/Recycling link and info</div>
-        <div *ngIf="user.requestType == 'yard'">Yard Waste link and info</div>
-    </md-card>
+        {{user.requestType}}-->
+    <!--<div *ngIf="user.requestType == 'garbage' || user.requestType == 'recycling' || user.requestType == 'garbage,recycling'">Garbage/Recycling link and info</div>
+        <div *ngIf="user.requestType == 'yard'">Yard Waste link and info</div>-->
+    <!--</md-card>-->
 
     <md-card class="app-input-section">
 
         <form #f="ngForm" novalidate>
 
             <md-input-container>
-                <input mdInput placeholder="First name" type="text" name="firstname" [(ngModel)]="user.firstname">
+                <input mdInput placeholder="First name" type="text" name="firstname" [(ngModel)]="user.callerfirstname">
             </md-input-container>
             <md-input-container>
-                <input mdInput placeholder="Last name" type="text" name="lastname" [(ngModel)]="user.lastname">
+                <input mdInput placeholder="Last name" type="text" name="lastname" [(ngModel)]="user.callerlastname" required>
             </md-input-container>
             <p>
                 <md-input-container hintLabel="ex. 123 Main St.">
-                    <input mdInput placeholder="Street Address" type="text" name="address" [(ngModel)]="user.address">
+                    <input mdInput placeholder="Street Address" mdTooltip="hey you" mdTooltipPosition="right" type="text" name="address" [(ngModel)]="user.address" required>
                 </md-input-container>
             </p>
             <p>
                 <md-input-container>
-                    <input mdInput placeholder="Email" type="text" name="email" [(ngModel)]="user.email">
+                    <input mdInput placeholder="Email" type="text" name="email" [(ngModel)]="user.callerEmail">
                 </md-input-container>
             </p>
             <md-input-container>
-                <input mdInput placeholder="Phone Number" type="text" name="phone" [(ngModel)]="user.phone">
+                <input mdInput placeholder="Phone Number" type="text" name="phone" [(ngModel)]="user.callerWorkPhone">
             </md-input-container>
             <p>
                 <md-input-container>
-                    <textarea mdInput placeholder="Comments" type="text" name="comments" [(ngModel)]="user.comments"></textarea>
+                    <textarea mdInput placeholder="Comments" type="text" name="comments" [(ngModel)]="user.callerComments"></textarea>
                 </md-input-container>
             </p>
             <button md-raised-button color="primary" type="submit" (click)="save(f.value, f.valid)">Submit</button>
+            <!--<button md-raised-button color="primary" type="submit" class="btn btn-success" (ngSubmit)="save(f.value, f.valid) " [disabled]="!f.form.valid ">Submit</button>-->
         </form>
-        <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+        <md-progress-bar *ngIf="!isDone && submitted " class="app-progress " mode="indeterminate " aria-label="Indeterminate progress-bar example "></md-progress-bar>
     </md-card>
 
     <!--<h2>Property Information</h2>
-        <md-autocomplete ng-disabled="false" md-no-cache="false" md-selected-item="app.selectedAddress" md-search-text="app.addressText" md-selected-item-change="app.addressSelected(address)" md-items="address in app.addressSearch(app.addressText)" md-item-text="address.attributes.ADDRESS"
-            md-min-length="4" md-autoselect="true" placeholder="Enter and select the property address">
-            <span md-highlight-text="searchText">{{address.attributes.ADDRESS}}</span>
+        <md-autocomplete ng-disabled="false " md-no-cache="false " md-selected-item="app.selectedAddress " md-search-text="app.addressText " md-selected-item-change="app.addressSelected(address) " md-items="address in app.addressSearch(app.addressText)
+                " md-item-text="address.attributes.ADDRESS "
+            md-min-length="4 " md-autoselect="true " placeholder="Enter and select the property address ">
+            <span md-highlight-text="searchText ">{{address.attributes.ADDRESS}}</span>
         </md-autocomplete>
         <p/>-->
 
-    <md-card *ngIf="isDone" class="app-input-section">
+    <md-card *ngIf="isDone " class="app-input-section ">
         <!--isDone = {{isDone}}-->
-        <div *ngIf="isDone">Your Service Request ID is {{authResponse.Value.Token | json}}</div>
+        <!--<div *ngIf="isDone ">Your Service Request ID is {{authResponse.Value.Token | json}}</div>-->
+        <div *ngIf="isDone ">Your Service Request ID is {{authResponse.requestId | json}}</div>
+
 
     </md-card>
 
-    <md-card class="app-input-section">
+    <md-card class="app-input-section ">
         <app-esri-map></app-esri-map>
     </md-card>
 

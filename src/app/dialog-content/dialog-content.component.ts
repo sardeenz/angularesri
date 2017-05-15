@@ -9,7 +9,7 @@ import {MdDialog, MdDialogRef} from '@angular/material';
 export class DialogContentComponent implements OnInit {
 
   title = 'DialogContentComponent works!';
-  @Input() test = '456';
+  @Input() test: string;
 
   constructor(@Optional() public dialogRef: MdDialogRef<DialogContentComponent>) { 
     console.log('test in constructor = ', this.test);

@@ -23,7 +23,6 @@ export class AppComponent implements OnInit {
   public isDone;
   public submitted = false;
 
-
   public user: User;
   public requestType = [
     { value: 'garbage', display: 'Garbage' },
@@ -37,6 +36,7 @@ export class AppComponent implements OnInit {
         sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg')); }
 
   public save(isValid: boolean, f: User) {
+    console.log('wanna cry inside save')
     this.submitted = true;
     this.isDone = false;
         console.log('this is f and f = ', f);
@@ -56,14 +56,15 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
       this.user = {
-        firstname: '',
-        lastname: '',
+        callerfirstname: '',
+        callerlastname: '',
         address: '1413 Scales St',
-        phone: '',
-        email: '',
+        callerWorkPhone: '',
+        callerEmail: '',
         requestType: [this.requestType[0].value],
-        comments: ''
+        callerComments: ''
     };
+    
   }
 
 }

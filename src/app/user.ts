@@ -4,6 +4,7 @@ export interface User {
     address: string;
     callerWorkPhone?: string;
     callerEmail: string;
-    requestType: string[];
+    problemsid: string;
     callerComments?: string;
+    comments: string;
 }

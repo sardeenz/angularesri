@@ -23,24 +23,24 @@
         <form (ngSubmit)="save()" #thisform="ngForm">
             <h2>Choose the type of missed collection</h2>
 
-            <md-select name="requestType" [(ngModel)]="user.requestType">
-                <md-option *ngFor="let requestType of requestType" [value]="requestType.value">
-                    {{requestType.display}}
+            <md-select name="problemsid" [(ngModel)]="user.problemsid">
+                <md-option *ngFor="let problemsid of problemsid" [value]="user.problemsid">
+                    {{problemsid.display}}
                 </md-option>
             </md-select>
-            <div *ngIf="user.requestType == 'garbage' 
-        || user.requestType == 'recycling' 
-        || user.requestType == 'garbage,recycling' 
-        || user.requestType == 'garbage,recycling,yard' 
-        || user.requestType == 'garbage,yard' 
-        || user.requestType == 'recycling,yard'">
+            <div *ngIf="user.problemsid == 'garbage' 
+        || user.problemsid == 'recycling' 
+        || user.problemsid == 'garbage,recycling' 
+        || user.problemsid == 'garbage,recycling,yard' 
+        || user.problemsid == 'garbage,yard' 
+        || user.problemsid == 'recycling,yard'">
 
                 <p>Garbage/Recycling link and info </p>
             </div>
-            <div *ngIf="user.requestType == 'yard' 
-        || user.requestType == 'garbage,yard' 
-        || user.requestType == 'garbage,recycling,yard'
-        || user.requestType == 'recycling,yard' ">
+            <div *ngIf="user.problemsid == 'yard' 
+        || user.problemsid == 'garbage,yard' 
+        || user.problemsid == 'garbage,recycling,yard'
+        || user.problemsid == 'recycling,yard' ">
 
                 <p>Yard Waste link and info</p>
 
@@ -48,10 +48,10 @@
             <br>
             <!--or if all three selected show both-->
             <!--
-    <md-card *ngIf="user.requestType != '' || user.requestType == 'garbage' && user.requestType == 'recycling'" class="app-input-section">
-        {{user.requestType}}-->
-            <!--<div *ngIf="user.requestType == 'garbage' || user.requestType == 'recycling' || user.requestType == 'garbage,recycling'">Garbage/Recycling link and info</div>
-        <div *ngIf="user.requestType == 'yard'">Yard Waste link and info</div>-->
+    <md-card *ngIf="user.problemsid != '' || user.problemsid == 'garbage' && user.problemsid == 'recycling'" class="app-input-section">
+        {{user.problemsid}}-->
+            <!--<div *ngIf="user.problemsid == 'garbage' || user.problemsid == 'recycling' || user.problemsid == 'garbage,recycling'">Garbage/Recycling link and info</div>
+        <div *ngIf="user.problemsid == 'yard'">Yard Waste link and info</div>-->
             <!--</md-card>-->
 
 

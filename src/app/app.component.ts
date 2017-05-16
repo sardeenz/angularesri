@@ -19,18 +19,17 @@ export class AppComponent implements OnInit {
 
   map: any;
   public authResponse;
-  public test = '213';
   public isDone;
   public submitted = false;
   public user: User;
-  
-  public requestType = [
+
+  public problemsid = [
     { value: 'garbage', display: 'Garbage' },
     { value: 'recycling', display: 'Recycling' },
     { value: 'yard', display: 'Yard Waste' },
 ];
 
-  constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private _dialog: MdDialog, 
+  constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private _dialog: MdDialog,
   private _servicerequestService: ServicerequestService) {iconRegistry.addSvgIcon(
         'city_seal',
         sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg')); }
@@ -39,52 +38,41 @@ export class AppComponent implements OnInit {
 
   public save() {
 
-    //type userType = User | null;
-    // const form: userType = {
-    //   callerfirstname: this.user.callerfirstname,
-    //   callerlastname: this.user.callerlastname,
-    //   address: this.user.address,
-    //   callerWorkPhone: this.user.callerWorkPhone,
-    //   callerEmail: this.user.callerEmail,
-    //   requestType: this.user.requestType,
-    //   callerComments: this.user.callerComments
-    // };
+    if (this.user.problemsid === 'garbage') {
+        this.user.problemsid = '263551';
+    } else if (this.user.problemsid === 'recycling') {
+        this.user.problemsid = '263552';
+    } else if (this.user.problemsid === 'yard') {
+        this.user.problemsid = '263553';
+    }
 
-    // if (this.user.requestType.includes('garbage') && this.user.requestType.length === 1) {
-    //     this.user.requestType = ['263551'];
-    // };
-
-    console.log('wanna cry inside save')
     this.submitted = true;
     this.isDone = false;
         console.log('user.address = ', this.user);
         this.esriMapComponent.gotoView(this.user.address);
-
-        console.log('before call to create service request');
         this._servicerequestService.createServiceRequest(this.user).subscribe(
           data => this.authResponse = data,
           err => console.error(err),
           //() => console.log('this token is ', this.authResponse.Value.Token)
           () => this.isDone = true
         );
-        console.log('after call to create service request');
-        //const dialogRef = this._dialog.open(DialogContentComponent);
     }
 
   ngOnInit() {
       this.user = {
         callerfirstname: '',
         callerlastname: '',
-        address: '1413 Scales St',
+        address: '',
         callerWorkPhone: '',
         callerEmail: '',
-        requestType: [this.requestType[0].value],
-        callerComments: ''
+        //problemsid: this.problemsid[0].value,
+        problemsid: 'garbage',
+        callerComments: '',
+        comments: 'created by SWS online customer web form'
     };
   }
 
   openDialog() {
-    console.log('openDialog');
     const dialogRef = this._dialog.open(DialogContentComponent);
   }
 

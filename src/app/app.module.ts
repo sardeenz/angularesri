@@ -1,7 +1,7 @@
 import { ServicerequestService } from './servicerequest.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
@@ -26,6 +26,7 @@ import { DialogContentComponent } from './dialog-content/dialog-content.componen
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ReactiveFormsModule,
     FormsModule,
     HttpModule,
     MdButtonModule,

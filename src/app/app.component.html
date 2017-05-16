@@ -23,24 +23,17 @@
         <form (ngSubmit)="save()" #thisform="ngForm">
             <h2>Choose the type of missed collection</h2>
 
-            <md-select name="problemsid" [(ngModel)]="user.problemsid">
-                <md-option *ngFor="let problemsid of problemsid" [value]="user.problemsid">
+            <md-select name="problemsid" [(ngModel)]="user.problemsid" placeholder="Choose" floatPlaceholder="never">
+                <md-option *ngFor="let problemsid of problemsid" [value]="problemsid.value">
                     {{problemsid.display}}
                 </md-option>
             </md-select>
             <div *ngIf="user.problemsid == 'garbage' 
-        || user.problemsid == 'recycling' 
-        || user.problemsid == 'garbage,recycling' 
-        || user.problemsid == 'garbage,recycling,yard' 
-        || user.problemsid == 'garbage,yard' 
-        || user.problemsid == 'recycling,yard'">
+        || user.problemsid == 'recycling'">
 
                 <p>Garbage/Recycling link and info </p>
             </div>
-            <div *ngIf="user.problemsid == 'yard' 
-        || user.problemsid == 'garbage,yard' 
-        || user.problemsid == 'garbage,recycling,yard'
-        || user.problemsid == 'recycling,yard' ">
+            <div *ngIf="user.problemsid == 'yard'">
 
                 <p>Yard Waste link and info</p>
 
@@ -65,11 +58,11 @@
             </md-input-container>
             <p>
                 <md-input-container hintLabel="ex. 123 Main St.">
-                    <input mdInput [mdAutocomplete]="auto" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="right" type="text" name="address" [(ngModel)]="user.address" required>
+                    <input mdInput [formControl]="myControl" [mdAutocomplete]="auto" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="right" type="text" name="address" [(ngModel)]="user.address" required>
                 </md-input-container>
                 <md-autocomplete #auto="mdAutocomplete">
-                    <md-option *ngFor="let option of options" [value]="option">
-                        {{ option }}
+                    <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
+                        {{ addressOptions }}
                     </md-option>
                 </md-autocomplete>
             </p>

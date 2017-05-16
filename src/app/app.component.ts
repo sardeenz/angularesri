@@ -1,3 +1,6 @@
+import { GeocodeService } from './geocode.service';
+import { Observable } from 'rxjs/Rx';
+import { FormControl } from '@angular/forms';
 import { DialogContentComponent } from './dialog-content/dialog-content.component';
 import { ServicerequestService } from './servicerequest.service';
 import { Component, OnInit, ViewChild, ElementRef, Optional } from '@angular/core';
@@ -17,12 +20,27 @@ export class AppComponent implements OnInit {
 
   @ViewChild(EsriMapComponent) esriMapComponent: EsriMapComponent;
 
+  myControl = new FormControl();
+  //  options = [
+  //   'One',
+  //   'Two',
+  //   'Three'
+  //  ];
+
+   addressOptions = [
+    'One',
+    'Two',
+    'Three'
+   ];
+   filteredOptions: Observable<string[]>;
+
   map: any;
   public authResponse;
   public isDone;
   public submitted = false;
   public user: User;
-  public options = ['test','test2'];
+  public data;
+  public result;
 
   public problemsid = [
     { value: 'garbage', display: 'Garbage' },
@@ -31,7 +49,7 @@ export class AppComponent implements OnInit {
 ];
 
   constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private _dialog: MdDialog,
-  private _servicerequestService: ServicerequestService) {iconRegistry.addSvgIcon(
+  private _servicerequestService: ServicerequestService, private geocodeService: GeocodeService) {iconRegistry.addSvgIcon(
         'city_seal',
         sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg')); }
 
@@ -67,11 +85,22 @@ export class AppComponent implements OnInit {
         callerWorkPhone: '',
         callerEmail: '',
         //problemsid: this.problemsid[0].value,
-        problemsid: 'garbage',
+        problemsid: '',
         callerComments: '',
         comments: 'created by SWS online customer web form'
     };
+
+    this.filteredOptions = this.myControl.valueChanges.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());
   }
+
+  filter(val: string): string[] {
+      this.geocodeService.getGeometry(val).subscribe(result => this.result = result,
+      err => console.error(err),
+      () => this.addressOptions.push(this.result.features[0].attributes.ADDRESS));
+
+      console.log('result = ', JSON.stringify(this.result));
+      return this.addressOptions.filter(addressOption => new RegExp(`^${val}`, 'gi').test(addressOption));
+   }
 
   openDialog() {
     const dialogRef = this._dialog.open(DialogContentComponent);

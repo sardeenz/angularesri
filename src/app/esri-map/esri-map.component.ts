@@ -85,6 +85,8 @@ export class EsriMapComponent implements OnInit {
 
   public setMarker(data) {
 
+    console.log('this.data from address search= ', this.data);
+
     this.mapView.goTo({center: [this.data.features[0].geometry.x, this.data.features[0].geometry.y],
         zoom: 17
       });

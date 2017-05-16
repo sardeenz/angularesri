@@ -22,6 +22,7 @@ export class AppComponent implements OnInit {
   public isDone;
   public submitted = false;
   public user: User;
+  public options = ['test','test2'];
 
   public problemsid = [
     { value: 'garbage', display: 'Garbage' },

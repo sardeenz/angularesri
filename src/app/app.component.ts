@@ -22,8 +22,8 @@ export class AppComponent implements OnInit {
   public test = '213';
   public isDone;
   public submitted = false;
-
   public user: User;
+  
   public requestType = [
     { value: 'garbage', display: 'Garbage' },
     { value: 'recycling', display: 'Recycling' },
@@ -35,12 +35,29 @@ export class AppComponent implements OnInit {
         'city_seal',
         sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg')); }
 
-  public save(isValid: boolean, f: User) {
+  onSubmit() { this.submitted = true; }
+
+  public save() {
+
+    //type userType = User | null;
+    // const form: userType = {
+    //   callerfirstname: this.user.callerfirstname,
+    //   callerlastname: this.user.callerlastname,
+    //   address: this.user.address,
+    //   callerWorkPhone: this.user.callerWorkPhone,
+    //   callerEmail: this.user.callerEmail,
+    //   requestType: this.user.requestType,
+    //   callerComments: this.user.callerComments
+    // };
+
+    // if (this.user.requestType.includes('garbage') && this.user.requestType.length === 1) {
+    //     this.user.requestType = ['263551'];
+    // };
+
     console.log('wanna cry inside save')
     this.submitted = true;
     this.isDone = false;
-        console.log('this is f and f = ', f);
-        console.log('user.address = ', this.user.address);
+        console.log('user.address = ', this.user);
         this.esriMapComponent.gotoView(this.user.address);
 
         console.log('before call to create service request');
@@ -64,7 +81,11 @@ export class AppComponent implements OnInit {
         requestType: [this.requestType[0].value],
         callerComments: ''
     };
-    
+  }
+
+  openDialog() {
+    console.log('openDialog');
+    const dialogRef = this._dialog.open(DialogContentComponent);
   }
 
 }

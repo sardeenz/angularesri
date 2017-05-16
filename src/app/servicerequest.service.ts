@@ -9,12 +9,11 @@ export class ServicerequestService {
     //private fuseUrl = 'http://rhsoaprdapp1.ci.raleigh.nc.us:8183/RaleighAPI/cityworks/createServiceRequest';
     private srUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/createServiceRequest/';
 
-    public x;
     public testAuth = JSON.parse('{"LoginName":"pwadmin","Password":"pw2dmin"}');
     //public testSr = JSON.parse('{"callerFirstName": "Surender","callerLastName": "Dalal", "callerWorkPhone": "9196708062", "callerEmail": "surender.dalal@raleighnc.gov ", "problemSid": "263574", "x": "", "y": "", "details": "this is a test", "submitTo": "263755", "callerAddress":"726 davenbury way", "callerCity":"cary" , "callerState":"NC" , "callerZip":"27513", "callerComments":"this is a comment", "comments":"chad is testing" }');
     public testSr = {"callerFirstName": "Surender","callerLastName": "Dalal", "callerWorkPhone": "9196708062", "callerEmail": "surender.dalal@raleighnc.gov ", "problemSid": "263574", "x": "", "y": "", "details": "this is a test", "submitTo": "263755", "callerAddress":"726 davenbury way", "callerCity":"cary" , "callerState":"NC" , "callerZip":"27513", "callerComments":"this is a comment", "comments":"chad is testing" };
     
-    public formTest =  {"firstname":"","lastname":"","address":"1413 Scales St","phone":"","email":"","requestType":["garbage"],"comments":""}
+    public formTest =  {"callerfirstname":"charles","callerlastname":"Foley","address":"1413 Scales St","callerWorkPhone":"9193893777","callerEmail":"sardeenz@gmail.com","requestType":["garbage","recycling"],"callerComments":"test"}
 
     constructor(private http: Http) { }
 

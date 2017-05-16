@@ -20,39 +20,42 @@
     </md-menu>
 
     <md-card class="app-input-section">
-        <h2>Choose the type(s) of missed collection</h2>
+        <form (ngSubmit)="save()" #thisform="ngForm">
+            <h2>Choose the type of missed collection</h2>
 
-        <md-select multiple name="requestType" [(ngModel)]="user.requestType">
-            <md-option *ngFor="let requestType of requestType" [value]="requestType.value">
-                {{requestType.display}}
-            </md-option>
-        </md-select>
-        <div *ngIf="user.requestType == 'garbage' 
+            <md-select name="requestType" [(ngModel)]="user.requestType">
+                <md-option *ngFor="let requestType of requestType" [value]="requestType.value">
+                    {{requestType.display}}
+                </md-option>
+            </md-select>
+            <div *ngIf="user.requestType == 'garbage' 
         || user.requestType == 'recycling' 
         || user.requestType == 'garbage,recycling' 
         || user.requestType == 'garbage,recycling,yard' 
         || user.requestType == 'garbage,yard' 
         || user.requestType == 'recycling,yard'">
-            <p>Garbage/Recycling link and info</p>
-        </div>
-        <div *ngIf="user.requestType == 'yard' 
+
+                <p>Garbage/Recycling link and info </p>
+            </div>
+            <div *ngIf="user.requestType == 'yard' 
         || user.requestType == 'garbage,yard' 
         || user.requestType == 'garbage,recycling,yard'
         || user.requestType == 'recycling,yard' ">
-            <p>Yard Waste link and info</p>
-        </div>
-        <!--or if all three selected show both-->
-    </md-card>
-    <!--
+
+                <p>Yard Waste link and info</p>
+
+            </div>
+            <br>
+            <!--or if all three selected show both-->
+            <!--
     <md-card *ngIf="user.requestType != '' || user.requestType == 'garbage' && user.requestType == 'recycling'" class="app-input-section">
         {{user.requestType}}-->
-    <!--<div *ngIf="user.requestType == 'garbage' || user.requestType == 'recycling' || user.requestType == 'garbage,recycling'">Garbage/Recycling link and info</div>
+            <!--<div *ngIf="user.requestType == 'garbage' || user.requestType == 'recycling' || user.requestType == 'garbage,recycling'">Garbage/Recycling link and info</div>
         <div *ngIf="user.requestType == 'yard'">Yard Waste link and info</div>-->
-    <!--</md-card>-->
+            <!--</md-card>-->
 
-    <md-card class="app-input-section">
 
-        <form #f="ngForm" novalidate>
+
 
             <md-input-container>
                 <input mdInput placeholder="First name" type="text" name="firstname" [(ngModel)]="user.callerfirstname">
@@ -78,10 +81,11 @@
                     <textarea mdInput placeholder="Comments" type="text" name="comments" [(ngModel)]="user.callerComments"></textarea>
                 </md-input-container>
             </p>
-            <button md-raised-button color="primary" type="submit" (click)="save(f.value, f.valid)">Submit</button>
-            <!--<button md-raised-button color="primary" type="submit" class="btn btn-success" (ngSubmit)="save(f.value, f.valid) " [disabled]="!f.form.valid ">Submit</button>-->
+            <!--<button md-raised-button color="primary" type="submit" (click)="save(f.value, f.valid)">Submit</button>-->
+            <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!thisform.form.valid">Submit</button>
+            <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+
         </form>
-        <md-progress-bar *ngIf="!isDone && submitted " class="app-progress " mode="indeterminate " aria-label="Indeterminate progress-bar example "></md-progress-bar>
     </md-card>
 
     <!--<h2>Property Information</h2>

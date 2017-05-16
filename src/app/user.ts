@@ -4,6 +4,6 @@ export interface User {
     address: string;
     callerWorkPhone?: string;
     callerEmail: string;
-    requestType?: string[];
+    requestType: string[];
     callerComments?: string;
 }

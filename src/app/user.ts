@@ -1,10 +1,17 @@
 export interface User {
-    callerfirstname: string;
-    callerlastname: string;
+    callerFirstName: string;
+    callerLastName: string;
+    callerAddress: string;
+    callerState: string;
+    callerCity: string;
+    callerZip: string;
     address: string;
     callerWorkPhone?: string;
     callerEmail: string;
-    problemsid: string;
+    problemSid: string;
     callerComments?: string;
     comments: string;
+    x: string;
+    y: string;
+    details: string;
 }

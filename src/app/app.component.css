@@ -71,3 +71,12 @@ md-sidenav-layout.m2app-dark {
 .app-progress {
     margin: 20px;
 }
+
+.md-input-container.bigClass {
+    min-width: 100px;
+    width: 100px;
+}
+
+.wider {
+    width: 200px;
+}

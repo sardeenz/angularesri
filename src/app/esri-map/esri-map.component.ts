@@ -95,6 +95,7 @@ export class EsriMapComponent implements OnInit {
         'esri/symbols/SimpleMarkerSymbol','esri/Graphic'],
         (Map, GraphicsLayer, Point, SimpleMarkerSymbol, Graphic) => {
             console.log('x = ',this.data.features[0].geometry.x);
+            console.log('y = ',this.data.features[0].geometry.y);
             this.markerSymbol = new SimpleMarkerSymbol({
               color: [226, 119, 40],
               outline: { // autocasts as new SimpleLineSymbol()

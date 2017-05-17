@@ -21,17 +21,8 @@ export class AppComponent implements OnInit {
   @ViewChild(EsriMapComponent) esriMapComponent: EsriMapComponent;
 
   myControl = new FormControl();
-  //  options = [
-  //   'One',
-  //   'Two',
-  //   'Three'
-  //  ];
 
-   addressOptions = [
-    'One',
-    'Two',
-    'Three'
-   ];
+   addressOptions = [];
    filteredOptions: Observable<string[]>;
 
   map: any;
@@ -42,7 +33,7 @@ export class AppComponent implements OnInit {
   public data;
   public result;
 
-  public problemsid = [
+  public problemSid = [
     { value: 'garbage', display: 'Garbage' },
     { value: 'recycling', display: 'Recycling' },
     { value: 'yard', display: 'Yard Waste' },
@@ -55,14 +46,18 @@ export class AppComponent implements OnInit {
 
   onSubmit() { this.submitted = true; }
 
-  public save() {
+  zoomToMap() {
+    console.log('inside zoomToMap');
+  }
 
-    if (this.user.problemsid === 'garbage') {
-        this.user.problemsid = '263551';
-    } else if (this.user.problemsid === 'recycling') {
-        this.user.problemsid = '263552';
-    } else if (this.user.problemsid === 'yard') {
-        this.user.problemsid = '263553';
+  save() {
+
+    if (this.user.problemSid === 'garbage') {
+        this.user.problemSid = '263551';
+    } else if (this.user.problemSid === 'recycling') {
+        this.user.problemSid = '263552';
+    } else if (this.user.problemSid === 'yard') {
+        this.user.problemSid = '263553';
     }
 
     this.submitted = true;
@@ -72,22 +67,29 @@ export class AppComponent implements OnInit {
         this._servicerequestService.createServiceRequest(this.user).subscribe(
           data => this.authResponse = data,
           err => console.error(err),
-          //() => console.log('this token is ', this.authResponse.Value.Token)
+          // () => console.log('this token is ', this.authResponse.Value.Token)
           () => this.isDone = true
         );
     }
 
   ngOnInit() {
       this.user = {
-        callerfirstname: '',
-        callerlastname: '',
+        callerFirstName: '',
+        callerLastName: '',
+        callerAddress: '',
+        callerCity: '',
+        callerState: '',
+        callerZip: '',
         address: '',
         callerWorkPhone: '',
         callerEmail: '',
-        //problemsid: this.problemsid[0].value,
-        problemsid: '',
+        // problemsid: this.problemsid[0].value,
+        problemSid: '',
         callerComments: '',
-        comments: 'created by SWS online customer web form'
+        comments: 'created by SWS online customer web form',
+        x: '',
+        y: '',
+        details: ''
     };
 
     this.filteredOptions = this.myControl.valueChanges.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());
@@ -98,7 +100,7 @@ export class AppComponent implements OnInit {
       err => console.error(err),
       () => this.addressOptions.push(this.result.features[0].attributes.ADDRESS));
 
-      console.log('result = ', JSON.stringify(this.result));
+      // console.log('result = ', JSON.stringify(this.result));
       return this.addressOptions.filter(addressOption => new RegExp(`^${val}`, 'gi').test(addressOption));
    }
 

@@ -1,7 +1,10 @@
 <div class="app-content">
 
     <md-toolbar color="primary">
-        <span><md-icon svgIcon="city_seal"></md-icon></span>
+        <a href="http://raleighnc.gov"> <span>
+            <md-icon svgIcon="city_seal"></md-icon>
+            </span>
+        </a>
         <span>Solid Waste Services</span>
         <button md-icon-button [mdMenuTriggerFor]="menu">
       <md-icon>more_vert</md-icon>
@@ -9,11 +12,11 @@
     </md-toolbar>
 
     <md-menu #menu="mdMenu">
-        <button md-menu-item (click)="openDialog([menu])">
+        <button md-menu-item (click)="openDialog('about')">
         <md-icon>info_outline</md-icon>
         <span>About</span>
         </button>
-        <button md-menu-item (click)="openDialog()">
+        <button md-menu-item (click)="openDialog('help')">
             <md-icon>help</md-icon>
       <span>Need Help?</span>
         </button>
@@ -22,24 +25,35 @@
     <md-card class="app-input-section">
         <form (ngSubmit)="save()" #thisform="ngForm">
             <h2>Choose the type of missed collection</h2>
+            <md-select name="problemSid" [(ngModel)]="user.problemSid" placeholder="Missed Collection Type">
+                <md-option *ngFor="let problemSid of problemSid" [value]="problemSid.value">
+                    {{problemSid.display}}
+                </md-option>
+            </md-select>
+            <p></p>
+            <div *ngIf="user.problemSid == 'garbage' || user.problemSid == 'recycling'">
+                <p>Garbage/Recycling link and info </p>
+            </div>
+            <div *ngIf="user.problemSid == 'yard'">
+                <p>Yard Waste link and info</p>
+            </div>
+            <br>
 
+
+            <!--<h2>Choose the type of missed collection</h2>
             <md-select name="problemSid" [(ngModel)]="user.problemSid" floatPlaceholder="never">
                 <md-option *ngFor="let problemSid of problemSid" [value]="problemSid.value">
                     {{problemSid.display}}
                 </md-option>
             </md-select>
             <p></p>
-            <div *ngIf="user.problemSid == 'garbage' 
-        || user.problemSid == 'recycling'">
-
+            <div *ngIf="user.problemSid == 'garbage' || user.problemSid == 'recycling'">
                 <p>Garbage/Recycling link and info </p>
             </div>
             <div *ngIf="user.problemSid == 'yard'">
-
                 <p>Yard Waste link and info</p>
-
             </div>
-            <br>
+            <br>-->
             <!--or if all three selected show both-->
             <!--
     <md-card *ngIf="user.problemsid != '' || user.problemsid == 'garbage' && user.problemsid == 'recycling'" class="app-input-section">

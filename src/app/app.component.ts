@@ -73,6 +73,10 @@ export class AppComponent implements OnInit {
     }
 
   ngOnInit() {
+
+    // if (this.problemSidArray.length > 0){
+    //   this.user.problemSid = this.problemSidArray[0].value;
+    // }
       this.user = {
         callerFirstName: '',
         callerLastName: '',
@@ -83,8 +87,8 @@ export class AppComponent implements OnInit {
         address: '',
         callerWorkPhone: '',
         callerEmail: '',
-        // problemsid: this.problemsid[0].value,
-        problemSid: '',
+        problemSid: this.problemSid[0].value,
+        //problemSid: '',
         callerComments: '',
         comments: 'created by SWS online customer web form',
         x: '',
@@ -100,12 +104,15 @@ export class AppComponent implements OnInit {
       err => console.error(err),
       () => this.addressOptions.push(this.result.features[0].attributes.ADDRESS));
 
-      // console.log('result = ', JSON.stringify(this.result));
       return this.addressOptions.filter(addressOption => new RegExp(`^${val}`, 'gi').test(addressOption));
    }
 
-  openDialog() {
-    const dialogRef = this._dialog.open(DialogContentComponent);
+  openDialog(page: string) {
+    if (page === 'about'){
+      const dialogRef = this._dialog.open(DialogContentComponent);
+    } else if (page === 'help') {
+      const dialogRef = this._dialog.open(DialogContentComponent);
+    }
   }
 
 }

@@ -14,4 +14,7 @@ export interface User {
     x: string;
     y: string;
     details: string;
+    city: string;
+    state: string;
+    zip: string;
 }

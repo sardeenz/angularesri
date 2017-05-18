@@ -18,13 +18,10 @@ import {MdIconRegistry} from '@angular/material';
 })
 export class AppComponent implements OnInit {
 
-  @ViewChild(EsriMapComponent) esriMapComponent: EsriMapComponent;
-
+  requestId: any;
   myControl = new FormControl();
-
    addressOptions = [];
    filteredOptions: Observable<string[]>;
-
   map: any;
   public authResponse;
   public isDone;
@@ -39,6 +36,8 @@ export class AppComponent implements OnInit {
     { value: 'yard', display: 'Yard Waste' },
 ];
 
+@ViewChild(EsriMapComponent) esriMapComponent: EsriMapComponent;
+
   constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private _dialog: MdDialog,
   private _servicerequestService: ServicerequestService, private geocodeService: GeocodeService) {iconRegistry.addSvgIcon(
         'city_seal',
@@ -48,6 +47,7 @@ export class AppComponent implements OnInit {
 
   zoomToMap() {
     console.log('inside zoomToMap');
+    this.esriMapComponent.gotoView(this.user.address);
   }
 
   save() {
@@ -63,13 +63,20 @@ export class AppComponent implements OnInit {
     this.submitted = true;
     this.isDone = false;
         console.log('user.address = ', this.user);
-        this.esriMapComponent.gotoView(this.user.address);
+        //this.esriMapComponent.gotoView(this.user.address);
         this._servicerequestService.createServiceRequest(this.user).subscribe(
           data => this.authResponse = data,
           err => console.error(err),
           // () => console.log('this token is ', this.authResponse.Value.Token)
           () => this.isDone = true
         );
+    }
+
+    checkSRStatus() {
+      this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
+          err => console.error(err),
+          // () => console.log('this token is ', this.authResponse.Value.Token)
+          () => this.isDone = true);
     }
 
   ngOnInit() {
@@ -93,7 +100,10 @@ export class AppComponent implements OnInit {
         comments: 'created by SWS online customer web form',
         x: '',
         y: '',
-        details: ''
+        details: '',
+        city: '',
+        state: 'NC',
+        zip: '',
     };
 
     this.filteredOptions = this.myControl.valueChanges.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());

@@ -1,10 +1,12 @@
 <div class="app-content">
 
     <md-toolbar color="primary">
-        <a href="http://raleighnc.gov"> <span>
+        <a href="http://raleighnc.gov">
+            <span>
             <md-icon svgIcon="city_seal"></md-icon>
             </span>
         </a>
+
         <span>Solid Waste Services</span>
         <button md-icon-button [mdMenuTriggerFor]="menu">
       <md-icon>more_vert</md-icon>
@@ -24,12 +26,14 @@
 
     <md-card class="app-input-section">
         <form (ngSubmit)="save()" #thisform="ngForm">
-            <h2>Choose the type of missed collection</h2>
+
+            <h2>Choose the type of missed collection </h2>
             <md-select name="problemSid" [(ngModel)]="user.problemSid" placeholder="Missed Collection Type">
                 <md-option *ngFor="let problemSid of problemSid" [value]="problemSid.value">
                     {{problemSid.display}}
                 </md-option>
             </md-select>
+
             <p></p>
             <div *ngIf="user.problemSid == 'garbage' || user.problemSid == 'recycling'">
                 <p>Garbage/Recycling link and info </p>
@@ -38,6 +42,7 @@
                 <p>Yard Waste link and info</p>
             </div>
             <br>
+
 
 
             <!--<h2>Choose the type of missed collection</h2>
@@ -73,14 +78,23 @@
             </md-input-container>
             <p>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
-                    <input mdInput [formControl]="myControl" [mdAutocomplete]="auto" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="right" type="text" name="address" [(ngModel)]="user.address" [(ngModel)]="user.callerAddress"
-                        required>
+                    <input mdInput [formControl]="myControl" [mdAutocomplete]="auto" (change)="zoomToMap()" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="right" type="text" name="address" [(ngModel)]="user.address"
+                        [(ngModel)]="user.callerAddress" required>
                 </md-input-container>
-                <md-autocomplete #auto="mdAutocomplete" md-selected-item="addressOptions" md-selected-item-change="zoomToMap()">
+                <md-autocomplete #auto="mdAutocomplete">
                     <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
                         {{ addressOptions }}
                     </md-option>
                 </md-autocomplete>
+                <md-input-container>
+                    <input mdInput placeholder="City" type="text" name="callerCity" [(ngModel)]="user.callerCity" [(ngModel)]="user.city">
+                </md-input-container>
+                <md-input-container>
+                    <input mdInput placeholder="State" type="text" name="callerState" [(ngModel)]="user.callerState" [(ngModel)]="user.state">
+                </md-input-container>
+                <md-input-container>
+                    <input mdInput placeholder="Zip" type="text" name="callerZip" [(ngModel)]="user.callerZip" [(ngModel)]="user.zip">
+                </md-input-container>
             </p>
             <p>
                 <md-input-container>

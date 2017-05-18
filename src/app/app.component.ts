@@ -7,9 +7,9 @@ import { Component, OnInit, ViewChild, ElementRef, Optional } from '@angular/cor
 import { User } from './user';
 import { EsriMapComponent } from 'app/esri-map/esri-map.component';
 import { EsriLoaderService } from 'angular2-esri-loader';
-import {MdDialog, MdDialogRef} from '@angular/material';
-import {DomSanitizer} from '@angular/platform-browser';
-import {MdIconRegistry} from '@angular/material';
+import { MdDialog, MdDialogRef } from '@angular/material';
+import { DomSanitizer } from '@angular/platform-browser';
+import { MdIconRegistry } from '@angular/material';
 
 @Component({
   selector: 'app-root',
@@ -20,8 +20,8 @@ export class AppComponent implements OnInit {
 
   requestId: any;
   myControl = new FormControl();
-   addressOptions = [];
-   filteredOptions: Observable<string[]>;
+  addressOptions = [];
+  filteredOptions: Observable<string[]>;
   map: any;
   public authResponse;
   public isDone;
@@ -31,17 +31,19 @@ export class AppComponent implements OnInit {
   public result;
 
   public problemSid = [
-    { value: 'garbage', display: 'Garbage' },
-    { value: 'recycling', display: 'Recycling' },
-    { value: 'yard', display: 'Yard Waste' },
-];
+    { value: '263551', display: 'Garbage' },
+    { value: '263552', display: 'Recycling' },
+    { value: '263553', display: 'Yard Waste' },
+  ];
 
-@ViewChild(EsriMapComponent) esriMapComponent: EsriMapComponent;
+  @ViewChild(EsriMapComponent) esriMapComponent: EsriMapComponent;
 
   constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private _dialog: MdDialog,
-  private _servicerequestService: ServicerequestService, private geocodeService: GeocodeService) {iconRegistry.addSvgIcon(
-        'city_seal',
-        sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg')); }
+    private _servicerequestService: ServicerequestService, private geocodeService: GeocodeService) {
+    iconRegistry.addSvgIcon(
+      'city_seal',
+      sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg'));
+  }
 
   onSubmit() { this.submitted = true; }
 
@@ -52,73 +54,72 @@ export class AppComponent implements OnInit {
 
   save() {
 
-    if (this.user.problemSid === 'garbage') {
-        this.user.problemSid = '263551';
-    } else if (this.user.problemSid === 'recycling') {
-        this.user.problemSid = '263552';
-    } else if (this.user.problemSid === 'yard') {
-        this.user.problemSid = '263553';
-    }
-
     this.submitted = true;
     this.isDone = false;
-        console.log('user.address = ', this.user);
-        //this.esriMapComponent.gotoView(this.user.address);
-        this._servicerequestService.createServiceRequest(this.user).subscribe(
-          data => this.authResponse = data,
-          err => console.error(err),
-          // () => console.log('this token is ', this.authResponse.Value.Token)
-          () => this.isDone = true
-        );
-    }
+    console.log('user.address = ', this.user);
+    this._servicerequestService.createServiceRequest(this.user).subscribe(
+      data => this.authResponse = data,
+      err => console.error(err),
+      () => {
+        this.isDone = true
+        if (this.authResponse.requestId === "") {
 
-    checkSRStatus() {
-      this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
-          err => console.error(err),
-          // () => console.log('this token is ', this.authResponse.Value.Token)
-          () => this.isDone = true);
-    }
+        }
+        console.log('this response is ', this.authResponse);
+      }
+      //() => this.isDone = true
+    );
+  }
+
+  checkSRStatus() {
+    this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
+      err => console.error(err),
+      // () => console.log('this token is ', this.authResponse.Value.Token)
+      () => this.isDone = true);
+  }
 
   ngOnInit() {
 
-    // if (this.problemSidArray.length > 0){
-    //   this.user.problemSid = this.problemSidArray[0].value;
-    // }
-      this.user = {
-        callerFirstName: '',
-        callerLastName: '',
-        callerAddress: '',
-        callerCity: '',
-        callerState: '',
-        callerZip: '',
-        address: '',
-        callerWorkPhone: '',
-        callerEmail: '',
-        problemSid: this.problemSid[0].value,
-        //problemSid: '',
-        callerComments: '',
-        comments: 'created by SWS online customer web form',
-        x: '',
-        y: '',
-        details: '',
-        city: '',
-        state: 'NC',
-        zip: '',
+    this.user = {
+      callerFirstName: '',
+      callerLastName: '',
+      callerAddress: '',
+      callerCity: '',
+      callerState: '',
+      callerZip: '',
+      address: '',
+      callerWorkPhone: '',
+      callerEmail: '',
+      problemSid: this.problemSid[0].value,
+      //problemSid: '',
+      callerComments: '',
+      comments: 'created by SWS online customer web form',
+      x: '',
+      y: '',
+      details: '',
+      city: '',
+      state: 'NC',
+      zip: ''
     };
 
-    this.filteredOptions = this.myControl.valueChanges.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());
+    this.filteredOptions = this.myControl.valueChanges.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice(0, 1));
   }
 
   filter(val: string): string[] {
-      this.geocodeService.getGeometry(val).subscribe(result => this.result = result,
-      err => console.error(err),
-      () => this.addressOptions.push(this.result.features[0].attributes.ADDRESS));
 
-      return this.addressOptions.filter(addressOption => new RegExp(`^${val}`, 'gi').test(addressOption));
-   }
+    this.geocodeService.getGeometry(val).subscribe(result => this.result = result,
+      err => console.error(err),
+      () => {
+        this.addressOptions.splice(0, 1);
+        this.addressOptions.push(this.result.features[0].attributes.ADDRESS)
+      });
+
+    console.log('this.addressOptions = ', this.addressOptions);
+    return this.addressOptions.filter(addressOption => new RegExp(`^${val}`, 'gi').test(addressOption));
+  }
 
   openDialog(page: string) {
-    if (page === 'about'){
+    if (page === 'about') {
       const dialogRef = this._dialog.open(DialogContentComponent);
     } else if (page === 'help') {
       const dialogRef = this._dialog.open(DialogContentComponent);

@@ -13,7 +13,10 @@ export class GeocodeService {
 
       getGeometry(address): Observable<string>  {
         return this.http.get(encodeURI(this.url) + encodeURIComponent(address.toUpperCase()) + '%\'').map((res:Response) => res.json())
-        .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-
+        .catch((error:any) => Observable.throw(error.json().error || console.log('Server error')));
       }
+      // getGeometry(address): Observable<string>  {
+      //   return this.http.get(encodeURI(this.url) + encodeURIComponent(address.toUpperCase()) + '%\'').map((res:Response) => res.json())
+      //   .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      // }
 }

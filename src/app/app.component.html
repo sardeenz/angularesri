@@ -78,10 +78,10 @@
             </md-input-container>
             <p>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
-                    <input mdInput [formControl]="myControl" [mdAutocomplete]="auto" (change)="zoomToMap()" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="right" type="text" name="address" [(ngModel)]="user.address"
-                        [(ngModel)]="user.callerAddress" required>
+                    <input mdInput #thisform="ngForm" [formControl]="myControl" [mdAutocomplete]="auto" (change)="zoomToMap()" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="right" type="text" name="address"
+                        [(ngModel)]="user.address" [(ngModel)]="user.callerAddress" required>
                 </md-input-container>
-                <md-autocomplete #auto="mdAutocomplete">
+                <md-autocomplete #auto="mdAutocomplete" md-min-length="4" md-autoselect="true">
                     <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
                         {{ addressOptions }}
                     </md-option>
@@ -110,7 +110,7 @@
                 </md-input-container>
             </p>
             <!--<button md-raised-button color="primary" type="submit" (click)="save(f.value, f.valid)">Submit</button>-->
-            <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!thisform.form.valid">Submit</button>
+            <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!thisform.valid">Submit</button>
             <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
 
         </form>
@@ -124,15 +124,14 @@
         </md-autocomplete>
         <p/>-->
 
-    <md-card *ngIf="isDone " class="app-input-section ">
+    <md-card *ngIf="isDone" class="app-input-section">
         <!--isDone = {{isDone}}-->
         <!--<div *ngIf="isDone ">Your Service Request ID is {{authResponse.Value.Token | json}}</div>-->
-        <div *ngIf="isDone ">Your Service Request ID is {{authResponse.requestId | json}}</div>
-
-
+        <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
+        <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
     </md-card>
 
-    <md-card class="app-input-section ">
+    <md-card class="app-input-section">
         <app-esri-map></app-esri-map>
     </md-card>
 

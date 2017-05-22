@@ -35,11 +35,13 @@
             </md-select>
 
             <p></p>
-            <div *ngIf="user.problemSid == 'garbage' || user.problemSid == 'recycling'">
-                <p>Garbage/Recycling link and info </p>
+            <div *ngIf="user.problemSid == '263551' || user.problemSid == '263553'">
+                <p></p>
+                <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">Garbage/Yard Waste link and info </a>
             </div>
-            <div *ngIf="user.problemSid == 'yard'">
-                <p>Yard Waste link and info</p>
+            <div *ngIf="user.problemSid == '263552'">
+                <p></p>
+                <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/RecyclePages.html" target="_blank">Recycling Waste link and info</a>
             </div>
             <br>
 
@@ -85,6 +87,7 @@
                     <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
                         {{ addressOptions }}
                     </md-option>
+
                 </md-autocomplete>
                 <md-input-container>
                     <input mdInput placeholder="City" type="text" name="callerCity" [(ngModel)]="user.callerCity" [(ngModel)]="user.city">

@@ -37,6 +37,8 @@ ng build --prod --bh /sws/
 zip -r dist.zip dist
 scp -i ~/code/sysadmin/bc-prod.pem dist.zip ubuntu@54.148.0.119:/tmp
 
+Don't forget to uncomment stuff in polyfills.ts to IE browers
+
 
 # Servicerequest
 

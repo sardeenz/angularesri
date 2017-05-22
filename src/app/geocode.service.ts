@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
-import {Http, Response, Headers, RequestOptions} from '@angular/http';
+import { Http, Response, Headers, RequestOptions } from '@angular/http';
 
 @Injectable()
 export class GeocodeService {
@@ -11,12 +11,12 @@ export class GeocodeService {
 
   constructor(private http: Http) { }
 
-      getGeometry(address): Observable<string>  {
-        return this.http.get(encodeURI(this.url) + encodeURIComponent(address.toUpperCase()) + '%\'').map((res:Response) => res.json())
-        .catch((error:any) => Observable.throw(error.json().error || console.log('Server error')));
-      }
-      // getGeometry(address): Observable<string>  {
-      //   return this.http.get(encodeURI(this.url) + encodeURIComponent(address.toUpperCase()) + '%\'').map((res:Response) => res.json())
-      //   .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-      // }
+  getGeometry(address): Observable<string> {
+    return this.http.get(encodeURI(this.url) + encodeURIComponent(address.toUpperCase()) + '%\'').map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+  }
+  // getGeometry(address): Observable<string>  {
+  //   return this.http.get(encodeURI(this.url) + encodeURIComponent(address.toUpperCase()) + '%\'').map((res:Response) => res.json())
+  //   .catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+  // }
 }

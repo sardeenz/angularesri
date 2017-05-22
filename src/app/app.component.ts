@@ -63,7 +63,7 @@ export class AppComponent implements OnInit {
       () => {
         this.isDone = true
         if (this.authResponse.requestId === "") {
-
+          console.log('no ServiceRequest ID was returned');
         }
         console.log('this response is ', this.authResponse);
       }
@@ -125,7 +125,6 @@ export class AppComponent implements OnInit {
       const dialogRef = this._dialog.open(DialogContentComponent);
     }
   }
-
 }
 
 

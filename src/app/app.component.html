@@ -81,7 +81,7 @@
                     <input mdInput #thisform="ngForm" [formControl]="myControl" [mdAutocomplete]="auto" (change)="zoomToMap()" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="right" type="text" name="address"
                         [(ngModel)]="user.address" [(ngModel)]="user.callerAddress" required>
                 </md-input-container>
-                <md-autocomplete #auto="mdAutocomplete" md-min-length="4" md-autoselect="true">
+                <md-autocomplete #auto="mdAutocomplete">
                     <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
                         {{ addressOptions }}
                     </md-option>

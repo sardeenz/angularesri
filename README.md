@@ -32,6 +32,12 @@ https://gist.github.com/tomwayson/e6260adfd56c2529313936528b8adacd
 npm install --save @types/arcgis-js-api
 
 
+# Deployment
+ng build --prod --bh /sws/
+zip -r dist.zip dist
+scp -i ~/code/sysadmin/bc-prod.pem dist.zip ubuntu@54.148.0.119:/tmp
+
+
 # Servicerequest
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 1.0.0.

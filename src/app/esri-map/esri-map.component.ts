@@ -37,6 +37,9 @@ export class EsriMapComponent implements OnInit {
     this.geocodeService.getGeometry(address).subscribe(data => this.data = data,
       err => console.error(err),
       () => this.setMarker(this.data));
+
+      console.log('this.data inside gotoView', this.data.features[0].geometry.x);
+
   }
 
   public ngOnInit() {

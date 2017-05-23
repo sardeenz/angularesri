@@ -1,3 +1,4 @@
+import { Geodata } from '../geodata';
 import { GeocodeService } from '../geocode.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
@@ -14,7 +15,7 @@ import { EsriLoaderService } from 'angular2-esri-loader';
 })
 export class EsriMapComponent implements OnInit {
 
-  public data: any;
+  geodata: Geodata;
   maploaded: boolean = false;
 
   public mymap: any;
@@ -25,7 +26,6 @@ export class EsriMapComponent implements OnInit {
   public markerSymbol: __esri.SimpleMarkerSymbol;
   public graphicsLayer: __esri.GraphicsLayer;
 
-
   // this is needed to be able to create the MapView at the DOM element in this component
   @ViewChild('mapViewNode') private mapViewEl: ElementRef;
 
@@ -34,11 +34,10 @@ export class EsriMapComponent implements OnInit {
   ) { }
 
   public gotoView(address) {
-    this.geocodeService.getGeometry(address).subscribe(data => this.data = data,
+    this.geocodeService.getGeometry(address).subscribe(geodata => this.geodata = geodata,
       err => console.error(err),
-      () => this.setMarker(this.data));
-
-      console.log('this.data inside gotoView', this.data.features[0].geometry.x);
+      () => this.setMarker(this.geodata));
+      console.log('this.data inside gotoView', this.geodata);
 
   }
 
@@ -88,17 +87,17 @@ export class EsriMapComponent implements OnInit {
 
   public setMarker(data) {
 
-    console.log('this.data from address search= ', this.data);
+    console.log('this.data from address search= ', this.geodata);
 
-    this.mapView.goTo({center: [this.data.features[0].geometry.x, this.data.features[0].geometry.y],
+    this.mapView.goTo({center: [this.geodata.features[0].geometry.x, this.geodata.features[0].geometry.y],
         zoom: 17
       });
 
         this.esriLoader.require(['esri/Map','esri/layers/GraphicsLayer','esri/geometry/Point',
         'esri/symbols/SimpleMarkerSymbol','esri/Graphic'],
         (Map, GraphicsLayer, Point, SimpleMarkerSymbol, Graphic) => {
-            console.log('x = ',this.data.features[0].geometry.x);
-            console.log('y = ',this.data.features[0].geometry.y);
+            console.log('x = ',this.geodata.features[0].geometry.x);
+            console.log('y = ',this.geodata.features[0].geometry.y);
             this.markerSymbol = new SimpleMarkerSymbol({
               color: [226, 119, 40],
               outline: { // autocasts as new SimpleLineSymbol()
@@ -108,8 +107,8 @@ export class EsriMapComponent implements OnInit {
             });
             this.pointGraphic = new Graphic({
               geometry: new Point({
-                        longitude: this.data.features[0].geometry.x,
-                        latitude: this.data.features[0].geometry.y
+                        longitude: this.geodata.features[0].geometry.x,
+                        latitude: this.geodata.features[0].geometry.y
                     })
             });
 

@@ -41,12 +41,12 @@ export class EsriMapComponent implements OnInit {
       err => console.error(err),
       () => {
         this.setMarker(this.geodata);
-        this.geocodeService.getTrashDay(this.geodata).subscribe(collectionareas => this.collectionareas = collectionareas,
+        this.geocodeService.getTrashDay(this.geodata).subscribe(collectionarea => this.collectionareas = collectionarea,
       err => console.error(err),
       () => console.log('this.day inside service call = ',this.day = this.collectionareas.features[0].attributes.DAY));
       }
       );
-      console.log('this.day outside service call= ', this.day);
+      console.log('this.day outside service call= ', this.collectionareas);
   }
 
   public ngOnInit() {

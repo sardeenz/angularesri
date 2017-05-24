@@ -1,3 +1,4 @@
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Geodata } from './geodata';
 import { Collectionareas } from './collectionareas';
 import { GeocodeService } from './geocode.service';
@@ -6,7 +7,7 @@ import { FormControl } from '@angular/forms';
 import { DialogContentComponent } from './dialog-content/dialog-content.component';
 import { ServicerequestService } from './servicerequest.service';
 import { Component, OnInit, ViewChild, ElementRef, Optional } from '@angular/core';
-import { User } from './user';
+import {User } from './user';
 import { EsriMapComponent } from 'app/esri-map/esri-map.component';
 import { EsriLoaderService } from 'angular2-esri-loader';
 import { MdDialog, MdDialogRef } from '@angular/material';
@@ -18,7 +19,11 @@ import { MdIconRegistry } from '@angular/material';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, User {
+
+  public myForm: FormGroup; // our model driven form
+  public submitted: boolean; // keep track on whether form is submitted
+  //public events: any[] = []; // use later to display form changes
 
   requestId: any;
   myControl = new FormControl();
@@ -27,24 +32,41 @@ export class AppComponent implements OnInit {
   map: any;
   public authResponse;
   public isDone;
-  public submitted = false;
-  public user: User;
+  user: User;
   public data;
   public result;
   geodata = new Geodata;
   collectionareas: Collectionareas;
   day: string = '';
 
-  public problemSid = [
+  public problemSids = [
     { value: '263551', display: 'Garbage' },
     { value: '263552', display: 'Recycling' },
     { value: '263553', display: 'Yard Waste' },
   ];
+    public problemSid: string;
+    public callerFirstName: string;
+    public callerAddress: string;
+    public callerState: string;
+    public callerCity: string;
+    public callerZip: string;
+    public address: string;
+    public callerWorkPhone: string;
+    public callerEmail: string;
+    public callerLastName: string;
+    public callerComments: string;
+    public comments: string;
+    public x: string;
+    public y: string;
+    public details: string;
+    public city: string;
+    public state: string;
+    public zip: string;
 
   @ViewChild(EsriMapComponent) esriMapComponent: EsriMapComponent;
 
   constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private _dialog: MdDialog,
-    private _servicerequestService: ServicerequestService, private geocodeService: GeocodeService) {
+    private _servicerequestService: ServicerequestService, private geocodeService: GeocodeService, private _fb: FormBuilder) {
     iconRegistry.addSvgIcon(
       'city_seal',
       sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg'));
@@ -54,24 +76,18 @@ export class AppComponent implements OnInit {
 
   zoomToMap() {
     console.log('inside zoomToMap');
-    this.esriMapComponent.gotoView(this.user.address);
-
-    // TODO: call trashday service and show trashday 
-    //       based on coords that should already be assigned to this.geodata model
-    //console.log('geoCHAD', this.geodata.features[0].geometry.x);
-    // this.geocodeService.getTrashDay(this.geodata).subscribe(collectionareas => this.collectionareas = collectionareas,
-    //   err => console.error(err),
-    //   () => this.day = this.collectionareas.features[0].attributes.DAY);
-      // () => console.log('this.data inside COLLECTIONAREAS', this.collectionareas.features[0].attributes.DAY));
-      
-
-  
+    //this.esriMapComponent.gotoView(this.user.address);
+    this.esriMapComponent.gotoView(this.myForm.get('callerAddress').value);
   }
 
-  save() {
-    this.submitted = true;
+  save(model: User, isValid: boolean) {
     this.isDone = false;
-    console.log('user.address = ', this.user);
+    this.submitted = true; // set form submit to true
+
+    // check if model is valid
+    // if valid, call API to save customer
+    console.log(model, isValid);
+
     this._servicerequestService.createServiceRequest(this.user).subscribe(
       data => this.authResponse = data,
       err => console.error(err),
@@ -82,7 +98,6 @@ export class AppComponent implements OnInit {
         }
         console.log('this response is ', this.authResponse);
       }
-      //() => this.isDone = true
     );
   }
 
@@ -94,30 +109,22 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    
+    this.myForm = this._fb.group({
+      problemSid: [this.problemSids[0].value],
+      callerFirstName: [''],
+      callerLastName: ['', [<any>Validators.required]],
+      callerAddress: ['', <any>Validators.required],
+      callerCity: ['Raleigh'],
+      callerState: ['NC'],
+      callerZip: [''],
+      callerEmail: ['', <any>Validators.email],
+      callerWorkPhone: [''],
+      comments: ['']
+    });
 
-    this.user = {
-      callerFirstName: '',
-      callerLastName: '',
-      callerAddress: '',
-      callerCity: '',
-      callerState: '',
-      callerZip: '',
-      address: '',
-      callerWorkPhone: '',
-      callerEmail: '',
-      problemSid: this.problemSid[0].value,
-      //problemSid: '',
-      callerComments: '',
-      comments: 'created by SWS online customer web form',
-      x: '',
-      y: '',
-      details: '',
-      city: '',
-      state: 'NC',
-      zip: ''
-    };
-
-    this.filteredOptions = this.myControl.valueChanges.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice(0, 1));
+    const callerAddressChanges$ = this.myForm.get('callerAddress').valueChanges;
+    this.filteredOptions = callerAddressChanges$.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice(0, 1));
   }
 
   filter(val: string): string[] {

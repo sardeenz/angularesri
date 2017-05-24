@@ -1,5 +1,5 @@
-import { Collectionareas } from './collectionareas';
 import { Geodata } from './geodata';
+import { Collectionareas } from './collectionareas';
 import { GeocodeService } from './geocode.service';
 import { Observable } from 'rxjs/Rx';
 import { FormControl } from '@angular/forms';
@@ -31,9 +31,9 @@ export class AppComponent implements OnInit {
   public user: User;
   public data;
   public result;
-  geodata: Geodata;
+  geodata = new Geodata;
   collectionareas: Collectionareas;
-  day: string;
+  day: string = '';
 
   public problemSid = [
     { value: '263551', display: 'Garbage' },
@@ -59,9 +59,9 @@ export class AppComponent implements OnInit {
     // TODO: call trashday service and show trashday 
     //       based on coords that should already be assigned to this.geodata model
     //console.log('geoCHAD', this.geodata.features[0].geometry.x);
-    this.geocodeService.getTrashDay().subscribe(collectionareas => this.collectionareas = collectionareas,
-      err => console.error(err),
-      () => this.day = this.collectionareas.features[0].attributes.DAY);
+    // this.geocodeService.getTrashDay(this.geodata).subscribe(collectionareas => this.collectionareas = collectionareas,
+    //   err => console.error(err),
+    //   () => this.day = this.collectionareas.features[0].attributes.DAY);
       // () => console.log('this.data inside COLLECTIONAREAS', this.collectionareas.features[0].attributes.DAY));
       
 

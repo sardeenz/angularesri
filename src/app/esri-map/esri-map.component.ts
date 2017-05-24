@@ -1,3 +1,4 @@
+import { Collectionareas } from '../collectionareas';
 import { Geodata } from '../geodata';
 import { GeocodeService } from '../geocode.service';
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
@@ -17,7 +18,9 @@ export class EsriMapComponent implements OnInit {
 
   geodata: Geodata;
   maploaded: boolean = false;
-
+  collectionareas: Collectionareas;
+  day: string = '';
+  
   public mymap: any;
 
   // for JSAPI 4.x you can use the "any for TS types
@@ -36,9 +39,14 @@ export class EsriMapComponent implements OnInit {
   public gotoView(address) {
     this.geocodeService.getGeometry(address).subscribe(geodata => this.geodata = geodata,
       err => console.error(err),
-      () => this.setMarker(this.geodata));
-      console.log('this.data inside gotoView', this.geodata);
-
+      () => {
+        this.setMarker(this.geodata);
+        this.geocodeService.getTrashDay(this.geodata).subscribe(collectionareas => this.collectionareas = collectionareas,
+      err => console.error(err),
+      () => console.log('this.day inside service call = ',this.day = this.collectionareas.features[0].attributes.DAY));
+      }
+      );
+      console.log('this.day outside service call= ', this.day);
   }
 
   public ngOnInit() {

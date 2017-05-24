@@ -135,7 +135,7 @@
     </md-card>
 
     <md-card class="app-input-section">
-        Your Garbage collection day is {{ day }}
+        <div *ngIf="day != ''">Your Garbage collection day is {{ day }}</div>
         <p></p>
         <app-esri-map></app-esri-map>
     </md-card>

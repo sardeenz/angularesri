@@ -25,60 +25,71 @@
     </md-menu>
 
     <md-card class="app-input-section">
-        <form (ngSubmit)="save()" #thisform="ngForm">
+        <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
 
             <h2>Choose the type of missed collection </h2>
-            <md-select name="problemSid" [(ngModel)]="user.problemSid" placeholder="Missed Collection Type">
-                <md-option *ngFor="let problemSid of problemSid" [value]="problemSid.value">
+            <md-select formControlName="problemSid">
+                <md-option *ngFor="let problemSid of problemSids" [value]="problemSid.value">
                     {{problemSid.display}}
                 </md-option>
             </md-select>
 
             <p></p>
-            <div *ngIf="user.problemSid == '263551' || user.problemSid == '263553'">
+            <div *ngIf="myForm.controls.problemSid.value == '263551' || myForm.controls.problemSid.value == '263553'">
                 <p></p>
                 <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">Garbage/Yard Waste link and info </a>
             </div>
-            <div *ngIf="user.problemSid == '263552'">
+            <div *ngIf="myForm.controls.problemSid.value == '263552'">
                 <p></p>
                 <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/RecyclePages.html" target="_blank">Recycling Waste link and info</a>
             </div>
             <br>
-
-
-
-            <!--<h2>Choose the type of missed collection</h2>
-            <md-select name="problemSid" [(ngModel)]="user.problemSid" floatPlaceholder="never">
-                <md-option *ngFor="let problemSid of problemSid" [value]="problemSid.value">
-                    {{problemSid.display}}
-                </md-option>
-            </md-select>
-            <p></p>
-            <div *ngIf="user.problemSid == 'garbage' || user.problemSid == 'recycling'">
-                <p>Garbage/Recycling link and info </p>
-            </div>
-            <div *ngIf="user.problemSid == 'yard'">
-                <p>Yard Waste link and info</p>
-            </div>
-            <br>-->
-            <!--or if all three selected show both-->
-            <!--
-    <md-card *ngIf="user.problemsid != '' || user.problemsid == 'garbage' && user.problemsid == 'recycling'" class="app-input-section">
-        {{user.problemsid}}-->
-            <!--<div *ngIf="user.problemsid == 'garbage' || user.problemsid == 'recycling' || user.problemsid == 'garbage,recycling'">Garbage/Recycling link and info</div>
-        <div *ngIf="user.problemsid == 'yard'">Yard Waste link and info</div>-->
-            <!--</md-card>-->
-
-
-
-
-            <md-input-container>
-                <input mdInput placeholder="First name" type="text" name="firstname" [(ngModel)]="user.callerFirstName">
+            <md-input-container class="wider" hintLabel="ex. 123 Main St.">
+                <input mdInput type="text" (change)="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="below">
             </md-input-container>
+            <md-autocomplete #auto="mdAutocomplete">
+                <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
+                    {{ addressOptions }}
+                </md-option>
+            </md-autocomplete>
+            <p>
+                <md-input-container>
+                    <input mdInput type="text" formControlName="callerFirstName" placeholder="First Name">
+                </md-input-container>
+            </p>
             <md-input-container>
-                <input mdInput placeholder="Last name" type="text" name="lastname" [(ngModel)]="user.callerLastName" required>
+                <input mdInput type="text" formControlName="callerLastName" placeholder="Last Name">
+                <small [hidden]="myForm.controls.callerLastName.valid || (myForm.controls.callerLastName.pristine && !submitted)">
+                    Last Name is required.
+                </small>
             </md-input-container>
             <p>
+                <md-input-container>
+                    <input mdInput type="text" formControlName="callerCity" placeholder="City">
+                </md-input-container>
+
+                <md-input-container>
+                    <input mdInput type="text" formControlName="callerState" placeholder="State">
+                </md-input-container>
+                <md-input-container>
+                    <input mdInput type="text" formControlName="callerZip" placeholder="Zip">
+                </md-input-container>
+            </p>
+            <p>
+                <md-input-container>
+                    <input mdInput type="text" formControlName="callerEmail" placeholder="someone@somewhere.com">
+                </md-input-container>
+            </p>
+            <p>
+                <md-input-container>
+                    <input mdInput type="text" formControlName="callerWorkPhone" placeholder="Phone #">
+                </md-input-container>
+            </p>
+            <md-input-container>
+                <textarea mdInput type="text" formControlName="comments" placeholder="Comments"></textarea>
+            </md-input-container>
+            <p>
+                <!--<p>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
                     <input mdInput #thisform="ngForm" [formControl]="myControl" [mdAutocomplete]="auto" (change)="zoomToMap()" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="right" type="text" name="address"
                         [(ngModel)]="user.address" [(ngModel)]="user.callerAddress" required>
@@ -110,12 +121,14 @@
             <p>
                 <md-input-container>
                     <textarea mdInput placeholder="Comments" type="text" name="comments" [(ngModel)]="user.callerComments"></textarea>
-                </md-input-container>
+            </md-input-container>
+            </p>-->
+                <!--<button md-raised-button color="primary" type="submit" (click)="save(f.value, f.valid)">Submit</button>-->
+                <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid">Submit</button>
             </p>
-            <!--<button md-raised-button color="primary" type="submit" (click)="save(f.value, f.valid)">Submit</button>-->
-            <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!thisform.valid">Submit</button>
-            <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
-
+            <p>
+                <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+            </p>
         </form>
     </md-card>
 

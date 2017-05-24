@@ -24,7 +24,7 @@
         </button>
     </md-menu>
 
-    <md-card class="app-input-section">
+    <md-card>
         <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
 
             <h2>Choose the type of missed collection </h2>
@@ -34,24 +34,39 @@
                 </md-option>
             </md-select>
 
-            <p></p>
             <div *ngIf="myForm.controls.problemSid.value == '263551' || myForm.controls.problemSid.value == '263553'">
-                <p></p>
-                <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">Garbage/Yard Waste link and info </a>
+                <p>
+                    <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">Garbage/Yard Waste link and info </a>
+                </p>
             </div>
             <div *ngIf="myForm.controls.problemSid.value == '263552'">
-                <p></p>
-                <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/RecyclePages.html" target="_blank">Recycling Waste link and info</a>
+                <p>
+                    <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/RecyclePages.html" target="_blank">Recycling Waste link and info</a>
+                </p>
             </div>
-            <br>
+
             <md-input-container class="wider" hintLabel="ex. 123 Main St.">
-                <input mdInput type="text" (change)="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="below">
+                <input mdInput type="text" (change)="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
             </md-input-container>
             <md-autocomplete #auto="mdAutocomplete">
                 <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
                     {{ addressOptions }}
                 </md-option>
             </md-autocomplete>
+            <md-input-container>
+                <input mdInput type="text" formControlName="callerCity" placeholder="City">
+            </md-input-container>
+
+            <md-input-container>
+                <input mdInput type="text" formControlName="callerState" placeholder="State">
+            </md-input-container>
+            <md-input-container>
+                <input mdInput type="text" formControlName="callerZip" placeholder="Zip" type="number">
+            </md-input-container>
+
+            <md-card>
+                <app-esri-map></app-esri-map>
+            </md-card>
             <p>
                 <md-input-container>
                     <input mdInput type="text" formControlName="callerFirstName" placeholder="First Name">
@@ -59,22 +74,7 @@
             </p>
             <md-input-container>
                 <input mdInput type="text" formControlName="callerLastName" placeholder="Last Name">
-                <small [hidden]="myForm.controls.callerLastName.valid || (myForm.controls.callerLastName.pristine && !submitted)">
-                    Last Name is required.
-                </small>
             </md-input-container>
-            <p>
-                <md-input-container>
-                    <input mdInput type="text" formControlName="callerCity" placeholder="City">
-                </md-input-container>
-
-                <md-input-container>
-                    <input mdInput type="text" formControlName="callerState" placeholder="State">
-                </md-input-container>
-                <md-input-container>
-                    <input mdInput type="text" formControlName="callerZip" placeholder="Zip">
-                </md-input-container>
-            </p>
             <p>
                 <md-input-container>
                     <input mdInput type="text" formControlName="callerEmail" placeholder="someone@somewhere.com">
@@ -82,72 +82,23 @@
             </p>
             <p>
                 <md-input-container>
-                    <input mdInput type="text" formControlName="callerWorkPhone" placeholder="Phone #">
+                    <input mdInput type="text" formControlName="callerWorkPhone" placeholder="Phone #" type="number">
                 </md-input-container>
             </p>
             <md-input-container>
                 <textarea mdInput type="text" formControlName="comments" placeholder="Comments"></textarea>
             </md-input-container>
             <p>
-                <!--<p>
-                <md-input-container class="wider" hintLabel="ex. 123 Main St.">
-                    <input mdInput #thisform="ngForm" [formControl]="myControl" [mdAutocomplete]="auto" (change)="zoomToMap()" placeholder="Street Address" mdTooltip="You only need to enter your street number and street name" mdTooltipPosition="right" type="text" name="address"
-                        [(ngModel)]="user.address" [(ngModel)]="user.callerAddress" required>
-                </md-input-container>
-                <md-autocomplete #auto="mdAutocomplete">
-                    <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
-                        {{ addressOptions }}
-                    </md-option>
-
-                </md-autocomplete>
-                <md-input-container>
-                    <input mdInput placeholder="City" type="text" name="callerCity" [(ngModel)]="user.callerCity" [(ngModel)]="user.city">
-                </md-input-container>
-                <md-input-container>
-                    <input mdInput placeholder="State" type="text" name="callerState" [(ngModel)]="user.callerState" [(ngModel)]="user.state">
-                </md-input-container>
-                <md-input-container>
-                    <input mdInput placeholder="Zip" type="text" name="callerZip" [(ngModel)]="user.callerZip" [(ngModel)]="user.zip">
-                </md-input-container>
-            </p>
-            <p>
-                <md-input-container>
-                    <input mdInput placeholder="Email" type="text" name="email" [(ngModel)]="user.callerEmail">
-                </md-input-container>
-            </p>
-            <md-input-container>
-                <input mdInput placeholder="Phone Number" type="text" name="phone" [(ngModel)]="user.callerWorkPhone">
-            </md-input-container>
-            <p>
-                <md-input-container>
-                    <textarea mdInput placeholder="Comments" type="text" name="comments" [(ngModel)]="user.callerComments"></textarea>
-            </md-input-container>
-            </p>-->
-                <!--<button md-raised-button color="primary" type="submit" (click)="save(f.value, f.valid)">Submit</button>-->
-                <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid">Submit</button>
+                <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
             </p>
             <p>
                 <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
             </p>
         </form>
-    </md-card>
+        <!--</md-card>-->
 
-    <!--<h2>Property Information</h2>
-        <md-autocomplete ng-disabled="false " md-no-cache="false " md-selected-item="app.selectedAddress " md-search-text="app.addressText " md-selected-item-change="app.addressSelected(address) " md-items="address in app.addressSearch(app.addressText)
-                " md-item-text="address.attributes.ADDRESS "
-            md-min-length="4 " md-autoselect="true " placeholder="Enter and select the property address ">
-            <span md-highlight-text="searchText ">{{address.attributes.ADDRESS}}</span>
-        </md-autocomplete>
-        <p/>-->
-
-    <md-card *ngIf="isDone" class="app-input-section">
-        isDone = {{isDone}}
+        <!--<md-card *ngIf="isDone">-->
         <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
         <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
     </md-card>
-
-    <md-card class="app-input-section">
-        <app-esri-map></app-esri-map>
-    </md-card>
-
 </div>

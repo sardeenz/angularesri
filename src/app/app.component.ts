@@ -34,7 +34,8 @@ export class AppComponent implements OnInit, User {
   public isDone;
   user: User;
   public data;
-  geodata = new Geodata;
+  //geodata = new Geodata();
+  geodata: Geodata;
   collectionareas: Collectionareas;
 
   public problemSids = [
@@ -73,24 +74,24 @@ export class AppComponent implements OnInit, User {
   onSubmit() { this.submitted = true; }
 
   zoomToMap() {
-<<<<<<< HEAD
 
-=======
     console.log('inside zoomToMap');
     //this.esriMapComponent.gotoView(this.user.address);
     this.esriMapComponent.gotoView(this.myForm.get('callerAddress').value);
->>>>>>> chad
   }
 
   save(model: User, isValid: boolean) {
+    
     this.isDone = false;
     this.submitted = true; // set form submit to true
 
     // check if model is valid
     // if valid, call API to save customer
-    console.log(model, isValid);
+    console.log('model is ',model, isValid);
 
-    this._servicerequestService.createServiceRequest(this.user).subscribe(
+    console.log('stringified model', JSON.stringify(model));
+
+    this._servicerequestService.createServiceRequest(model).subscribe(
       data => this.authResponse = data,
       err => console.error(err),
       () => {
@@ -110,10 +111,6 @@ export class AppComponent implements OnInit, User {
   }
 
   ngOnInit() {
-<<<<<<< HEAD
-
-=======
-    
     this.myForm = this._fb.group({
       problemSid: [this.problemSids[0].value],
       callerFirstName: [''],
@@ -129,7 +126,6 @@ export class AppComponent implements OnInit, User {
 
     const callerAddressChanges$ = this.myForm.get('callerAddress').valueChanges;
     this.filteredOptions = callerAddressChanges$.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice(0, 1));
->>>>>>> chad
   }
 
   filter(val: string): string[] {

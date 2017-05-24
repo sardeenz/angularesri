@@ -1,4 +1,4 @@
-export class Geodata {
+export interface Geodata {
     displayFieldName: string;
     fieldAliases: FieldAliases;
     geometryType: string;

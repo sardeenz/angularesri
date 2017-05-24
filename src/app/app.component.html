@@ -128,15 +128,12 @@
         <p/>-->
 
     <md-card *ngIf="isDone" class="app-input-section">
-        <!--isDone = {{isDone}}-->
-        <!--<div *ngIf="isDone ">Your Service Request ID is {{authResponse.Value.Token | json}}</div>-->
+        isDone = {{isDone}}
         <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
         <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
     </md-card>
 
     <md-card class="app-input-section">
-        <div *ngIf="day != ''">Your Garbage collection day is {{ day }}</div>
-        <p></p>
         <app-esri-map></app-esri-map>
     </md-card>
 

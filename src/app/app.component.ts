@@ -30,10 +30,8 @@ export class AppComponent implements OnInit {
   public submitted = false;
   public user: User;
   public data;
-  public result;
   geodata = new Geodata;
   collectionareas: Collectionareas;
-  day: string = '';
 
   public problemSid = [
     { value: '263551', display: 'Garbage' },
@@ -53,19 +51,7 @@ export class AppComponent implements OnInit {
   onSubmit() { this.submitted = true; }
 
   zoomToMap() {
-    console.log('inside zoomToMap');
     this.esriMapComponent.gotoView(this.user.address);
-
-    // TODO: call trashday service and show trashday 
-    //       based on coords that should already be assigned to this.geodata model
-    //console.log('geoCHAD', this.geodata.features[0].geometry.x);
-    // this.geocodeService.getTrashDay(this.geodata).subscribe(collectionareas => this.collectionareas = collectionareas,
-    //   err => console.error(err),
-    //   () => this.day = this.collectionareas.features[0].attributes.DAY);
-      // () => console.log('this.data inside COLLECTIONAREAS', this.collectionareas.features[0].attributes.DAY));
-      
-
-  
   }
 
   save() {
@@ -76,20 +62,18 @@ export class AppComponent implements OnInit {
       data => this.authResponse = data,
       err => console.error(err),
       () => {
-        this.isDone = true
+        this.isDone = true;
         if (this.authResponse.requestId === "") {
           console.log('no ServiceRequest ID was returned');
         }
         console.log('this response is ', this.authResponse);
       }
-      //() => this.isDone = true
     );
   }
 
   checkSRStatus() {
     this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
       err => console.error(err),
-      // () => console.log('this token is ', this.authResponse.Value.Token)
       () => this.isDone = true);
   }
 
@@ -106,13 +90,12 @@ export class AppComponent implements OnInit {
       callerWorkPhone: '',
       callerEmail: '',
       problemSid: this.problemSid[0].value,
-      //problemSid: '',
       callerComments: '',
       comments: 'created by SWS online customer web form',
       x: '',
       y: '',
       details: '',
-      city: '',
+      city: 'Raleigh',
       state: 'NC',
       zip: ''
     };
@@ -123,11 +106,11 @@ export class AppComponent implements OnInit {
   filter(val: string): string[] {
 
     // TODO: use geodata instead of results
-    this.geocodeService.getGeometry(val).subscribe(result => this.result = result,
+    this.geocodeService.getGeometry(val).subscribe(geodata => this.geodata = geodata,
       err => console.error(err),
       () => {
         this.addressOptions.splice(0, 1);
-        this.addressOptions.push(this.result.features[0].attributes.ADDRESS)
+        this.addressOptions.push(this.geodata.features[0].attributes.ADDRESS);
       });
 
     console.log('this.addressOptions = ', this.addressOptions);

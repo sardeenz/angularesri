@@ -14,7 +14,7 @@ export class ServicerequestService {
   // private fuseUrl = 'http://rhsoaprdapp1.ci.raleigh.nc.us:8183/RaleighAPI/cityworks/createServiceRequest';
 
   private createSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/createServiceRequest/';
-  private getSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/createServiceRequest/';
+  private getSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/getServiceRequest/';
 
 
   public testAuth = JSON.parse('{"LoginName":"pwadmin","Password":"pw2dmin"}');
@@ -56,7 +56,7 @@ export class ServicerequestService {
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers }); // Create a request option
     // return this.http.post(this.srUrl, this.testSr, options).map((res: Response) => res.json());
-    return this.http.get(this.getSRUrl + 'requestid', options).map((res: Response) => res.json());
+    return this.http.get(this.getSRUrl + requestid, options).map((res: Response) => res.json());
   }
 
 }

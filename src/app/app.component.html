@@ -64,6 +64,17 @@
                 <input mdInput type="text" formControlName="callerZip" placeholder="Zip" type="number">
             </md-input-container>
 
+            <form (ngSubmit)="checkSRStatus()" #subForm="ngForm">
+                Check status of an existing Service Request:
+                <br>
+                <md-input-container>
+                    <input mdInput type="text" [(ngModel)]="requestId" name="requestId" placeholder="Request ID" type="number">
+                </md-input-container>
+                <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
+
+            </form>
+
+
             <md-card>
                 <app-esri-map></app-esri-map>
             </md-card>

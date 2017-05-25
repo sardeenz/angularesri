@@ -20,6 +20,8 @@ export class EsriMapComponent implements OnInit {
   maploaded: boolean = false;
   collectionareas: Collectionareas;
   day: string = '';
+  geojson;
+  geojsonArr: string[];
   
   public mymap: any;
 
@@ -41,6 +43,7 @@ export class EsriMapComponent implements OnInit {
       err => console.error(err),
       () => {
         this.setMarker(this.geodata);
+        this.isInsideCity(this.geodata);
         this.geocodeService.getTrashDay(this.geodata).subscribe(collectionarea => this.collectionareas = collectionarea,
       err => console.error(err),
       () => console.log('this.day inside service call = ',this.day = this.collectionareas.features[0].attributes.DAY));
@@ -125,4 +128,13 @@ export class EsriMapComponent implements OnInit {
             this.mapView.graphics.add(this.pointGraphic);
         });
   }
+
+  public isInsideCity(geometry): boolean {
+      this.geocodeService.cityLimits().subscribe(geojson => this.geojson = geojson,
+      err => console.error(err),
+      () => console.log('hello geojson', this.geojson.features[0].geometry.coordinates[0]));
+
+      return true;
+  }
+
 }

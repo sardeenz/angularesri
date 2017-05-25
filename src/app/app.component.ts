@@ -19,7 +19,7 @@ import { MdIconRegistry } from '@angular/material';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
-export class AppComponent implements OnInit, User {
+export class AppComponent implements OnInit {
 
   public myForm: FormGroup; // our model driven form
   public submitted: boolean; // keep track on whether form is submitted
@@ -34,33 +34,16 @@ export class AppComponent implements OnInit, User {
   public isDone;
   user: User;
   public data;
-  //geodata = new Geodata();
+   //geodata = new Geodata();
   geodata: Geodata;
   collectionareas: Collectionareas;
+  //srStatus: string;
 
   public problemSids = [
     { value: '263551', display: 'Garbage' },
     { value: '263552', display: 'Recycling' },
     { value: '263553', display: 'Yard Waste' },
   ];
-    public problemSid: string;
-    public callerFirstName: string;
-    public callerAddress: string;
-    public callerState: string;
-    public callerCity: string;
-    public callerZip: string;
-    public address: string;
-    public callerWorkPhone: string;
-    public callerEmail: string;
-    public callerLastName: string;
-    public callerComments: string;
-    public comments: string;
-    public x: string;
-    public y: string;
-    public details: string;
-    public city: string;
-    public state: string;
-    public zip: string;
 
   @ViewChild(EsriMapComponent) esriMapComponent: EsriMapComponent;
 
@@ -71,8 +54,6 @@ export class AppComponent implements OnInit, User {
       sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg'));
   }
 
-  onSubmit() { this.submitted = true; }
-
   zoomToMap() {
 
     console.log('inside zoomToMap');
@@ -81,7 +62,9 @@ export class AppComponent implements OnInit, User {
   }
 
   save(model: User, isValid: boolean) {
-    
+
+    // delete model.srStatus;
+
     this.isDone = false;
     this.submitted = true; // set form submit to true
 
@@ -105,9 +88,11 @@ export class AppComponent implements OnInit, User {
   }
 
   checkSRStatus() {
+    console.log('inside check status', this.requestId);
+    this.submitted = true;
     this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
       err => console.error(err),
-      () => this.isDone = true);
+      () => console.log('sr status from Cityworks = ', this.authResponse));
   }
 
   ngOnInit() {
@@ -116,6 +101,7 @@ export class AppComponent implements OnInit, User {
       callerFirstName: [''],
       callerLastName: ['', [<any>Validators.required]],
       callerAddress: ['', <any>Validators.required],
+      address: [''],
       callerCity: ['Raleigh'],
       callerState: ['NC'],
       callerZip: [''],
@@ -125,7 +111,7 @@ export class AppComponent implements OnInit, User {
     });
 
     const callerAddressChanges$ = this.myForm.get('callerAddress').valueChanges;
-    this.filteredOptions = callerAddressChanges$.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice(0, 1));
+    this.filteredOptions = callerAddressChanges$.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());
   }
 
   filter(val: string): string[] {

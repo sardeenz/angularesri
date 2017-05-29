@@ -5,6 +5,8 @@ import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Observable } from 'rxjs/Rx';
 import 'rxjs/add/observable/throw';
 import 'rxjs/add/operator/catch';
+import { MomentModule } from 'angular2-moment';
+import * as moment from 'moment';
 
 // also import the "angular2-esri-loader" to be able to load JSAPI modules
 import { EsriLoaderService } from 'angular2-esri-loader';
@@ -22,6 +24,7 @@ export class EsriMapComponent implements OnInit {
   day: string = '';
   geojson;
   geojsonArr: string[];
+  today: any;
   
   public mymap: any;
 
@@ -39,6 +42,15 @@ export class EsriMapComponent implements OnInit {
   ) { }
 
   public gotoView(address) {
+
+    let start = new Date(this.today);
+    console.log('start = ', start);
+    //  let isOdd = (moment().week() % 2) == 1;
+    //             if (response === 'B' && isOdd) {
+    //                 console.log(":tell", 'No this is not your recycling week');
+    //             }
+    //              console.log(":tell", "Yes this is your recycing week");
+
     this.geocodeService.getGeometry(address).subscribe(geodata => this.geodata = geodata,
       err => console.error(err),
       () => {
@@ -46,7 +58,7 @@ export class EsriMapComponent implements OnInit {
         this.isInsideCity(this.geodata);
         this.geocodeService.getTrashDay(this.geodata).subscribe(collectionarea => this.collectionareas = collectionarea,
       err => console.error(err),
-      () => console.log('this.day inside service call = ',this.day = this.collectionareas.features[0].attributes.DAY));
+      () => console.log('this.day inside service call = ', this.day = this.collectionareas.features[0].attributes.DAY));
       }
       );
       console.log('this.day outside service call= ', this.collectionareas);
@@ -132,7 +144,11 @@ export class EsriMapComponent implements OnInit {
   public isInsideCity(geometry): boolean {
       this.geocodeService.cityLimits().subscribe(geojson => this.geojson = geojson,
       err => console.error(err),
-      () => console.log('hello geojson', this.geojson.features[0].geometry.coordinates[0]));
+      () => {
+        // TODO: create nested loop to find matching coordinates and return true/false
+        console.log('hello geojson', this.geojson.features[0].geometry.coordinates[0]);
+
+      });
 
       return true;
   }

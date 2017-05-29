@@ -16,6 +16,7 @@ import { MdIconRegistry } from '@angular/material';
 
 @Component({
   selector: 'app-root',
+  // templateUrl: './app.component.html',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -24,6 +25,9 @@ export class AppComponent implements OnInit {
   public myForm: FormGroup; // our model driven form
   public submitted: boolean; // keep track on whether form is submitted
   //public events: any[] = []; // use later to display form changes
+
+  cards: Array<User>;
+  cardIndex: number;
 
   requestId: any;
   myControl = new FormControl();

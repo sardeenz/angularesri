@@ -25,6 +25,9 @@ export class AppComponent implements OnInit {
   public submitted: boolean; // keep track on whether form is submitted
   //public events: any[] = []; // use later to display form changes
 
+  cards: Array<number>;
+  cardIndex: number;
+
   requestId: any;
   myControl = new FormControl();
   addressOptions = [];
@@ -34,9 +37,10 @@ export class AppComponent implements OnInit {
   public isDone;
   user: User;
   public data;
-  //geodata = new Geodata();  which one to use and why it doesn't seem to matter
+   //geodata = new Geodata();
   geodata: Geodata;
   collectionareas: Collectionareas;
+  //srStatus: string;
 
   public problemSids = [
     { value: '263551', display: 'Garbage' },
@@ -53,8 +57,6 @@ export class AppComponent implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg'));
   }
 
-  onSubmit() { this.submitted = true; }
-
   zoomToMap() {
 
     console.log('inside zoomToMap');
@@ -63,7 +65,9 @@ export class AppComponent implements OnInit {
   }
 
   save(model: User, isValid: boolean) {
-    
+
+    // delete model.srStatus;
+
     this.isDone = false;
     this.submitted = true; // set form submit to true
 
@@ -87,23 +91,30 @@ export class AppComponent implements OnInit {
   }
 
   checkSRStatus() {
+    console.log('inside check status', this.requestId);
+    this.submitted = true;
     this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
       err => console.error(err),
-      () => this.isDone = true);
+      () => console.log('sr status from Cityworks = ', this.authResponse));
   }
 
   ngOnInit() {
+    this.cardIndex = 0;
+    this.cards = [this.cardIndex];
+
     this.myForm = this._fb.group({
       problemSid: [this.problemSids[0].value],
       callerFirstName: [''],
       callerLastName: ['', [<any>Validators.required]],
       callerAddress: ['', <any>Validators.required],
+      address: [''],
       callerCity: ['Raleigh'],
       callerState: ['NC'],
       callerZip: [''],
       callerEmail: ['', <any>Validators.email],
       callerWorkPhone: [''],
-      comments: ['']
+      comments: [''],
+      callerComments: ['']
     });
 
     const callerAddressChanges$ = this.myForm.get('callerAddress').valueChanges;

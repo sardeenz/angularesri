@@ -153,7 +153,6 @@ export class AppComponent implements OnInit {
 
   filter(val: string): string[] {
 
-    // TODO: use geodata instead of results
     this.geocodeService.getGeometry(val).subscribe(geodata => this.geodata = geodata,
       err => console.error(err),
       () => {

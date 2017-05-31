@@ -124,6 +124,12 @@ export class AppComponent implements OnInit {
     this.filteredOptions = callerAddressChanges$.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());
   }
 
+  getPreviousCard(){
+    //this.cards.push(this.cards.length + 1);
+    this.cardIndex -= 1;
+    console.log('this previous cards full array', this.cardIndex);
+  }
+
   getNextCard(){
     //this.cards.push(this.cards.length + 1);
     this.cardIndex += 1;

@@ -22,6 +22,9 @@ import { MdIconRegistry } from '@angular/material';
 })
 export class AppComponent implements OnInit {
 
+  prjCompleteDate: Date;
+  prjCompleteStr: string;
+  options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
   public myForm: FormGroup; // our model driven form
   public submitted: boolean; // keep track on whether form is submitted
   //public events: any[] = []; // use later to display form changes
@@ -29,6 +32,7 @@ export class AppComponent implements OnInit {
   cards: Array<number>;
   cardIndex: number;
 
+  srStatus = '';
   requestId: any;
   myControl = new FormControl();
   addressOptions = [];
@@ -99,7 +103,18 @@ export class AppComponent implements OnInit {
     this.submitted = true;
     this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
       err => console.error(err),
-      () => console.log('sr status from Cityworks = ', this.authResponse));
+      () => {
+        this.srStatus = this.authResponse.Value.Status;
+        if (this.srStatus === 'INPROG') {
+          this.srStatus = 'In Progress';
+        }
+        this.prjCompleteDate =  this.authResponse.Value.PrjCompleteDate;
+        this.prjCompleteDate = new Date(this.authResponse.Value.PrjCompleteDate);
+
+        this.prjCompleteStr = this.prjCompleteDate.toLocaleDateString("en-US", this.options);
+        //this.prjCompleteDate = new Date(this.prjCompleteDate);
+        console.log('sr status from Cityworks = ', this.authResponse.Value);
+      });
   }
 
   ngOnInit() {

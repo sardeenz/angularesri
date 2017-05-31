@@ -128,6 +128,27 @@
     </md-card>
 </ng-container>
 
+<p class="map-md-card" *ngIf="cardIndex==0">
+    Or
+</p>
+<md-card *ngIf="cardIndex==0">
+    <md-card-content class="map-md-card">
+        <form (ngSubmit)="checkSRStatus()" #subForm="ngForm">
+            Check status of an existing Service Request:
+            <br>
+            <md-input-container>
+                <input mdInput type="text" [(ngModel)]="requestId" name="requestId" placeholder="Request ID" type="number">
+            </md-input-container>
+            <br>
+            <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
+            <md-progress-bar *ngIf="submitted && srStatus === ''" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+            <p *ngIf="srStatus != ''">You Service Request is in '{{srStatus}}' status.</p>
+            <div *ngIf="srStatus != 'CLOSED' && srStatus != '' && srStatus != 'COMPLETE'">The Projected Completion Date is {{prjCompleteStr}}</div>
+
+        </form>
+    </md-card-content>
+</md-card>
+
 <md-card class="map-md-card" *ngIf="this.myForm.get('callerAddress').value != ''">
     <app-esri-map></app-esri-map>
 </md-card>

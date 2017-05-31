@@ -125,6 +125,6 @@
     </md-card>
 </ng-container>
 
-<md-card class="map-md-card">
+<md-card class="map-md-card" *ngIf="this.myForm.get('callerAddress').value != ''">
     <app-esri-map></app-esri-map>
 </md-card>

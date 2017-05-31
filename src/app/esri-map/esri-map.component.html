@@ -5,6 +5,12 @@
     </a>
 </h1>-->
 
-<div *ngIf="day != ''">Your Garbage collection day is {{ day }}</div>
+<div *ngIf="day != ''">Your Garbage collection day is {{ day }}.</div>
+<br/>
+<div *ngIf="week != ''">{{week}}
+    <p>
+        Click <a href="http://www.raleighnc.gov/services/content/SolidWaste/Articles/ServiceSchedule.html">here</a> to get more information on Service Day Schedules.
+    </p>
+</div>
 <br/>
 <div #mapViewNode></div>

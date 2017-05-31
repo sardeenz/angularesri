@@ -16,11 +16,15 @@ import { MdIconRegistry } from '@angular/material';
 
 @Component({
   selector: 'app-root',
+  // templateUrl: './app.component.html',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
 
+  prjCompleteDate: Date;
+  prjCompleteStr: string;
+  options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
   public myForm: FormGroup; // our model driven form
   public submitted: boolean; // keep track on whether form is submitted
   //public events: any[] = []; // use later to display form changes
@@ -28,6 +32,7 @@ export class AppComponent implements OnInit {
   cards: Array<number>;
   cardIndex: number;
 
+  srStatus = '';
   requestId: any;
   myControl = new FormControl();
   addressOptions = [];
@@ -67,7 +72,8 @@ export class AppComponent implements OnInit {
   save(model: User, isValid: boolean) {
 
     // delete model.srStatus;
-
+    // move callerAddress to address to display in Cityworks in both fields
+    model.address = this.myForm.get('callerAddress').value;
     this.isDone = false;
     this.submitted = true; // set form submit to true
 
@@ -95,7 +101,18 @@ export class AppComponent implements OnInit {
     this.submitted = true;
     this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
       err => console.error(err),
-      () => console.log('sr status from Cityworks = ', this.authResponse));
+      () => {
+        this.srStatus = this.authResponse.Value.Status;
+        if (this.srStatus === 'INPROG') {
+          this.srStatus = 'In Progress';
+        }
+        this.prjCompleteDate =  this.authResponse.Value.PrjCompleteDate;
+        this.prjCompleteDate = new Date(this.authResponse.Value.PrjCompleteDate);
+
+        this.prjCompleteStr = this.prjCompleteDate.toLocaleDateString("en-US", this.options);
+        //this.prjCompleteDate = new Date(this.prjCompleteDate);
+        console.log('sr status from Cityworks = ', this.authResponse.Value);
+      });
   }
 
   ngOnInit() {
@@ -117,13 +134,27 @@ export class AppComponent implements OnInit {
       callerComments: ['']
     });
 
+    this.cards = [0];
+    this.cardIndex = 0;
+
     const callerAddressChanges$ = this.myForm.get('callerAddress').valueChanges;
     this.filteredOptions = callerAddressChanges$.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());
   }
 
+  getPreviousCard(){
+    //this.cards.push(this.cards.length + 1);
+    this.cardIndex -= 1;
+    console.log('this previous cards full array', this.cardIndex);
+  }
+
+  getNextCard(){
+    //this.cards.push(this.cards.length + 1);
+    this.cardIndex += 1;
+    console.log('this cards full array', this.cardIndex);
+  }
+
   filter(val: string): string[] {
 
-    // TODO: use geodata instead of results
     this.geocodeService.getGeometry(val).subscribe(geodata => this.geodata = geodata,
       err => console.error(err),
       () => {

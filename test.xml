@@ -1,0 +1,7 @@
+<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
+   <s:Body>
+      <GetLastVehicleInfoResponse xmlns="http://tempuri.org/">
+         <GetLastVehicleInfoResult><![CDATA[<VehicleInfoList dataComplete="true" lastTimestampUtc="2017-05-26T14:45:48"><VehicleInfo uid="6e26b0a6-997f-4f8c-8a52-2c687aeca84c" timestamp="2017-05-26T10:45:48.000-04:00" vehicleId="1224"><Field id="Direction" value="11.4" /><Field id="Latitude" value="+35.74748" /><Field id="Longitude" value="-78.62060" /><Field id="RouteDate" value="2017-05-26" /><Field id="RouteId" value="SE_1A" /><Field id="Speed" value="3.421875" /></VehicleInfo></VehicleInfoList>]]></GetLastVehicleInfoResult>
+      </GetLastVehicleInfoResponse>
+   </s:Body>
+</s:Envelope>

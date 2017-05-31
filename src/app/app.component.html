@@ -28,6 +28,7 @@
         <md-card-header>
             <md-card-title>
                 <h2>Missed Collection Form</h2>
+                <h3>Step {{cardIndex + 1}} of 3</h3>
             </md-card-title>
         </md-card-header>
 
@@ -66,12 +67,7 @@
             </form>
             <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
             <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
-
         </md-card-content>
-
-
-
-
         <md-card-content *ngIf="cardIndex==1">
             <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                 <h3>Choose the type of missed collection</h3>
@@ -124,7 +120,7 @@
 
         <md-card-actions style="margin:0 auto;">
             <!--<button md-icon-button (click)="getPreviousCard()" *ngIf="cards.length > 1 && cardIndex > 0" mdTooltip="Previous Building Type"><md-icon>keyboard_arrow_left</md-icon></button>-->
-            <button md-button (click)="getNextCard()" *ngIf="cardIndex==0 || cardIndex ==1" mdTooltip="test">Next></button>
+            <button md-button (click)="getNextCard()" *ngIf="(cardIndex==0 || cardIndex ==1) && myForm.value" mdTooltip="test">Next</button>
         </md-card-actions>
     </md-card>
 </ng-container>

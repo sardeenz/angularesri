@@ -11,9 +11,9 @@ body {
 }
 
 md-card {
-    max-width: 500px;
-    /*max-width: 80%;*/
-    margin: 10px;
+    /*max-width: 400px;*/
+    max-width: 33.3%;
+    margin: 20px;
     /*margin: 6em auto;*/
     text-align: center;
     margin-left: auto;

@@ -25,7 +25,7 @@
 <ng-container *ngFor="let card of cards; let i = index">
     <!--<md-card *ngIf="i === cardIndex">-->
     <md-card>
-        <md-card-header>
+        <md-card-header class="map-md-card">
             <md-card-title>
                 <h2>Missed Collection Form</h2>
                 <h3>Step {{cardIndex + 1}} of 3</h3>
@@ -36,19 +36,19 @@
         <md-card-content *ngIf="cardIndex==2">
             <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                 <h3>Choose the type of dissed collection</h3>
-                <p>
-                    <md-input-container>
-                        <input mdInput type="text" formControlName="callerFirstName" placeholder="First Name">
-                    </md-input-container>
-                </p>
+
+                <md-input-container>
+                    <input mdInput type="text" formControlName="callerFirstName" placeholder="First Name">
+                </md-input-container>
+
                 <md-input-container>
                     <input mdInput type="text" formControlName="callerLastName" placeholder="Last Name">
                 </md-input-container>
-                <p>
-                    <md-input-container>
-                        <input mdInput type="text" formControlName="callerEmail" placeholder="someone@somewhere.com">
-                    </md-input-container>
-                </p>
+
+                <md-input-container>
+                    <input mdInput type="text" formControlName="callerEmail" placeholder="Email">
+                </md-input-container>
+
                 <p>
                     <md-input-container>
                         <input mdInput type="text" formControlName="callerWorkPhone" placeholder="Phone #" type="number">

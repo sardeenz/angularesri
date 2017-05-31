@@ -26,7 +26,7 @@ export class AppComponent implements OnInit {
   public submitted: boolean; // keep track on whether form is submitted
   //public events: any[] = []; // use later to display form changes
 
-  cards: Array<User>;
+  cards: Array<number>;
   cardIndex: number;
 
   requestId: any;
@@ -68,6 +68,9 @@ export class AppComponent implements OnInit {
   save(model: User, isValid: boolean) {
 
     // delete model.srStatus;
+
+    // move callerAddress to address to display in Cityworks in both fields
+    model.address = this.myForm.get('callerAddress').value;
 
     this.isDone = false;
     this.submitted = true; // set form submit to true
@@ -114,8 +117,17 @@ export class AppComponent implements OnInit {
       comments: ['']
     });
 
+    this.cards = [0];
+    this.cardIndex = 0;
+
     const callerAddressChanges$ = this.myForm.get('callerAddress').valueChanges;
     this.filteredOptions = callerAddressChanges$.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());
+  }
+
+  getNextCard(){
+    //this.cards.push(this.cards.length + 1);
+    this.cardIndex += 1;
+    console.log('this cards full array', this.cardIndex);
   }
 
   filter(val: string): string[] {

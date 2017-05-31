@@ -1,116 +1,134 @@
-<div class="app-content">
-
-    <md-toolbar color="primary">
-        <a href="http://raleighnc.gov">
-            <span>
+<md-toolbar color="primary">
+    <a href="http://raleighnc.gov">
+        <span>
             <md-icon svgIcon="city_seal"></md-icon>
             </span>
-        </a>
+    </a>
 
-        <span>Solid Waste Services</span>
-        <button md-icon-button [mdMenuTriggerFor]="menu">
+    <span>Solid Waste Services</span>
+    <button md-icon-button [mdMenuTriggerFor]="menu">
       <md-icon>more_vert</md-icon>
     </button>
-    </md-toolbar>
+</md-toolbar>
 
-    <md-menu #menu="mdMenu">
-        <button md-menu-item (click)="openDialog('about')">
+<md-menu #menu="mdMenu">
+    <button md-menu-item (click)="openDialog('about')">
         <md-icon>info_outline</md-icon>
         <span>About</span>
         </button>
-        <button md-menu-item (click)="openDialog('help')">
+    <button md-menu-item (click)="openDialog('help')">
             <md-icon>help</md-icon>
       <span>Need Help?</span>
         </button>
-    </md-menu>
+</md-menu>
 
+<ng-container *ngFor="let card of cards; let i = index">
+    <!--<md-card *ngIf="i === cardIndex">-->
     <md-card>
-        <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
+        <md-card-header>
+            <md-card-title>
+                <h2>Missed Collection Form</h2>
+            </md-card-title>
+        </md-card-header>
 
-            <h2>Choose the type of missed collection </h2>
-            <md-select formControlName="problemSid">
-                <md-option *ngFor="let problemSid of problemSids" [value]="problemSid.value">
-                    {{problemSid.display}}
-                </md-option>
-            </md-select>
 
-            <div *ngIf="myForm.controls.problemSid.value == '263551' || myForm.controls.problemSid.value == '263553'">
+        <md-card-content *ngIf="cardIndex==2">
+            <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
+                <h3>Choose the type of dissed collection</h3>
                 <p>
-                    <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">Garbage/Yard Waste link and info </a>
+                    <md-input-container>
+                        <input mdInput type="text" formControlName="callerFirstName" placeholder="First Name">
+                    </md-input-container>
                 </p>
-            </div>
-            <div *ngIf="myForm.controls.problemSid.value == '263552'">
-                <p>
-                    <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/RecyclePages.html" target="_blank">Recycling Waste link and info</a>
-                </p>
-            </div>
-
-            <md-input-container class="wider" hintLabel="ex. 123 Main St.">
-                <input mdInput type="text" (change)="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
-            </md-input-container>
-            <md-autocomplete #auto="mdAutocomplete">
-                <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
-                    {{ addressOptions }}
-                </md-option>
-            </md-autocomplete>
-            <md-input-container>
-                <input mdInput type="text" formControlName="callerCity" placeholder="City">
-            </md-input-container>
-
-            <md-input-container>
-                <input mdInput type="text" formControlName="callerState" placeholder="State">
-            </md-input-container>
-            <md-input-container>
-                <input mdInput type="text" formControlName="callerZip" placeholder="Zip" type="number">
-            </md-input-container>
-
-            <form (ngSubmit)="checkSRStatus()" #subForm="ngForm">
-                Check status of an existing Service Request:
-                <br>
                 <md-input-container>
-                    <input mdInput type="text" [(ngModel)]="requestId" name="requestId" placeholder="Request ID" type="number">
+                    <input mdInput type="text" formControlName="callerLastName" placeholder="Last Name">
                 </md-input-container>
-                <br>
-                <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
+                <p>
+                    <md-input-container>
+                        <input mdInput type="text" formControlName="callerEmail" placeholder="someone@somewhere.com">
+                    </md-input-container>
+                </p>
+                <p>
+                    <md-input-container>
+                        <input mdInput type="text" formControlName="callerWorkPhone" placeholder="Phone #" type="number">
+                    </md-input-container>
+                </p>
+                <md-input-container>
+                    <textarea mdInput type="text" formControlName="comments" placeholder="Comments"></textarea>
+                </md-input-container>
+                <p>
+                    <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
+                </p>
+                <p>
+                    <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+                </p>
 
             </form>
+            <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
+            <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
+
+        </md-card-content>
 
 
-            <md-card>
-                <app-esri-map></app-esri-map>
-            </md-card>
-            <p>
-                <md-input-container>
-                    <input mdInput type="text" formControlName="callerFirstName" placeholder="First Name">
-                </md-input-container>
-            </p>
-            <md-input-container>
-                <input mdInput type="text" formControlName="callerLastName" placeholder="Last Name">
-            </md-input-container>
-            <p>
-                <md-input-container>
-                    <input mdInput type="text" formControlName="callerEmail" placeholder="someone@somewhere.com">
-                </md-input-container>
-            </p>
-            <p>
-                <md-input-container>
-                    <input mdInput type="text" formControlName="callerWorkPhone" placeholder="Phone #" type="number">
-                </md-input-container>
-            </p>
-            <md-input-container>
-                <textarea mdInput type="text" formControlName="comments" placeholder="Comments"></textarea>
-            </md-input-container>
-            <p>
-                <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
-            </p>
-            <p>
-                <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
-            </p>
-        </form>
-        <!--</md-card>-->
 
-        <!--<md-card *ngIf="isDone">-->
-        <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
-        <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
+
+        <md-card-content *ngIf="cardIndex==1">
+            <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
+                <h3>Choose the type of missed collection</h3>
+                <md-select formControlName="problemSid">
+                    <md-option *ngFor="let problemSid of problemSids" [value]="problemSid.value">
+                        {{problemSid.display}}
+                    </md-option>
+                </md-select>
+
+                <div *ngIf="myForm.controls.problemSid.value == '263551' || myForm.controls.problemSid.value == '263553'">
+                    <p>
+                        <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">Garbage/Yard Waste link and info </a>
+                    </p>
+                </div>
+                <div *ngIf="myForm.controls.problemSid.value == '263552'">
+                    <p>
+                        <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/RecyclePages.html" target="_blank">Recycling Waste link and info</a>
+                    </p>
+                </div>
+
+            </form>
+        </md-card-content>
+
+        <md-card-content *ngIf="cardIndex==0">
+            <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
+                <h3>Enter your address</h3>
+                <md-input-container class="wider" hintLabel="ex. 123 Main St.">
+                    <input mdInput type="text" (change)="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
+                </md-input-container>
+                <md-autocomplete #auto="mdAutocomplete">
+                    <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
+                        {{ addressOptions }}
+                    </md-option>
+                </md-autocomplete>
+                <p>
+                    <md-input-container>
+                        <input mdInput type="text" formControlName="callerCity" placeholder="City">
+                    </md-input-container>
+                </p>
+                <md-input-container>
+                    <input mdInput type="text" formControlName="callerState" placeholder="State">
+                </md-input-container>
+                <p>
+                    <md-input-container>
+                        <input mdInput type="text" formControlName="callerZip" placeholder="Zip" type="number">
+                    </md-input-container>
+                </p>
+            </form>
+        </md-card-content>
+
+        <md-card-actions style="margin:0 auto;">
+            <!--<button md-icon-button (click)="getPreviousCard()" *ngIf="cards.length > 1 && cardIndex > 0" mdTooltip="Previous Building Type"><md-icon>keyboard_arrow_left</md-icon></button>-->
+            <button md-button (click)="getNextCard()" *ngIf="cardIndex==0 || cardIndex ==1" mdTooltip="test">Next></button>
+        </md-card-actions>
     </md-card>
-</div>
+</ng-container>
+
+<md-card class="map-md-card">
+    <app-esri-map></app-esri-map>
+</md-card>

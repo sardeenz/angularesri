@@ -120,8 +120,8 @@
 
         <md-card-actions style="margin:0 auto;" class="map-md-card">
             <form class="map-md-card" [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
-                <button md-button (click)="getPreviousCard()" *ngIf="cardIndex > 0">Back</button>
-                <button md-button (click)="getNextCard()" *ngIf="cardIndex==0 || (this.myForm.get('callerAddress').value && cardIndex==1)">Next</button>
+                <button md-button (click)="getPreviousCard()" *ngIf="cardIndex > 0" [disabled]="submitted">Back</button>
+                <button md-button (click)="getNextCard()" *ngIf="cardIndex==0 || (this.myForm.get('callerAddress').value && cardIndex==1)" [disabled]="submitted">Next</button>
                 <button *ngIf="cardIndex==2" md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
             </form>
         </md-card-actions>

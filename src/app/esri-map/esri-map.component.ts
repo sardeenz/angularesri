@@ -21,11 +21,12 @@ export class EsriMapComponent implements OnInit {
   geodata: Geodata;
   maploaded: boolean = false;
   collectionareas: Collectionareas;
-  day: string = '';
+  day = '';
+  week = '';
   geojson;
   geojsonArr: string[];
   today: any;
-  
+
   public mymap: any;
 
   // for JSAPI 4.x you can use the "any for TS types
@@ -42,26 +43,27 @@ export class EsriMapComponent implements OnInit {
   ) { }
 
   public gotoView(address) {
-
-    let start = new Date(this.today);
-    console.log('start = ', start);
-    //  let isOdd = (moment().week() % 2) == 1;
-    //             if (response === 'B' && isOdd) {
-    //                 console.log(":tell", 'No this is not your recycling week');
-    //             }
-    //              console.log(":tell", "Yes this is your recycing week");
-
     this.geocodeService.getGeometry(address).subscribe(geodata => this.geodata = geodata,
       err => console.error(err),
       () => {
         this.setMarker(this.geodata);
         this.isInsideCity(this.geodata);
         this.geocodeService.getTrashDay(this.geodata).subscribe(collectionarea => this.collectionareas = collectionarea,
-      err => console.error(err),
-      () => console.log('this.day inside service call = ', this.day = this.collectionareas.features[0].attributes.DAY));
+          err => console.error(err),
+          () => {
+            console.log('attributes = ', this.collectionareas.features[0].attributes);
+            this.day = this.collectionareas.features[0].attributes.DAY;
+            this.week = this.collectionareas.features[0].attributes.WEEK;
+            console.log('moment = ', moment().week() % 2);
+            let isOdd = (moment().week() % 2) === 1;
+                if (this.week === 'B' && isOdd) {
+                    console.log(this.week = "This week is not your Recycling week.");
+                }
+                 console.log(this.week = "This week is your Recycling week.");
+          });
       }
-      );
-      console.log('this.day outside service call= ', this.collectionareas);
+    );
+    console.log('this.day outside service call= ', this.collectionareas);
   }
 
   public ngOnInit() {
@@ -80,7 +82,7 @@ export class EsriMapComponent implements OnInit {
         'esri/symbols/SimpleMarkerSymbol',
         'esri/Graphic',
         'esri/layers/GraphicsLayer'
-        ]).then(([
+      ]).then(([
         Map,
         MapView,
         Point,
@@ -112,37 +114,38 @@ export class EsriMapComponent implements OnInit {
 
     console.log('this.data from address search= ', this.geodata);
 
-    this.mapView.goTo({center: [this.geodata.features[0].geometry.x, this.geodata.features[0].geometry.y],
-        zoom: 17
-      });
+    this.mapView.goTo({
+      center: [this.geodata.features[0].geometry.x, this.geodata.features[0].geometry.y],
+      zoom: 17
+    });
 
-        this.esriLoader.require(['esri/Map','esri/layers/GraphicsLayer','esri/geometry/Point',
-        'esri/symbols/SimpleMarkerSymbol','esri/Graphic'],
-        (Map, GraphicsLayer, Point, SimpleMarkerSymbol, Graphic) => {
-            console.log('x = ',this.geodata.features[0].geometry.x);
-            console.log('y = ',this.geodata.features[0].geometry.y);
-            this.markerSymbol = new SimpleMarkerSymbol({
-              color: [226, 119, 40],
-              outline: { // autocasts as new SimpleLineSymbol()
-                color: [255, 255, 255],
-                width: 2
-              }
-            });
-            this.pointGraphic = new Graphic({
-              geometry: new Point({
-                        longitude: this.geodata.features[0].geometry.x,
-                        latitude: this.geodata.features[0].geometry.y
-                    })
-            });
-
-            this.pointGraphic.symbol = this.markerSymbol;
-            this.mapView.graphics.removeAll();
-            this.mapView.graphics.add(this.pointGraphic);
+    this.esriLoader.require(['esri/Map', 'esri/layers/GraphicsLayer', 'esri/geometry/Point',
+      'esri/symbols/SimpleMarkerSymbol', 'esri/Graphic'],
+      (Map, GraphicsLayer, Point, SimpleMarkerSymbol, Graphic) => {
+        console.log('x = ', this.geodata.features[0].geometry.x);
+        console.log('y = ', this.geodata.features[0].geometry.y);
+        this.markerSymbol = new SimpleMarkerSymbol({
+          color: [226, 119, 40],
+          outline: { // autocasts as new SimpleLineSymbol()
+            color: [255, 255, 255],
+            width: 2
+          }
         });
+        this.pointGraphic = new Graphic({
+          geometry: new Point({
+            longitude: this.geodata.features[0].geometry.x,
+            latitude: this.geodata.features[0].geometry.y
+          })
+        });
+
+        this.pointGraphic.symbol = this.markerSymbol;
+        this.mapView.graphics.removeAll();
+        this.mapView.graphics.add(this.pointGraphic);
+      });
   }
 
   public isInsideCity(geometry): boolean {
-      this.geocodeService.cityLimits().subscribe(geojson => this.geojson = geojson,
+    this.geocodeService.cityLimits().subscribe(geojson => this.geojson = geojson,
       err => console.error(err),
       () => {
         // TODO: create nested loop to find matching coordinates and return true/false
@@ -150,7 +153,7 @@ export class EsriMapComponent implements OnInit {
 
       });
 
-      return true;
+    return true;
   }
 
 }

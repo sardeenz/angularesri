@@ -25,7 +25,7 @@
 <ng-container *ngFor="let card of cards; let i = index">
     <!--<md-card *ngIf="i === cardIndex">-->
     <md-card>
-        <md-card-header class="map-md-card">
+        <md-card-header>
             <md-card-title>
                 <h2>Missed Collection Form</h2>
                 <h3>Step {{cardIndex + 1}} of 3</h3>
@@ -33,7 +33,7 @@
         </md-card-header>
 
 
-        <md-card-content *ngIf="cardIndex==2">
+        <md-card-content *ngIf="cardIndex==2" class="map-md-card">
             <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                 <h3>Enter your contact information</h3>
 
@@ -57,9 +57,9 @@
                 <md-input-container>
                     <textarea mdInput type="text" formControlName="comments" placeholder="Comments"></textarea>
                 </md-input-container>
-                <p>
-                    <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
-                </p>
+                <!--<p>
+                    <button class="map-md-card" md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
+                </p>-->
                 <p>
                     <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
                 </p>
@@ -68,7 +68,7 @@
             <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
             <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
         </md-card-content>
-        <md-card-content *ngIf="cardIndex==0">
+        <md-card-content *ngIf="cardIndex==0" class="map-md-card">
             <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                 <h3>Choose the type of missed collection</h3>
                 <md-select formControlName="problemSid">
@@ -79,19 +79,19 @@
 
                 <div *ngIf="myForm.controls.problemSid.value == '263551' || myForm.controls.problemSid.value == '263553'">
                     <p>
-                        <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">Garbage/Yard Waste link and info </a>
+                        <br/> Click <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">here</a> to get more information on Garbage and Yard Waste Preparation.
                     </p>
                 </div>
                 <div *ngIf="myForm.controls.problemSid.value == '263552'">
                     <p>
-                        <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/RecyclePages.html" target="_blank">Recycling Waste link and info</a>
+                        <br/> Click <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/RecyclePages.html" target="_blank">here</a> to get more information on Recycling Preparation.
                     </p>
                 </div>
 
             </form>
         </md-card-content>
 
-        <md-card-content *ngIf="cardIndex==1">
+        <md-card-content *ngIf="cardIndex==1" class="map-md-card">
             <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                 <h3>Enter your address</h3>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
@@ -118,9 +118,12 @@
             </form>
         </md-card-content>
 
-        <md-card-actions style="margin:0 auto;">
-            <button md-button (click)="getPreviousCard()" *ngIf="cardIndex > 0">Back</button>
-            <button md-button (click)="getNextCard()" *ngIf="cardIndex==0 || (this.myForm.get('callerAddress').value && cardIndex==1)">Next</button>
+        <md-card-actions style="margin:0 auto;" class="map-md-card">
+            <form class="map-md-card" [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
+                <button md-button (click)="getPreviousCard()" *ngIf="cardIndex > 0">Back</button>
+                <button md-button (click)="getNextCard()" *ngIf="cardIndex==0 || (this.myForm.get('callerAddress').value && cardIndex==1)">Next</button>
+                <button *ngIf="cardIndex==2" md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
+            </form>
         </md-card-actions>
     </md-card>
 </ng-container>

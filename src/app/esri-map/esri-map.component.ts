@@ -54,7 +54,7 @@ export class EsriMapComponent implements OnInit {
             console.log('attributes = ', this.collectionareas.features[0].attributes);
             this.day = this.collectionareas.features[0].attributes.DAY;
             this.week = this.collectionareas.features[0].attributes.WEEK;
-            console.log('moment = ', moment().week() % 2);
+            console.log('moment = ', moment().week());
             let isOdd = (moment().week() % 2) === 1;
                 if (this.week === 'B' && isOdd) {
                     console.log(this.week = "This week is not your Recycling week.");
@@ -149,7 +149,18 @@ export class EsriMapComponent implements OnInit {
       err => console.error(err),
       () => {
         // TODO: create nested loop to find matching coordinates and return true/false
-        console.log('hello geojson', this.geojson.features[0].geometry.coordinates[0]);
+        this.geojson.features[0].geometry.coordinates[0].find(x => x.name === geometry.features[0].geometry.x);
+        this.geojsonArr = this.geojson.features[0].geometry.coordinates[0];
+        for (var i=0; i < this.geojsonArr.length; i++) {
+          console.log('inside loop of geojson array',this.geojsonArr[i]);
+    }
+
+        console.log('geometry from call = ', geometry.features[0].geometry);
+        //this.geojsonArr 
+        let coords = geometry.features[0].geometry;
+        // let parsed = JSON.parse(coords);
+        // console.log('parsed = ', parsed);
+        console.log('hello geojson', this.geojson.features[0].geometry.coordinates[0][0]);
 
       });
 

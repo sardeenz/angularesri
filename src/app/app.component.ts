@@ -7,7 +7,7 @@ import { FormControl } from '@angular/forms';
 import { DialogContentComponent } from './dialog-content/dialog-content.component';
 import { ServicerequestService } from './servicerequest.service';
 import { Component, OnInit, ViewChild, ElementRef, Optional } from '@angular/core';
-import {User } from './user';
+import { User } from './user';
 import { EsriMapComponent } from 'app/esri-map/esri-map.component';
 import { EsriLoaderService } from 'angular2-esri-loader';
 import { MdDialog, MdDialogRef } from '@angular/material';
@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
 
   prjCompleteDate: Date;
   prjCompleteStr: string;
-  options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'};
+  options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   public myForm: FormGroup; // our model driven form
   public submitted: boolean; // keep track on whether form is submitted
   //public events: any[] = []; // use later to display form changes
@@ -42,7 +42,7 @@ export class AppComponent implements OnInit {
   public isDone;
   user: User;
   public data;
-   //geodata = new Geodata();
+  //geodata = new Geodata();
   geodata: Geodata;
   collectionareas: Collectionareas;
   //srStatus: string;
@@ -81,7 +81,7 @@ export class AppComponent implements OnInit {
 
     // check if model is valid
     // if valid, call API to save customer
-    console.log('model is ',model, isValid);
+    console.log('model is ', model, isValid);
 
     console.log('stringified model', JSON.stringify(model));
 
@@ -108,7 +108,7 @@ export class AppComponent implements OnInit {
         if (this.srStatus === 'INPROG') {
           this.srStatus = 'In Progress';
         }
-        this.prjCompleteDate =  this.authResponse.Value.PrjCompleteDate;
+        this.prjCompleteDate = this.authResponse.Value.PrjCompleteDate;
         this.prjCompleteDate = new Date(this.authResponse.Value.PrjCompleteDate);
 
         this.prjCompleteStr = this.prjCompleteDate.toLocaleDateString("en-US", this.options);
@@ -136,23 +136,23 @@ export class AppComponent implements OnInit {
     this.cardIndex = 0;
 
     const callerAddressChanges$ = this.myForm.get('callerAddress').valueChanges;
-    this.filteredOptions = callerAddressChanges$.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());
-  }
+    if (callerAddressChanges$.startWith(' n ')){
+        //https://stackoverflow.com/questions/34615425/how-to-watch-for-form-changes-in-angular-2/34629083
+    }
+    // let message = "";
+    // let words = ["reducing", "is", "simple"];
+    // for ( let i = 0; i < words.length; i++ ){
+    //   message = message + ' ' + words[i];
+    // }
+    // let words2 = ["reducing2", "is", "simple"].reduce((a,b) => a + ','+ b);
+    // console.log('message = ', words2);
 
-  getPreviousCard(){
-    //this.cards.push(this.cards.length + 1);
-    this.cardIndex -= 1;
-    console.log('this previous cards full array', this.cardIndex);
-  }
-
-  getNextCard(){
-    //this.cards.push(this.cards.length + 1);
-    this.cardIndex += 1;
-    console.log('this cards full array', this.cardIndex);
+    // this.filteredOptions = callerAddressChanges$.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());
+    this.filteredOptions = callerAddressChanges$.startWith(null)
+    .map(val => val ? this.filter(val) : console.log('inside slice'));
   }
 
   filter(val: string): string[] {
-
     this.geocodeService.getGeometry(val).subscribe(geodata => this.geodata = geodata,
       err => console.error(err),
       () => {
@@ -162,6 +162,18 @@ export class AppComponent implements OnInit {
 
     console.log('this.addressOptions = ', this.addressOptions);
     return this.addressOptions.filter(addressOption => new RegExp(`^${val}`, 'gi').test(addressOption));
+  }
+
+  getPreviousCard() {
+    //this.cards.push(this.cards.length + 1);
+    this.cardIndex -= 1;
+    console.log('this previous cards full array', this.cardIndex);
+  }
+
+  getNextCard() {
+    //this.cards.push(this.cards.length + 1);
+    this.cardIndex += 1;
+    console.log('this cards full array', this.cardIndex);
   }
 
   openDialog(page: string) {

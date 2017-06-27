@@ -16,7 +16,7 @@ export class GeocodeService {
   // tslint:disable-next-line:max-line-length
   private url = 'https://maps.raleighnc.gov/arcgis/rest/services/Addresses/MapServer/0/query?returnGeometry=true&outSR=4326&geometryPrecision=5&f=json&orderByFields=ADDRESS&where=ADDRESSU like \'';
   // tslint:disable-next-line:max-line-length
-  private urlTrashDay = 'https://maps.raleighnc.gov/arcgis/rest/services/Services/PortalServices/MapServer/12/query?geometry=';
+  private urlTrashDay = 'http://maps.raleighnc.gov/arcgis/rest/services/Services/PortalServices1/MapServer/12/query?geometry=';
   constructor(private http: Http) { }
 
   getGeometry(address): Observable<Geodata> {

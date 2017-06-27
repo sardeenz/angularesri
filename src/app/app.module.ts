@@ -31,7 +31,7 @@ import { DialogContentComponent } from './dialog-content/dialog-content.componen
     HttpModule,
     MdButtonModule,
     MdCheckboxModule,
-    MaterialModule.forRoot(),
+    MaterialModule,
   ],
   entryComponents: [DialogContentComponent],
   providers: [EsriLoaderService, GeocodeService, ServicerequestService],

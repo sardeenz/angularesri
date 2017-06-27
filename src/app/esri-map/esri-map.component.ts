@@ -25,6 +25,7 @@ export class EsriMapComponent implements OnInit {
   week = '';
   geojson;
   geojsonArr: string[];
+  x = '';
   today: any;
 
   public mymap: any;
@@ -56,10 +57,11 @@ export class EsriMapComponent implements OnInit {
             this.week = this.collectionareas.features[0].attributes.WEEK;
             console.log('moment = ', moment().week());
             let isOdd = (moment().week() % 2) === 1;
-                if (this.week === 'B' && isOdd) {
-                    console.log(this.week = "This week is not your Recycling week.");
-                }
-                 console.log(this.week = "This week is your Recycling week.");
+            if (this.week === 'B' && isOdd) {
+              this.week = "This week is your Recycling week.";
+            } else {
+              this.week = "This week is not your Recycling week.";
+            }
           });
       }
     );
@@ -113,7 +115,6 @@ export class EsriMapComponent implements OnInit {
   public setMarker(data) {
 
     console.log('this.data from address search= ', this.geodata);
-
     this.mapView.goTo({
       center: [this.geodata.features[0].geometry.x, this.geodata.features[0].geometry.y],
       zoom: 17
@@ -151,9 +152,15 @@ export class EsriMapComponent implements OnInit {
         // TODO: create nested loop to find matching coordinates and return true/false
         this.geojson.features[0].geometry.coordinates[0].find(x => x.name === geometry.features[0].geometry.x);
         this.geojsonArr = this.geojson.features[0].geometry.coordinates[0];
-        for (var i=0; i < this.geojsonArr.length; i++) {
-          console.log('inside loop of geojson array',this.geojsonArr[i]);
-    }
+        for (var i = 0; i < this.geojsonArr.length; i++) {
+          console.log('inside loop of geojson array', this.geojsonArr[i]);
+          this.x = this.geojsonArr[i][0];
+          //console.log('geojson = ', this.x.substring(0, 9));
+          console.log('geometry x = ', geometry.features[0].geometry.x);
+          if (this.geojsonArr[i][0] === geometry.features[0].geometry.x) {
+            console.log('geo match');
+          }
+        }
 
         console.log('geometry from call = ', geometry.features[0].geometry);
         //this.geojsonArr 

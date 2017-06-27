@@ -21,6 +21,7 @@ import { MdIconRegistry } from '@angular/material';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  geocodedata: any;
 
   prjCompleteDate: Date;
   prjCompleteStr: string;
@@ -32,6 +33,7 @@ export class AppComponent implements OnInit {
   cards: Array<number>;
   cardIndex: number;
 
+  someAddress = '';
   srStatus = '';
   requestId: any;
   myControl = new FormControl();
@@ -136,21 +138,78 @@ export class AppComponent implements OnInit {
     this.cardIndex = 0;
 
     const callerAddressChanges$ = this.myForm.get('callerAddress').valueChanges;
-    if (callerAddressChanges$.startWith(' n ')){
-        //https://stackoverflow.com/questions/34615425/how-to-watch-for-form-changes-in-angular-2/34629083
+    if (callerAddressChanges$.startWith(' n ')) {
+      //https://stackoverflow.com/questions/34615425/how-to-watch-for-form-changes-in-angular-2/34629083
     }
     // let message = "";
     // let words = ["reducing", "is", "simple"];
     // for ( let i = 0; i < words.length; i++ ){
     //   message = message + ' ' + words[i];
     // }
-    // let words2 = ["reducing2", "is", "simple"].reduce((a,b) => a + ','+ b);
-    // console.log('message = ', words2);
+    let words2 = ["reducing2", "is", "simple"].reduce((a,b) => a + ','+ b);
+    console.log('message = ', words2);
 
     // this.filteredOptions = callerAddressChanges$.startWith(null).map(val => val ? this.filter(val) : this.addressOptions.slice());
-    this.filteredOptions = callerAddressChanges$.startWith(null)
-    .map(val => val ? this.filter(val) : console.log('inside slice'));
+
+    // callerAddressChanges$.map(val => );
+    //.filter( value => value === '720 n' ).map(v => console.log('v = ',v));
+
+    this.filteredOptions = callerAddressChanges$
+    .startWith(null)
+    //.debounceTime(200)
+      .scan(() => {
+        this.someAddress = this.myForm.get('callerAddress').value;
+        // if (this.someAddress.includes(' n ')) {
+        //   this.someAddress = this.someAddress.replace(' n ', ' North ');
+        //   this.myForm.controls['callerAddress'].setValue(this.someAddress);
+        // }
+        // if (this.someAddress.includes(' N ')) {
+        //   this.someAddress = this.someAddress.replace(' N ', ' North ');
+        //   this.myForm.controls['callerAddress'].setValue(this.someAddress);
+        // }
+        // if (this.someAddress.includes(' s ')) {
+        //   this.someAddress = this.someAddress.replace(' s ', ' South ');
+        //   this.myForm.controls['callerAddress'].setValue(this.someAddress);
+        // }
+        // if (this.someAddress.includes(' S ')) {
+        //   this.someAddress = this.someAddress.replace(' S ', ' South ');
+        //   this.myForm.controls['callerAddress'].setValue(this.someAddress);
+        // }
+        // if (this.someAddress.includes(' e ')) {
+        //   this.someAddress = this.someAddress.replace(' e ', ' East ');
+        //   this.myForm.controls['callerAddress'].setValue(this.someAddress);
+        // }
+        // if (this.someAddress.includes(' E ')) {
+        //   this.someAddress = this.someAddress.replace(' E ', ' East ');
+        //   this.myForm.controls['callerAddress'].setValue(this.someAddress);
+        // }
+        // if (this.someAddress.includes(' w ')) {
+        //   this.someAddress = this.someAddress.replace(' w ', ' West ');
+        //   this.myForm.controls['callerAddress'].setValue(this.someAddress);
+        // }
+        // if (this.someAddress.includes(' W ')) {
+        //   this.someAddress = this.someAddress.replace(' W ', ' West ');
+        //   this.myForm.controls['callerAddress'].setValue(this.someAddress);
+        // }
+      }
+      )
+      .map(val => this.someAddress ? this.filter(this.someAddress) : console.log('inside slice', this.someAddress));
+
+    // this.filteredOptions = callerAddressChanges$.startWith(null).debounceTime(100).filter(x => this.myForm.get('callerAddress').value === '7')
+    // .map(val => val ? this.filter(val) : console.log('inside slice'));
   }
+
+  //   filterGeo(val: string): string[] {
+  //   this.geocodeService.getGeometryGeoCoder(val).subscribe(geocodedata => this.geocodedata = geocodedata,
+  //     err => console.error(err),
+  //     () => {
+  //       this.addressOptions.splice(0, 1);
+  //       this.addressOptions.push(this.geocodedata.candidates[0].address);
+  //     });
+
+  //   console.log('this.addressOptions = ', this.addressOptions);
+  //   return this.addressOptions.filter(addressOption => new RegExp(`^${this.addressOptions}`, 'gi').test(addressOption));
+  // }
 
   filter(val: string): string[] {
     this.geocodeService.getGeometry(val).subscribe(geodata => this.geodata = geodata,
@@ -161,7 +220,7 @@ export class AppComponent implements OnInit {
       });
 
     console.log('this.addressOptions = ', this.addressOptions);
-    return this.addressOptions.filter(addressOption => new RegExp(`^${val}`, 'gi').test(addressOption));
+    return this.addressOptions.filter(addressOption => new RegExp(`^${this.addressOptions}`, 'gi').test(addressOption));
   }
 
   getPreviousCard() {

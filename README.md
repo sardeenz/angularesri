@@ -31,6 +31,7 @@ https://gist.github.com/tomwayson/e6260adfd56c2529313936528b8adacd
 
 npm install --save @types/arcgis-js-api
 
+npm install --save angular/material2-builds angular/cdk-builds
 
 # Deployment
 ng build --prod --bh /sws/

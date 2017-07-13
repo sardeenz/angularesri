@@ -105,8 +105,8 @@ export class EsriMapComponent implements OnInit {
         };
         this.mymap = map;
         this.mapView = new MapView(mapViewProperties);
-        this.maploaded = this.esriLoader.isLoaded();
-        console.log(this.maploaded);
+        // this.maploaded = this.esriLoader.isLoaded();
+        // console.log(this.maploaded);
       });
     });
 

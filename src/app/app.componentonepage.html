@@ -22,14 +22,14 @@
         </button>
 </md-menu>
 
-<!--<md-button-toggle-group name="pies" [(ngModel)]="favoritePie">
+<md-button-toggle-group name="pies" [(ngModel)]="favoritePie">
     <md-button-toggle *ngFor="let pie of pieOptions" [value]="pie">
         {{pie}}
     </md-button-toggle>
 </md-button-toggle-group>
-<p>Your favorite type of pie is: {{favoritePie}}</p>-->
+<p>Your favorite type of pie is: {{favoritePie}}</p>
 
-<ng-container *ngFor="let card of cards; let i = index">
+<ng-container>
     <!--<md-card *ngIf="i === cardIndex">-->
     <md-card>
         <md-card-header>
@@ -40,7 +40,7 @@
         </md-card-header>
 
 
-        <md-card-content *ngIf="cardIndex==2" class="map-md-card">
+        <md-card-content>
             <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                 <h3>Enter your contact information</h3>
 
@@ -75,7 +75,7 @@
             <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
             <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
         </md-card-content>
-        <md-card-content *ngIf="cardIndex==0" class="map-md-card">
+        <md-card-content>
             <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                 <h3>Choose the type of missed collection</h3>
                 <md-select formControlName="problemSid">
@@ -98,7 +98,7 @@
             </form>
         </md-card-content>
 
-        <md-card-content *ngIf="cardIndex==1" class="map-md-card">
+        <md-card-content>
             <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
                 <h3>Enter your address</h3>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
@@ -136,10 +136,10 @@
     </md-card>
 </ng-container>
 
-<p class="map-md-card" *ngIf="cardIndex==0">
+<p class="map-md-card">
     Or
 </p>
-<md-card *ngIf="cardIndex==0">
+<md-card>
     <md-card-content class="map-md-card">
         <form (ngSubmit)="checkSRStatus()" #subForm="ngForm">
             Check status of an existing Service Request:

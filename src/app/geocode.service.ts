@@ -22,16 +22,16 @@ export class GeocodeService {
   private urlTrashDay = 'https://maps.raleighnc.gov/arcgis/rest/services/Services/PortalServices/MapServer/12/query?geometry=';
   constructor(private http: Http) { }
 
-  getGeometry(address): Observable<Geodata> {
-    return this.http.get(encodeURI(this.url) + encodeURIComponent(address.toUpperCase()) + '%\'').map((res: Response) => res.json())
-      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
-  }
-
-  // getGeometryGeoCoder(address): Observable<Geodata> {
-  //   console.log('geoAddress = ', encodeURI(this.urlgeocoder) + encodeURIComponent(address));
-  //   return this.http.get(encodeURI(this.urlgeocoder) + encodeURIComponent(address)).map((res: Response) => res.json())
+  // getGeometry(address): Observable<Geodata> {
+  //   return this.http.get(encodeURI(this.url) + encodeURIComponent(address.toUpperCase()) + '%\'').map((res: Response) => res.json())
   //     .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   // }
+
+  getGeometry(address): Observable<Geodata> {
+    console.log('geoAddress = ', encodeURI(this.urlgeocoder) + encodeURIComponent(address));
+    return this.http.get(encodeURI(this.urlgeocoder) + encodeURIComponent(address)).map((res: Response) => res.json())
+      .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
+  }
 
   //getTrashDay(coords)
   urlparms = '&geometryType=esriGeometryPoint&inSR=4326&outFields=*&f=json';

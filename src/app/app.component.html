@@ -31,7 +31,7 @@
         </md-card-header>
         <md-card-content>
             <!-- <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)"> -->
-            <form [formGroup]="myForm" novalidate>
+            <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
 
                 <h3>Choose the type of missed collection</h3>
                 <md-select formControlName="problemSid">
@@ -52,9 +52,7 @@
                 <!--<p>
                     <button class="map-md-card" md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
                 </p>-->
-                <p>
-                    <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
-                </p>
+
                 <h3>Enter your address</h3>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
                     <input mdInput type="text" change="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
@@ -84,6 +82,8 @@
                 <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
                 <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
             </form>
+            <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+
         </md-card-content>
 
         <md-card-actions style="margin:0 auto;" class="map-md-card">

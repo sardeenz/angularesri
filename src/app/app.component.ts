@@ -129,8 +129,6 @@ export class AppComponent implements OnInit {
       callerCity: ['Raleigh'],
       callerState: ['NC'],
       callerZip: [''],
-      callerEmail: ['', <any>Validators.email],
-      callerWorkPhone: [''],
       comments: ['']
     });
 
@@ -147,7 +145,7 @@ export class AppComponent implements OnInit {
       err => console.error(err),
       () => {
         this.addressOptions.splice(this.addressOptions.length-1, this.addressOptions.length);
-        console.log('geocodedata = ', this.geocodedata.Results[0]);
+        //console.log('geocodedata = ', this.geocodedata.Results[0]);
         // for (let v in this.geocodedata.features) {
           this.addressOptions.push(this.geocodedata.Results[this.addressOptions.length]);
           //this.addressOptions.push(this.geocodedata.Results[this.addressOptions.length]);

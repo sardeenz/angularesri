@@ -16,7 +16,6 @@ import { MdIconRegistry } from '@angular/material';
 
 @Component({
   selector: 'app-root',
-  // templateUrl: './app.component.html',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })
@@ -38,7 +37,9 @@ export class AppComponent implements OnInit {
   requestId: any;
   myControl = new FormControl();
   addressOptions = [];
-  filteredOptions: Observable<string[]>;
+  //filteredOptions: Observable<string[]>;
+    filteredOptions: any;
+
   map: any;
   public authResponse;
   public isDone;
@@ -47,7 +48,6 @@ export class AppComponent implements OnInit {
   //geodata = new Geodata();
   geodata: Geodata;
   collectionareas: Collectionareas;
-  //srStatus: string;
 
   public problemSids = [
     { value: '263551', display: 'Garbage' },
@@ -123,7 +123,7 @@ export class AppComponent implements OnInit {
     this.myForm = this._fb.group({
       problemSid: [this.problemSids[0].value],
       callerFirstName: [''],
-      callerLastName: ['', [<any>Validators.required]],
+      // callerLastName: ['', [<any>Validators.required]],
       callerAddress: ['', <any>Validators.required],
       address: [''],
       callerCity: ['Raleigh'],

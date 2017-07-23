@@ -28,7 +28,7 @@ export class GeocodeService {
   // }
 
   getGeometry(address): Observable<Geodata> {
-    console.log('geoAddress = ', encodeURI(this.urlgeocoder) + encodeURIComponent(address));
+    //console.log('geoAddress = ', encodeURI(this.urlgeocoder) + encodeURIComponent(address));
     return this.http.get(encodeURI(this.urlgeocoder) + encodeURIComponent(address)).map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }

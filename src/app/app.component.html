@@ -6,7 +6,7 @@
     </a>
 
     <span>Solid Waste Services Missed Collection</span>
-    <button md-icon-button [mdMenuTriggerFor]="menu">
+    <button md-icon-button [mdMenuTriggerFor]="menu">   
       <md-icon>more_vert</md-icon>
     </button>
 </md-toolbar>
@@ -26,7 +26,7 @@
     <md-card>
         <md-card-header>
             <md-card-title>
-                <h2>Choose the type of missed collection</h2>
+                <h2>What was Missed?</h2>
             </md-card-title>
         </md-card-header>
         <md-card-content>
@@ -70,18 +70,18 @@
                     <button class="map-md-card" md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
                 </p>-->
 
-                <br>
+
                 <h3>Enter your address</h3>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
                     <input mdInput type="text" change="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
                 </md-input-container>
-                <md-autocomplete #auto="mdAutocomplete" [displayWith]="displayFn">
+                <md-autocomplete #auto="mdAutocomplete">
                     <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
                         <!--{{geocodedata.Results[0]}}-->
                         {{ addressOptions }}
                     </md-option>
                 </md-autocomplete>
-                <p>
+                <!-- <p>
                     <md-input-container>
                         <input mdInput type="text" formControlName="callerCity" placeholder="City">
                     </md-input-container>
@@ -93,7 +93,7 @@
                     <md-input-container>
                         <input mdInput type="text" formControlName="callerZip" placeholder="Zip" type="number">
                     </md-input-container>
-                </p>
+                </p> -->
                 <md-input-container>
                     <textarea mdInput type="text" formControlName="comments" placeholder="Comments"></textarea>
                 </md-input-container>

@@ -13,6 +13,10 @@ body {
     font-family: Roboto, sans-serif;
 }
 
+chf {
+    text-align: center;
+}
+
 md-card {
     max-width: 400px;
     /*max-width: 33.3%;*/

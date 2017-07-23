@@ -15,6 +15,10 @@ md-sidenav-layout.m2app-dark {
     min-width: 100px;
 }
 
+.h2 {
+    text-align: center;
+}
+
 .app-content md-checkbox {
     margin: 10px;
 }
@@ -73,5 +77,5 @@ md-sidenav-layout.m2app-dark {
 }
 
 .wider {
-    width: 200px;
+    width: 400px;
 }

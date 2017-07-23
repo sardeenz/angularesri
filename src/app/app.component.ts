@@ -144,12 +144,14 @@ export class AppComponent implements OnInit {
     this.geocodeService.getGeometry(val).subscribe(geocodedata => this.geocodedata = geocodedata,
       err => console.error(err),
       () => {
-        this.addressOptions.splice(this.addressOptions.length-1, this.addressOptions.length);
-        //console.log('geocodedata = ', this.geocodedata.Results[0]);
-        // for (let v in this.geocodedata.features) {
-          this.addressOptions.push(this.geocodedata.Results[this.addressOptions.length]);
-          //this.addressOptions.push(this.geocodedata.Results[this.addressOptions.length]);
-        // }
+        // add a splice here or something to remove stuff from addressOptions array
+        console.log('val = ', val);
+        //this.addressOptions.splice(0,1);
+        for (val in this.geocodedata.candidates) {
+          if (this.geocodedata.candidates[val].attributes.Loc_name == "WakeStreets") {
+              this.addressOptions.push(this.geocodedata.candidates[val].address);
+          }
+         }
       });
 
     console.log('this.addressOptions = ', this.addressOptions);

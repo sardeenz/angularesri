@@ -5,7 +5,7 @@
             </span>
     </a>
 
-    <span>Solid Waste Services</span>
+    <span>Solid Waste Services Missed Collection</span>
     <button md-icon-button [mdMenuTriggerFor]="menu">
       <md-icon>more_vert</md-icon>
     </button>
@@ -26,22 +26,34 @@
     <md-card>
         <md-card-header>
             <md-card-title>
-                <h2>Missed Collection Form</h2>
+                <h2>Choose the type of missed collection</h2>
             </md-card-title>
         </md-card-header>
         <md-card-content>
             <!-- <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)"> -->
             <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
 
-                <h3>Choose the type of missed collection</h3>
-                <md-select formControlName="problemSid">
+                <!-- <h3>Choose the type of missed collection</h3> -->
+                <!-- <md-button-toggle-group formControlName="problemSid" name="collectionTypes">
+                    <md-button-toggle>Garbage</md-button-toggle>
+                    <md-button-toggle value='263552'>Recycling</md-button-toggle>
+                    <md-button-toggle value='263553'>Yard Waste</md-button-toggle>
+                </md-button-toggle-group> -->
+
+                <md-button-toggle-group name="collectionTypes" formControlName="problemSid">
+                    <md-button-toggle *ngFor="let problemSid of problemSids" [value]="problemSid.value">
+                        {{problemSid.display}}
+                    </md-button-toggle>
+                </md-button-toggle-group>
+
+                <!-- <md-select formControlName="problemSid">
                     <md-option *ngFor="let problemSid of problemSids" [value]="problemSid.value">
                         {{problemSid.display}}
                     </md-option>
-                </md-select>
-                <div *ngIf="myForm.controls.problemSid.value == '263551' || myForm.controls.problemSid.value == '263553'">
+                </md-select> -->
+                <div *ngIf="myForm.controls.problemSid.value == '263551'">
                     <p>
-                        <br/> Click <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">here</a> to get more information on Garbage and Yard Waste Preparation.
+                        <br/> Click <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">here</a> to get more information on Garbage Preparation.
                     </p>
                 </div>
                 <div *ngIf="myForm.controls.problemSid.value == '263552'">
@@ -49,10 +61,16 @@
                         <br/> Click <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/RecyclePages.html" target="_blank">here</a> to get more information on Recycling Preparation.
                     </p>
                 </div>
+                <div *ngIf="myForm.controls.problemSid.value == '263553'">
+                    <p>
+                        <br/> Click <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">here</a> to get more information on Yard Waste Preparation.
+                    </p>
+                </div>
                 <!--<p>
                     <button class="map-md-card" md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
                 </p>-->
 
+                <br>
                 <h3>Enter your address</h3>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
                     <input mdInput type="text" change="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">

@@ -1,9 +1,8 @@
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Geodata } from './geodata';
 import { Collectionareas } from './collectionareas';
 import { GeocodeService } from './geocode.service';
 import { Observable } from 'rxjs/Rx';
-import { FormControl } from '@angular/forms';
 import { DialogContentComponent } from './dialog-content/dialog-content.component';
 import { ServicerequestService } from './servicerequest.service';
 import { Component, OnInit, ViewChild, ElementRef, Optional } from '@angular/core';
@@ -120,6 +119,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    const PHONE_REGEX = /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/;
     this.myForm = this._fb.group({
       problemSid: [this.problemSids[0].value],
       callerFirstName: [''],
@@ -129,6 +130,8 @@ export class AppComponent implements OnInit {
       callerCity: ['Raleigh'],
       callerState: ['NC'],
       callerZip: [''],
+      callerEmail: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      callerWorkPhone: ['919-555-5555', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]], // /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/
       comments: ['']
     });
 

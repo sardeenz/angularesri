@@ -71,7 +71,7 @@
                 </p>-->
 
 
-                <h3>Enter your address</h3>
+                <h3>Enter your address and phone number</h3>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
                     <input mdInput type="text" change="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
                 </md-input-container>
@@ -89,11 +89,30 @@
                 <md-input-container>
                     <input mdInput type="text" formControlName="callerState" placeholder="State">
                 </md-input-container>
+                <p> -->
                 <p>
                     <md-input-container>
-                        <input mdInput type="text" formControlName="callerZip" placeholder="Zip" type="number">
+                        <input mdInput type="text" formControlName="callerEmail" placeholder="Email">
+                        <md-error *ngIf="myForm.controls.callerEmail.hasError('pattern')">
+                            Please enter a valid email address
+                        </md-error>
+                        <md-error *ngIf="myForm.controls.callerEmail.hasError('required')">
+                            Email is <strong>required</strong>
+                        </md-error>
+                        <!-- <md-hint align="start"><strong>Don't disclose personal info</strong> </md-hint> -->
                     </md-input-container>
-                </p> -->
+                </p>
+                <p>
+                    <md-input-container>
+                        <input mdInput type="text" formControlName="callerWorkPhone" placeholder="Phone #">
+                        <md-error *ngIf="myForm.controls.callerWorkPhone.hasError('pattern')">
+                            Please enter a valid phone number
+                        </md-error>
+                        <md-error *ngIf="myForm.controls.callerWorkPhone.hasError('required')">
+                            Phone is <strong>required</strong>
+                        </md-error>
+                    </md-input-container>
+                </p>
                 <md-input-container>
                     <textarea mdInput type="text" formControlName="comments" placeholder="Comments"></textarea>
                 </md-input-container>
@@ -133,6 +152,6 @@
     </md-card-content>
 </md-card>
 
-<md-card class="map-md-card" *ngIf="this.myForm.get('callerAddress').value != ''">
+<!-- <md-card class="map-md-card" *ngIf="this.myForm.get('callerAddress').value != ''">
     <app-esri-map></app-esri-map>
-</md-card>
+</md-card> -->

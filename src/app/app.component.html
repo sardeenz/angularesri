@@ -5,7 +5,7 @@
             </span>
     </a>
 
-    <span>Solid Waste Services Missed Collection</span>
+    <span>Solid Waste Services Missed Pickup</span>
     <button md-icon-button [mdMenuTriggerFor]="menu">   
       <md-icon>more_vert</md-icon>
     </button>
@@ -76,11 +76,11 @@
                     <input mdInput type="text" change="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
                 </md-input-container>
                 <md-autocomplete #auto="mdAutocomplete">
-                    <md-option *ngFor="let addressOptions of filteredOptions | async" [value]="addressOptions">
-                        <!--{{geocodedata.Results[0]}}-->
-                        {{ addressOptions }}
+                    <md-option *ngFor="let item of items | async" [value]="item.address">
+                        {{ item.address }}
                     </md-option>
                 </md-autocomplete>
+
                 <!-- <p>
                     <md-input-container>
                         <input mdInput type="text" formControlName="callerCity" placeholder="City">
@@ -91,15 +91,15 @@
                 </md-input-container>
                 <p> -->
                 <p>
-                    <md-input-container>
+                    <md-input-container hintLabel='Enter your email to recieve updates on your request'>
                         <input mdInput type="text" formControlName="callerEmail" placeholder="Email">
                         <md-error *ngIf="myForm.controls.callerEmail.hasError('pattern')">
                             Please enter a valid email address
                         </md-error>
-                        <md-error *ngIf="myForm.controls.callerEmail.hasError('required')">
-                            Email is <strong>required</strong>
-                        </md-error>
-                        <!-- <md-hint align="start"><strong>Don't disclose personal info</strong> </md-hint> -->
+                        <!-- <md-error *ngIf="myForm.controls.callerEmail.hasError('required')">
+                            Email is required
+                        </md-error> -->
+                        <!-- <md-hint align="start"><strong>Email is not required, but will notify you of updates to your request.</strong> </md-hint> -->
                     </md-input-container>
                 </p>
                 <p>
@@ -109,7 +109,7 @@
                             Please enter a valid phone number
                         </md-error>
                         <md-error *ngIf="myForm.controls.callerWorkPhone.hasError('required')">
-                            Phone is <strong>required</strong>
+                            Phone # is required
                         </md-error>
                     </md-input-container>
                 </p>

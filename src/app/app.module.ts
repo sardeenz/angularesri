@@ -1,8 +1,10 @@
+import { FilteraddressService } from './filteraddress.service';
 import { ServicerequestService } from './servicerequest.service';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
+import {HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 
@@ -29,12 +31,13 @@ import { DialogContentComponent } from './dialog-content/dialog-content.componen
     ReactiveFormsModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     MdButtonModule,
     MdCheckboxModule,
     MaterialModule
   ],
   entryComponents: [DialogContentComponent],
-  providers: [EsriLoaderService, GeocodeService, ServicerequestService],
+  providers: [EsriLoaderService, GeocodeService, ServicerequestService, FilteraddressService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

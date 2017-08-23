@@ -7,7 +7,7 @@ export interface User {
     callerZip: string;
     address: string;
     callerWorkPhone: string;
-    callerEmail: string;
+    callerEmail?: string;
     problemSid: string;
     callerComments?: string;
     comments: string;

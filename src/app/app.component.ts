@@ -1,5 +1,7 @@
+import { FilteraddressService } from './filteraddress.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Geodata } from './geodata';
+import { Candidate, Geocode } from './geocode';
+// import { Geodata } from './geodata';
 import { Collectionareas } from './collectionareas';
 import { GeocodeService } from './geocode.service';
 import { Observable } from 'rxjs/Rx';
@@ -28,6 +30,12 @@ export class AppComponent implements OnInit {
   public submitted: boolean; // keep track on whether form is submitted
   //public events: any[] = []; // use later to display form changes
 
+  items: Observable<Array<Candidate>>;
+  private anyErrors: boolean;  
+  public subscription;
+  public coords;
+  
+
   cards: Array<number>;
   cardIndex: number;
 
@@ -45,7 +53,7 @@ export class AppComponent implements OnInit {
   user: User;
   public data;
   //geodata = new Geodata();
-  geodata: Geodata;
+  //geodata: Geodata;
   collectionareas: Collectionareas;
 
   public problemSids = [
@@ -57,7 +65,8 @@ export class AppComponent implements OnInit {
   @ViewChild(EsriMapComponent) esriMapComponent: EsriMapComponent;
 
   constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private _dialog: MdDialog,
-    private _servicerequestService: ServicerequestService, private geocodeService: GeocodeService, private _fb: FormBuilder) {
+    private _servicerequestService: ServicerequestService, private geocodeService: GeocodeService, private _fb: FormBuilder,
+     private filteraddressService: FilteraddressService) {
     iconRegistry.addSvgIcon(
       'city_seal',
       sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg'));
@@ -130,7 +139,7 @@ export class AppComponent implements OnInit {
       callerCity: ['Raleigh'],
       callerState: ['NC'],
       callerZip: [''],
-      callerEmail: ['', [<any>Validators.required, <any>Validators.pattern(EMAIL_REGEX)]],
+      callerEmail: ['', <any>Validators.pattern(EMAIL_REGEX)],
       callerWorkPhone: ['919-555-5555', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]], // /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/
       comments: ['']
     });
@@ -138,8 +147,23 @@ export class AppComponent implements OnInit {
     this.cards = [0];
     this.cardIndex = 0;
 
-    this.filteredOptions = this.myForm.get('callerAddress').valueChanges.startWith(null)
-    .map(val => val ? this.filter(val) : console.log('inside slice', val));
+    // this.filteredOptions = this.myForm.get('callerAddress').valueChanges.startWith(null)
+    // .map(val => val ? this.filter(val) : console.log('inside slice', val));
+
+// variable 'x' below is whatever is passed to the observable of valuechanges
+this.items = this.myForm.get('callerAddress').valueChanges
+.debounceTime(300)
+.distinctUntilChanged()
+.switchMap((x) => this.filteraddressService.getGeometry(x));
+
+// this is getting the last set of coordinates I think.
+this.subscription = this.items.subscribe(
+x => x.map(res => console.log('x.map = ', this.coords = res.location)),
+error => this.anyErrors = true,
+() => console.log('finished items subscription')
+);
+
+
   }
 
   filter(val: string): string[] {

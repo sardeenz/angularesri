@@ -79,3 +79,7 @@ md-sidenav-layout.m2app-dark {
 .wider {
     width: 400px;
 }
+
+.wide {
+    width: 200px;
+}

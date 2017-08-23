@@ -73,7 +73,7 @@
                 </p>-->
 
 
-                <h3>Enter your address and phone number</h3>
+                <h3>Enter your Address</h3>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
                     <input mdInput type="text" change="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
                 </md-input-container>
@@ -93,7 +93,7 @@
                 </md-input-container>
                 <p> -->
                 <p>
-                    <md-input-container hintLabel='Enter your email to recieve updates on your request'>
+                    <md-input-container class="wide" hintLabel='Enter your email to recieve updates on your request'>
                         <input mdInput type="text" formControlName="callerEmail" placeholder="Email">
                         <md-error *ngIf="myForm.controls.callerEmail.hasError('pattern')">
                             Please enter a valid email address
@@ -105,7 +105,7 @@
                     </md-input-container>
                 </p>
                 <p>
-                    <md-input-container>
+                    <md-input-container class="wide">
                         <input mdInput type="text" formControlName="callerWorkPhone" placeholder="Phone #">
                         <md-error *ngIf="myForm.controls.callerWorkPhone.hasError('pattern')">
                             Please enter a valid phone number
@@ -116,18 +116,18 @@
                     </md-input-container>
                 </p>
                 <md-input-container>
-                    <textarea mdInput type="text" formControlName="comments" placeholder="Comments"></textarea>
+                    <textarea mdInput type="text" class="wide" formControlName="comments" placeholder="Comments"></textarea>
                 </md-input-container>
                 <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
                 <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
             </form>
-            <md-progress-bar *ngIf="!isDone && submitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+            <md-progress-bar *ngIf="isDone" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
 
         </md-card-content>
 
         <md-card-actions style="margin:0 auto;" class="map-md-card">
             <form class="map-md-card" [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
-                <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
+                <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || isDone">Submit</button>
             </form>
         </md-card-actions>
     </md-card>
@@ -144,11 +144,11 @@
             <md-input-container>
                 <input mdInput type="text" [(ngModel)]="requestId" name="requestId" placeholder="Request ID" type="number">
             </md-input-container>
-            <br>
-            <button md-raised-button type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
-            <md-progress-bar *ngIf="submitted && srStatus === '' && isDone" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+            <br> {{!subForm.valid}}
+            <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
+            <md-progress-bar *ngIf="submitted && srStatus === ''" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
             <p *ngIf="srStatus != ''">You Service Request is in '{{srStatus}}' status.</p>
-            <div *ngIf="srStatus != 'CLOSED' && srStatus != '' && srStatus != 'COMPLETE'">The Projected Completion Date is {{prjCompleteStr}}</div>
+            <div *ngIf="srStatus != 'CLOSED' && srStatus != '' && srStatus != 'COMPLETE'">Your requested item will be collected within two business days, not including weekends.</div>
 
         </form>
     </md-card-content>

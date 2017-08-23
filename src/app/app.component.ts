@@ -27,7 +27,10 @@ export class AppComponent implements OnInit {
   prjCompleteStr: string;
   options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   public myForm: FormGroup; // our model driven form
-  public submitted: boolean; // keep track on whether form is submitted
+  submitted: boolean = false; // keep track on whether form is submitted
+  isDone: boolean = false;
+  
+  
   //public events: any[] = []; // use later to display form changes
 
   items: Observable<Array<Candidate>>;
@@ -49,7 +52,6 @@ export class AppComponent implements OnInit {
 
   map: any;
   public authResponse;
-  public isDone;
   user: User;
   public data;
   //geodata = new Geodata();
@@ -81,14 +83,9 @@ export class AppComponent implements OnInit {
 
   save(model: User, isValid: boolean) {
 
-    // delete model.srStatus;
-
     // move callerAddress to address to display in Cityworks in both fields
     model.address = this.myForm.get('callerAddress').value;
-
-    this.isDone = false;
-    this.submitted = true; // set form submit to true
-
+    //this.isDone = false;
     // check if model is valid
     // if valid, call API to save customer
     console.log('model is ', model, isValid);
@@ -110,12 +107,11 @@ export class AppComponent implements OnInit {
 
   checkSRStatus() {
     console.log('inside check status', this.requestId);
-    this.submitted = true;
-    this.isDone = true;
-    
+    //this.submitted = false;
     this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
       err => console.error(err),
       () => {
+        this.submitted = true;
         this.srStatus = this.authResponse.Value.Status;
         if (this.srStatus === 'INPROG') {
           this.srStatus = 'In Progress';

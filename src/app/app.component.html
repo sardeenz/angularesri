@@ -138,14 +138,18 @@
 </p>
 <md-card>
     <md-card-content class="map-md-card">
-        <form (ngSubmit)="checkSRStatus()" #subForm="ngForm">
+        <form (ngSubmit)="checkSRStatus()" #subForm="ngForm" novalidate>
             Check status of an existing Service Request:
             <br>
             <md-input-container>
                 <input mdInput type="text" [(ngModel)]="requestId" name="requestId" placeholder="Request ID" type="number">
             </md-input-container>
-            <br> {{!subForm.valid}}
+
+            <br> Valid = {{!subForm.valid}}<br> Submitted = {{submitted}}
+            <!-- <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button> -->
+            "name.valid || (name.pristine && !submitted)"
             <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
+
             <md-progress-bar *ngIf="submitted && srStatus === ''" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
             <p *ngIf="srStatus != ''">You Service Request is in '{{srStatus}}' status.</p>
             <div *ngIf="srStatus != 'CLOSED' && srStatus != '' && srStatus != 'COMPLETE'">Your requested item will be collected within two business days, not including weekends.</div>

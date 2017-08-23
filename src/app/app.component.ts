@@ -111,6 +111,8 @@ export class AppComponent implements OnInit {
   checkSRStatus() {
     console.log('inside check status', this.requestId);
     this.submitted = true;
+    this.isDone = true;
+    
     this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
       err => console.error(err),
       () => {
@@ -140,7 +142,7 @@ export class AppComponent implements OnInit {
       callerState: ['NC'],
       callerZip: [''],
       callerEmail: ['', <any>Validators.pattern(EMAIL_REGEX)],
-      callerWorkPhone: ['919-555-5555', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]], // /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/
+      callerWorkPhone: ['', [<any>Validators.required, <any>Validators.pattern(PHONE_REGEX)]],
       comments: ['']
     });
 
@@ -206,7 +208,9 @@ error => this.anyErrors = true,
       const dialogRef = this._dialog.open(DialogContentComponent);
     } else if (page === 'help') {
       const dialogRef = this._dialog.open(DialogContentComponent);
-    }
+    } else if (page === 'status') {
+      const dialogRef = this._dialog.open(DialogContentComponent);
+    } 
   }
 }
 

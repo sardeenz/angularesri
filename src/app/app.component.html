@@ -1,8 +1,10 @@
 <md-toolbar color="primary">
-    <a href="http://maps.raleighnc.gov/missedcollection">
-        <span>
+    <a href="http://www.raleighnc.gov/">
+        <!-- <span>
             <md-icon svgIcon="city_seal"></md-icon>
-            </span>
+            </span> -->
+        <img alt="Official City of Raleigh Seal" class="logo" src="./assets/City-Seal-BW.png">
+
     </a>
 
     <span>Solid Waste Services Missed Pickup</span>
@@ -12,10 +14,10 @@
 </md-toolbar>
 
 <md-menu #menu="mdMenu">
-    <button md-menu-item (click)="openDialog('about')">
+    <!-- <button md-menu-item (click)="openDialog('about')">
         <md-icon>info_outline</md-icon>
         <span>About</span>
-        </button>
+        </button> -->
     <button md-menu-item (click)="openDialog('help')">
             <md-icon>help</md-icon>
       <span>Need Help?</span>
@@ -109,7 +111,7 @@
                             Please enter a valid phone number
                         </md-error>
                         <md-error *ngIf="myForm.controls.callerWorkPhone.hasError('required')">
-                            Phone # is required
+                            Phone number is required
                         </md-error>
                     </md-input-container>
                 </p>
@@ -144,7 +146,7 @@
             </md-input-container>
             <br>
             <button md-raised-button type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
-            <md-progress-bar *ngIf="submitted && srStatus === ''" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+            <md-progress-bar *ngIf="submitted && srStatus === '' && isDone" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
             <p *ngIf="srStatus != ''">You Service Request is in '{{srStatus}}' status.</p>
             <div *ngIf="srStatus != 'CLOSED' && srStatus != '' && srStatus != 'COMPLETE'">The Projected Completion Date is {{prjCompleteStr}}</div>
 

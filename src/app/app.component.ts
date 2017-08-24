@@ -22,6 +22,7 @@ import { MdIconRegistry } from '@angular/material';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  ckSrStatussubmitted: boolean;
   geocodedata: any;
 
   prjCompleteDate: Date;
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit {
   public subForm: FormGroup; // tiny model driven form
   submitted: boolean = false; // keep track on whether form is submitted
   isDone: boolean = false;
+  ckStatus: boolean = false;
 
   items: Observable<Array<Candidate>>;
   private anyErrors: boolean;
@@ -83,7 +85,9 @@ export class AppComponent implements OnInit {
 
     // move callerAddress to address to display in Cityworks in both fields
     model.address = this.myForm.get('callerAddress').value;
-    //this.isDone = false;
+    this.submitted = true;
+    this.ckSrStatussubmitted = true;
+    
     // check if model is valid
     // if valid, call API to save customer
     console.log('model is ', model, isValid);
@@ -95,6 +99,7 @@ export class AppComponent implements OnInit {
       err => console.error(err),
       () => {
         this.isDone = true;
+        this.ckSrStatussubmitted = true;        
         if (this.authResponse.requestId === '') {
           console.log('no ServiceRequest ID was returned');
         }
@@ -106,13 +111,13 @@ export class AppComponent implements OnInit {
   checkSRStatus() {
     console.log('inside check status', this.requestId);
     console.log('inside check status!!!!!!!!', this.subForm.get('srInputId'));
-    //this.submitted = false;
+    this.ckSrStatussubmitted = true;
     // this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
     this._servicerequestService.getServiceRequest(this.subForm.get('srInputId').value).subscribe(data => this.authResponse = data,
         
       err => console.error(err),
       () => {
-        this.submitted = true;
+        this.ckStatus = true;
         this.srStatus = this.authResponse.Value.Status;
         if (this.srStatus === 'INPROG') {
           this.srStatus = 'In Progress';

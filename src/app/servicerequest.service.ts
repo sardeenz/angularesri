@@ -14,7 +14,7 @@ export class ServicerequestService {
   // private fuseUrl = 'http://rhsoaprdapp1.ci.raleigh.nc.us:8183/RaleighAPI/cityworks/createServiceRequest';
 
   private createSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/createServiceRequest/';
-  private getSRUrl = 'http://rhsoaprdapp1.ci.raleigh.nc.us:8183/RaleighAPI/cityworks/getServiceRequest/';
+  private getSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/getServiceRequest/';
 
 
   public testAuth = JSON.parse('{"LoginName":"pwadmin","Password":"pw2dmin"}');

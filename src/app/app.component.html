@@ -118,10 +118,11 @@
                 <md-input-container>
                     <textarea mdInput type="text" class="wide" formControlName="comments" placeholder="Comments"></textarea>
                 </md-input-container>
+                <br>
                 <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
                 <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
             </form>
-            <md-progress-bar *ngIf="isDone" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+            <md-progress-bar *ngIf="!isDone && submitted && ckSrStatussubmitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
 
         </md-card-content>
 
@@ -148,7 +149,7 @@
             </md-input-container>
             <!-- <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button> -->
 
-            <md-progress-bar *ngIf="submitted && srStatus === ''" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+            <md-progress-bar *ngIf="ckSrStatussubmitted && srStatus === '' && ckStatus" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
             <p *ngIf="srStatus != ''">You Service Request is in '{{srStatus}}' status.</p>
             <div *ngIf="srStatus != 'CLOSED' && srStatus != '' && srStatus != 'COMPLETE'">Your requested item will be collected within two business days, not including weekends.</div>
 

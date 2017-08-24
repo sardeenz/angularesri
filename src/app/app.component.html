@@ -75,7 +75,7 @@
 
                 <h3>Enter your Address</h3>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
-                    <input mdInput type="text" change="zoomToMap()" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
+                    <input mdInput type="text" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
                 </md-input-container>
                 <md-autocomplete #auto="mdAutocomplete">
                     <md-option *ngFor="let item of items | async" [value]="item.address">
@@ -138,17 +138,15 @@
 </p>
 <md-card>
     <md-card-content class="map-md-card">
-        <form (ngSubmit)="checkSRStatus()" #subForm="ngForm" novalidate>
-            Check status of an existing Service Request:
-            <br>
-            <md-input-container>
-                <input mdInput type="text" [(ngModel)]="requestId" name="requestId" placeholder="Request ID" type="number">
+        <form [formGroup]="subForm" novalidate (ngSubmit)="checkSRStatus(subForm.value, subForm.valid)">
+            <h3>Check status of an existing Service Request</h3>
+            <md-input-container hintLabel='If you have a pending Service Request ID, enter it here'>
+                <input mdInput type="text" formControlName="srInputId" placeholder="Request ID">
+                <!-- <md-error *ngIf="subForm.controls.srInputId.hasError('pattern')">
+                        Please enter a valid email address
+                    </md-error> -->
             </md-input-container>
-
-            <br> Valid = {{!subForm.valid}}<br> Submitted = {{submitted}}
             <!-- <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button> -->
-            "name.valid || (name.pristine && !submitted)"
-            <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
 
             <md-progress-bar *ngIf="submitted && srStatus === ''" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
             <p *ngIf="srStatus != ''">You Service Request is in '{{srStatus}}' status.</p>
@@ -156,6 +154,12 @@
 
         </form>
     </md-card-content>
+    <md-card-actions style="margin:0 auto;" class="map-md-card">
+        <form class="map-md-card" [formGroup]="subForm" novalidate (ngSubmit)="checkSRStatus(subForm.value, subForm.valid)">
+            <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
+        </form>
+    </md-card-actions>
+
 </md-card>
 
 <!-- <md-card class="map-md-card" *ngIf="this.myForm.get('callerAddress').value != ''">

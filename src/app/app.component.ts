@@ -1,3 +1,4 @@
+import { ValidateFn } from 'codelyzer/walkerFactory/walkerFn';
 import { FilteraddressService } from './filteraddress.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Candidate, Geocode } from './geocode';
@@ -27,17 +28,14 @@ export class AppComponent implements OnInit {
   prjCompleteStr: string;
   options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   public myForm: FormGroup; // our model driven form
+  public subForm: FormGroup; // tiny model driven form
   submitted: boolean = false; // keep track on whether form is submitted
   isDone: boolean = false;
-  
-  
-  //public events: any[] = []; // use later to display form changes
 
   items: Observable<Array<Candidate>>;
-  private anyErrors: boolean;  
+  private anyErrors: boolean;
   public subscription;
   public coords;
-  
 
   cards: Array<number>;
   cardIndex: number;
@@ -48,7 +46,7 @@ export class AppComponent implements OnInit {
   myControl = new FormControl();
   addressOptions = [];
   //filteredOptions: Observable<string[]>;
-    filteredOptions: any;
+  filteredOptions: any;
 
   map: any;
   public authResponse;
@@ -68,7 +66,7 @@ export class AppComponent implements OnInit {
 
   constructor(iconRegistry: MdIconRegistry, sanitizer: DomSanitizer, private _dialog: MdDialog,
     private _servicerequestService: ServicerequestService, private geocodeService: GeocodeService, private _fb: FormBuilder,
-     private filteraddressService: FilteraddressService) {
+    private filteraddressService: FilteraddressService) {
     iconRegistry.addSvgIcon(
       'city_seal',
       sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg'));
@@ -97,7 +95,7 @@ export class AppComponent implements OnInit {
       err => console.error(err),
       () => {
         this.isDone = true;
-        if (this.authResponse.requestId === "") {
+        if (this.authResponse.requestId === '') {
           console.log('no ServiceRequest ID was returned');
         }
         console.log('this response is ', this.authResponse);
@@ -107,8 +105,11 @@ export class AppComponent implements OnInit {
 
   checkSRStatus() {
     console.log('inside check status', this.requestId);
+    console.log('inside check status!!!!!!!!', this.subForm.get('srInputId'));
     //this.submitted = false;
-    this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
+    // this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
+    this._servicerequestService.getServiceRequest(this.subForm.get('srInputId').value).subscribe(data => this.authResponse = data,
+        
       err => console.error(err),
       () => {
         this.submitted = true;
@@ -142,24 +143,28 @@ export class AppComponent implements OnInit {
       comments: ['']
     });
 
-    this.cards = [0];
-    this.cardIndex = 0;
+    this.subForm = this._fb.group({
+      srInputId: ['', [<any>Validators.maxLength(6), <any>Validators.minLength(6), <any>Validators.required]]
+    });
+    
+    // this.cards = [0];
+    // this.cardIndex = 0;
 
     // this.filteredOptions = this.myForm.get('callerAddress').valueChanges.startWith(null)
     // .map(val => val ? this.filter(val) : console.log('inside slice', val));
 
-// variable 'x' below is whatever is passed to the observable of valuechanges
-this.items = this.myForm.get('callerAddress').valueChanges
-.debounceTime(300)
-.distinctUntilChanged()
-.switchMap((x) => this.filteraddressService.getGeometry(x));
+    // variable 'x' below is whatever is passed to the observable of valuechanges
+    this.items = this.myForm.get('callerAddress').valueChanges
+      .debounceTime(300)
+      .distinctUntilChanged()
+      .switchMap((x) => this.filteraddressService.getGeometry(x));
 
-// this is getting the last set of coordinates I think.
-this.subscription = this.items.subscribe(
-x => x.map(res => console.log('x.map = ', this.coords = res.location)),
-error => this.anyErrors = true,
-() => console.log('finished items subscription')
-);
+    // this is getting the last set of coordinates I think.
+    this.subscription = this.items.subscribe(
+      x => x.map(res => console.log('x.map = ', this.coords = res.location)),
+      error => this.anyErrors = true,
+      () => console.log('finished items subscription')
+    );
 
 
   }
@@ -174,9 +179,9 @@ error => this.anyErrors = true,
         //this.addressOptions.splice(0,1);
         for (val in this.geocodedata.candidates) {
           if (this.geocodedata.candidates[val].attributes.Loc_name == "WakeStreets") {
-              this.addressOptions.push(this.geocodedata.candidates[val].address);
+            this.addressOptions.push(this.geocodedata.candidates[val].address);
           }
-         }
+        }
       });
 
     console.log('this.addressOptions = ', this.addressOptions);
@@ -206,7 +211,7 @@ error => this.anyErrors = true,
       const dialogRef = this._dialog.open(DialogContentComponent);
     } else if (page === 'status') {
       const dialogRef = this._dialog.open(DialogContentComponent);
-    } 
+    }
   }
 }
 

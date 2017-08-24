@@ -139,7 +139,7 @@
 </p>
 <md-card>
     <md-card-content class="map-md-card">
-        <form [formGroup]="subForm" novalidate (ngSubmit)="checkSRStatus(subForm.value, subForm.valid)">
+        <form [formGroup]="subForm" novalidate (ngSubmit)="checkSRStatus()">
             <h3>Check status of an existing Service Request</h3>
             <md-input-container hintLabel='If you have a pending Service Request ID, enter it here'>
                 <input mdInput type="text" formControlName="srInputId" placeholder="Request ID">
@@ -156,7 +156,7 @@
         </form>
     </md-card-content>
     <md-card-actions style="margin:0 auto;" class="map-md-card">
-        <form class="map-md-card" [formGroup]="subForm" novalidate (ngSubmit)="checkSRStatus(subForm.value, subForm.valid)">
+        <form class="map-md-card" [formGroup]="subForm" novalidate (ngSubmit)="checkSRStatus()">
             <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
         </form>
     </md-card-actions>

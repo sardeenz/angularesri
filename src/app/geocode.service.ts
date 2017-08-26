@@ -34,10 +34,21 @@ export class GeocodeService {
   }
 
   //getTrashDay(coords)
-  urlparms = '&geometryType=esriGeometryPoint&inSR=4326&outFields=*&f=json';
+  // urlparms = '&geometryType=esriGeometryPoint&inSR=4326&outFields=WEEK&f=json';
+  urlparms = '&geometryType=esriGeometryPoint&inSR=4326&outFields=WEEK&returnGeometry=false&f=json';
+  // valid url example - https://maps.raleighnc.gov/arcgis/rest/services/Services/PortalServices/MapServer/12/query?
+  // geometry={%22x%22:-78.64423,%22y%22:35.79834}&geometryType=esriGeometryPoint&inSR=4326&outFields=WEEK&returnGeometry=false&f=json
+
 
   getTrashDay(data): Observable<Collectionareas> {
-    let geometry = JSON.stringify(data.features[0].geometry);
+    //let geometry = JSON.stringify(data.features[0].geometry);
+    // let geometryx = JSON.stringify(data.x);
+    // let geometryy = JSON.stringify(data.y);
+    // let geometry = geometryx.concat(','.concat(geometryy));
+    let geometry = JSON.stringify(data);
+    
+    console.log('geometry w/ xy---------------------------', geometry);
+
     console.log('geometerryyyyURL = ', encodeURI(this.urlTrashDay + geometry + this.urlparms));
     return this.http.get(encodeURI(this.urlTrashDay + geometry + this.urlparms)).map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));

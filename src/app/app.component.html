@@ -28,7 +28,7 @@
     <md-card>
         <md-card-header>
             <md-card-title>
-                <h2>What was Missed?</h2>
+                <h2>What was missed?</h2>
             </md-card-title>
         </md-card-header>
         <md-card-content>
@@ -73,15 +73,24 @@
                 </p>-->
 
 
-                <h3>Enter your Address</h3>
+                <h3>Enter the Address of the Missed Pickup Location</h3>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
-                    <input mdInput type="text" formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
+                    <input mdInput type="text" (change)='recycleDay()' formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
                 </md-input-container>
                 <md-autocomplete #auto="mdAutocomplete">
                     <md-option *ngFor="let item of items | async" [value]="item.address">
                         {{ item.address }}
                     </md-option>
                 </md-autocomplete>
+                {{isRecyclingWeek}}
+
+                <div *ngIf="myForm.controls.problemSid.value == '263552'">
+                    <p>
+                        <md-error *ngIf="week == 'A' || week == 'B' && isNotRecyclingWeek">
+                            You have selected a missed pickup for Recycling, but your Recycling service is not scheduled to be picked up this week. Please do not submit this form. Recycling is collected every other week.
+                        </md-error>
+                    </p>
+                </div>
 
                 <!-- <p>
                     <md-input-container>
@@ -93,8 +102,8 @@
                 </md-input-container>
                 <p> -->
                 <p>
-                    <md-input-container class="wide" hintLabel='Enter your email to recieve updates on your request'>
-                        <input mdInput type="text" formControlName="callerEmail" placeholder="Email">
+                    <md-input-container class="wide" hintLabel='Email is optional: Enter your email to recieve updates on your request'>
+                        <input mdInput type="text" formControlName="callerEmail" placeholder="Email Address">
                         <md-error *ngIf="myForm.controls.callerEmail.hasError('pattern')">
                             Please enter a valid email address
                         </md-error>

@@ -43,6 +43,24 @@ export class EsriMapComponent implements OnInit {
     private esriLoader: EsriLoaderService, private geocodeService: GeocodeService
   ) { }
 
+  public recycleDay(address) {
+    console.log('inside recycleDay method');
+    this.geocodeService.getTrashDay(this.geodata).subscribe(collectionarea => this.collectionareas = collectionarea,
+      err => console.error(err),
+      () => {
+        console.log('attributes = ', this.collectionareas.features[0].attributes);
+        this.day = this.collectionareas.features[0].attributes.DAY;
+        this.week = this.collectionareas.features[0].attributes.WEEK;
+        console.log('moment = ', moment().week());
+        let isOdd = (moment().week() % 2) === 1;
+        if (this.week === 'B' && isOdd) {
+          this.week = "This week is your Recycling week.";
+        } else {
+          this.week = "This week is not your Recycling week.";
+        }
+      });
+  }
+
   public gotoView(address) {
     this.geocodeService.getGeometry(address).subscribe(geodata => this.geodata = geodata,
       err => console.error(err),

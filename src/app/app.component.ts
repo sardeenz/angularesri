@@ -15,6 +15,8 @@ import { EsriLoaderService } from 'angular2-esri-loader';
 import { MdDialog, MdDialogRef } from '@angular/material';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MdIconRegistry } from '@angular/material';
+import { MomentModule } from 'angular2-moment';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +24,24 @@ import { MdIconRegistry } from '@angular/material';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  isRecyclingWeek: string;
+  isNotRecyclingWeek: boolean;
+  getWeek(arg0: any): any {
+    this.week = arg0;
+    console.log('getWeek = ', this.week);
+
+    console.log('moment = ', moment().week());
+    const isOdd = (moment().week() % 2) === 1;
+    if (this.week === 'B' && isOdd) {
+      this.isRecyclingWeek = 'This week is your Recycling week.';
+    } else {
+      this.isRecyclingWeek = 'This week is not your Recycling week.';
+      this.isNotRecyclingWeek = true;
+    }
+
+  }
+
+
   ckSrStatussubmitted: boolean;
   geocodedata: any;
 
@@ -38,6 +58,8 @@ export class AppComponent implements OnInit {
   private anyErrors: boolean;
   public subscription;
   public coords;
+  public coordsArray = [];
+  public week;
 
   cards: Array<number>;
   cardIndex: number;
@@ -74,32 +96,35 @@ export class AppComponent implements OnInit {
       sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg'));
   }
 
-  zoomToMap() {
+  recycleDay() {
+    console.log('inside recycleDay - coords', this.coords);
+    //let recycleAddress = this.myForm.get('callerAddress').value;
+    this.geocodeService.getTrashDay(this.coords).subscribe(
+      data => {this.collectionareas = data; this.getWeek(this.collectionareas.features[0].attributes.WEEK);},
+      err => console.error(err),
+      () => { console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
+      });
+    
 
-    console.log('inside zoomToMap');
-    //this.esriMapComponent.gotoView(this.user.address);
+    console.log('inside collectionareas', this.week);
+
+    // this.esriMapComponent.recycleDay(recycleAddress);
+  }
+
+  zoomToMap() {
     this.esriMapComponent.gotoView(this.myForm.get('callerAddress').value);
   }
 
   save(model: User, isValid: boolean) {
-
-    // move callerAddress to address to display in Cityworks in both fields
     model.address = this.myForm.get('callerAddress').value;
     this.submitted = true;
     this.ckSrStatussubmitted = true;
-    
-    // check if model is valid
-    // if valid, call API to save customer
-    console.log('model is ', model, isValid);
-
-    console.log('stringified model', JSON.stringify(model));
-
     this._servicerequestService.createServiceRequest(model).subscribe(
       data => this.authResponse = data,
       err => console.error(err),
       () => {
         this.isDone = true;
-        this.ckSrStatussubmitted = true;        
+        this.ckSrStatussubmitted = true;
         if (this.authResponse.requestId === '') {
           console.log('no ServiceRequest ID was returned');
         }
@@ -109,12 +134,8 @@ export class AppComponent implements OnInit {
   }
 
   checkSRStatus() {
-    console.log('inside check status', this.requestId);
-    console.log('inside check status!!!!!!!!', this.subForm.get('srInputId'));
     this.ckSrStatussubmitted = true;
-    // this._servicerequestService.getServiceRequest(this.requestId).subscribe(data => this.authResponse = data,
     this._servicerequestService.getServiceRequest(this.subForm.get('srInputId').value).subscribe(data => this.authResponse = data,
-        
       err => console.error(err),
       () => {
         this.ckStatus = true;
@@ -151,7 +172,7 @@ export class AppComponent implements OnInit {
     this.subForm = this._fb.group({
       srInputId: ['', [<any>Validators.maxLength(6), <any>Validators.minLength(6), <any>Validators.required]]
     });
-    
+
     // this.cards = [0];
     // this.cardIndex = 0;
 
@@ -166,12 +187,14 @@ export class AppComponent implements OnInit {
 
     // this is getting the last set of coordinates I think.
     this.subscription = this.items.subscribe(
-      x => x.map(res => console.log('x.map = ', this.coords = res.location)),
+      x => x.map(res => console.log('x.map = ', this.coordsArray.push(res.location), this.coords = this.coordsArray[0])),
       error => this.anyErrors = true,
       () => console.log('finished items subscription')
     );
-
-
+    console.log('this.coordsArray = ', this.coordsArray);
+    //this.coords = this.coordsArray[0];
+    console.log('this.coords = ', this.coords);
+    
   }
 
   filter(val: string): string[] {

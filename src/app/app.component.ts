@@ -24,6 +24,9 @@ import * as moment from 'moment';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  public cands: Candidate;
+  arrayCnt: number;
+  isOdd: boolean;
   isRecyclingWeek: string;
   isNotRecyclingWeek: boolean;
   getWeek(arg0: any): any {
@@ -31,16 +34,15 @@ export class AppComponent implements OnInit {
     console.log('getWeek = ', this.week);
 
     console.log('moment = ', moment().week());
-    const isOdd = (moment().week() % 2) === 1;
-    if (this.week === 'B' && isOdd) {
+    this.isOdd = (moment().week() % 2) === 1;
+    console.log('isOdd = ', this.isOdd);
+    if (this.week === 'B' && !this.isOdd) {
       this.isRecyclingWeek = 'This week is your Recycling week.';
     } else {
       this.isRecyclingWeek = 'This week is not your Recycling week.';
       this.isNotRecyclingWeek = true;
     }
-
   }
-
 
   ckSrStatussubmitted: boolean;
   geocodedata: any;
@@ -53,6 +55,8 @@ export class AppComponent implements OnInit {
   submitted: boolean = false; // keep track on whether form is submitted
   isDone: boolean = false;
   ckStatus: boolean = false;
+
+  testCandidates = [];
 
   items: Observable<Array<Candidate>>;
   private anyErrors: boolean;
@@ -97,7 +101,20 @@ export class AppComponent implements OnInit {
   }
 
   recycleDay() {
-    console.log('inside recycleDay - coords', this.coords);
+    console.log('this.testCandidates',this.testCandidates);
+    //if address from testCandidates exactly matches address from for, get coordindates and pass them to get trash day.
+    //console.log('this.testCandidates',this.testCandidates.forEach(this.myForm.get('callerAddress').value === testCandidates.address));
+    
+    for (let addressEntry in this.testCandidates){
+      console.log('addressEntry', addressEntry);
+    }
+    // take the final address that has been inputted and get only it's coordinates
+    // shouldn't have to do this since we already have all coordinates
+    // this.filteraddressService.getGeometry(this.myForm.get('callerAddress').value);
+
+    console.log('count of array = ', this.arrayCnt);
+    this.coords = this.coordsArray[this.arrayCnt];
+    console.log('inside recycleDay - this.coords', this.coords);
     //let recycleAddress = this.myForm.get('callerAddress').value;
     this.geocodeService.getTrashDay(this.coords).subscribe(
       data => {this.collectionareas = data; this.getWeek(this.collectionareas.features[0].attributes.WEEK);},
@@ -153,6 +170,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    // reset array 
+    //this.candidate.slice(0,1);
+    
     const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const PHONE_REGEX = /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/;
     this.myForm = this._fb.group({
@@ -184,17 +204,20 @@ export class AppComponent implements OnInit {
       .debounceTime(300)
       .distinctUntilChanged()
       .switchMap((x) => this.filteraddressService.getGeometry(x));
-
+    
     // this is getting the last set of coordinates I think.
     this.subscription = this.items.subscribe(
-      x => x.map(res => console.log('x.map = ', this.coordsArray.push(res.location), this.coords = this.coordsArray[0])),
+      // x => x.map(res => this.arrayCnt = this.coordsArray.push(res.location), // also push the res.address from type Candidate
+      x => x.map(res => this.arrayCnt = this.testCandidates.push(res), // also push the res.address from type Candidate
+      
+      this.coords = this.coordsArray[this.arrayCnt]), 
+      // x => x.map(res => console.log('x.map = ', this.arrayCnt = this.coordsArray.push(res.location))),
       error => this.anyErrors = true,
       () => console.log('finished items subscription')
     );
     console.log('this.coordsArray = ', this.coordsArray);
     //this.coords = this.coordsArray[0];
     console.log('this.coords = ', this.coords);
-    
   }
 
   filter(val: string): string[] {

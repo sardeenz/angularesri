@@ -28,16 +28,25 @@ export class AppComponent implements OnInit {
   arrayCnt: number;
   isOdd: boolean;
   isRecyclingWeek: string;
-  isNotRecyclingWeek: boolean;
+  isNotRecyclingWeek: boolean = false;
   getWeek(arg0: any): any {
     this.week = arg0;
     console.log('getWeek = ', this.week);
 
     console.log('moment = ', moment().week());
-    this.isOdd = (moment().week() % 2) === 1;
+    this.isOdd = (moment().week() % 2) == 1;
+    console.log('actual week number = ', moment().week());
     console.log('isOdd = ', this.isOdd);
-    if (this.week === 'B' && !this.isOdd) {
+
+    // if (this.week === 'A' && this.isOdd) {
+    //   this.isRecyclingWeek = 'This week is your Recycling week.';
+    // } else if (this.week === 'B' && !this.isOdd) {
+
+    // }
+    this.isNotRecyclingWeek = false;
+    if (this.week === 'A' && this.isOdd) {
       this.isRecyclingWeek = 'This week is your Recycling week.';
+      this.isNotRecyclingWeek = false;      
     } else {
       this.isRecyclingWeek = 'This week is not your Recycling week.';
       this.isNotRecyclingWeek = true;
@@ -105,25 +114,35 @@ export class AppComponent implements OnInit {
     //if address from testCandidates exactly matches address from for, get coordindates and pass them to get trash day.
     //console.log('this.testCandidates',this.testCandidates.forEach(this.myForm.get('callerAddress').value === testCandidates.address));
     
-    for (let addressEntry in this.testCandidates){
+    for (let addressEntry in this.testCandidates) {
       console.log('addressEntry', addressEntry);
+      if (this.testCandidates[addressEntry].address === this.myForm.get('callerAddress').value) {
+        console.log('we have a match on address, heres its coordinates', this.testCandidates[addressEntry].location);
+
+        this.geocodeService.getTrashDay(this.testCandidates[addressEntry].location).subscribe(
+          data => {this.collectionareas = data; this.getWeek(this.collectionareas.features[0].attributes.WEEK);},
+          err => console.error(err),
+          () => { console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
+          });
+
+      }
     }
     // take the final address that has been inputted and get only it's coordinates
     // shouldn't have to do this since we already have all coordinates
     // this.filteraddressService.getGeometry(this.myForm.get('callerAddress').value);
 
-    console.log('count of array = ', this.arrayCnt);
-    this.coords = this.coordsArray[this.arrayCnt];
-    console.log('inside recycleDay - this.coords', this.coords);
+    // console.log('count of array = ', this.arrayCnt);
+    // this.coords = this.coordsArray[this.arrayCnt];
+    // console.log('inside recycleDay - this.coords', this.coords);
     //let recycleAddress = this.myForm.get('callerAddress').value;
-    this.geocodeService.getTrashDay(this.coords).subscribe(
-      data => {this.collectionareas = data; this.getWeek(this.collectionareas.features[0].attributes.WEEK);},
-      err => console.error(err),
-      () => { console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
-      });
+    // this.geocodeService.getTrashDay(this.coords).subscribe(
+    //   data => {this.collectionareas = data; this.getWeek(this.collectionareas.features[0].attributes.WEEK);},
+    //   err => console.error(err),
+    //   () => { console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
+    //   });
     
 
-    console.log('inside collectionareas', this.week);
+    // console.log('inside collectionareas', this.week);
 
     // this.esriMapComponent.recycleDay(recycleAddress);
   }

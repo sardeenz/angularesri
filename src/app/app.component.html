@@ -86,7 +86,7 @@
 
                 <div *ngIf="myForm.controls.problemSid.value == '263552'">
                     <p>
-                        <md-error *ngIf="week == 'A' || week == 'B' && isNotRecyclingWeek">
+                        <md-error *ngIf="(week === 'A' || week === 'B') && isNotRecyclingWeek">
                             You have selected a missed pickup for Recycling, but your Recycling service is not scheduled to be picked up this week. Please do not submit this form. Recycling is collected every other week.
                         </md-error>
                     </p>

@@ -87,10 +87,12 @@
                 <div *ngIf="myForm.controls.problemSid.value == '263552'">
                     <p>
                         <md-error *ngIf="(week === 'A' || week === 'B') && isNotRecyclingWeek">
-                            You have selected a missed pickup for Recycling, but your Recycling service is not scheduled to be picked up this week. Please do not submit this form. Recycling is collected every other week.
+                            You have selected a missed pickup for Recycling, but your Recycling service is not scheduled to be picked up this week. Residential Recycling is collected every other week.
                         </md-error>
                     </p>
                 </div>
+
+
 
                 <!-- <p>
                     <md-input-container>
@@ -129,10 +131,16 @@
                 </md-input-container>
                 <br>
                 <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
-                <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div>
-            </form>
-            <md-progress-bar *ngIf="!isDone && submitted && ckSrStatussubmitted" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+                <!-- <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div> -->
+                <br>
+                <div *ngIf="isDone && authResponse.requestId != ''">We apologize for the inconvenience. Your Service Request number is {{authResponse.requestId | json}} and your {{problemSidDisplay}} will be collected within two business days, not including weekends. Your container must be at the curb
+                    from 7am to 5pm, starting now and until collected.</div>
 
+            </form>
+            <md-progress-bar *ngIf="!isDone && submitted && ckSrStatussubmitted && !displayHttpError" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+            <div>
+                {{displayHttpError}}
+            </div>
         </md-card-content>
 
         <md-card-actions style="margin:0 auto;" class="map-md-card">

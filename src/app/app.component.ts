@@ -1,3 +1,4 @@
+import {HttpErrorResponse} from '@angular/common/http';
 import { ValidateFn } from 'codelyzer/walkerFactory/walkerFn';
 import { FilteraddressService } from './filteraddress.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -24,17 +25,19 @@ import * as moment from 'moment';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
+  problemSidDisplay: string;
   public cands: Candidate;
+  displayHttpError: string;
   arrayCnt: number;
   isOdd: boolean;
   isRecyclingWeek: string;
-  isNotRecyclingWeek: boolean = false;
+  isNotRecyclingWeek: boolean;
   getWeek(arg0: any): any {
     this.week = arg0;
     console.log('getWeek = ', this.week);
 
     console.log('moment = ', moment().week());
-    this.isOdd = (moment().week() % 2) == 1;
+    this.isOdd = (moment().week() % 2) === 1;
     console.log('actual week number = ', moment().week());
     console.log('isOdd = ', this.isOdd);
 
@@ -43,14 +46,14 @@ export class AppComponent implements OnInit {
     // } else if (this.week === 'B' && !this.isOdd) {
 
     // }
-    this.isNotRecyclingWeek = false;
-    if (this.week === 'A' && this.isOdd) {
-      this.isRecyclingWeek = 'This week is your Recycling week.';
-      this.isNotRecyclingWeek = false;      
-    } else {
-      this.isRecyclingWeek = 'This week is not your Recycling week.';
-      this.isNotRecyclingWeek = true;
-    }
+    // this.isNotRecyclingWeek = false;
+    // if (this.week === 'A' && this.isOdd) {
+    //   this.isRecyclingWeek = 'This week is your Recycling week.';
+    //   this.isNotRecyclingWeek = false;      
+    // } else {
+    //   this.isRecyclingWeek = 'This week is not your Recycling week.';
+    //   this.isNotRecyclingWeek = true;
+    // }
   }
 
   ckSrStatussubmitted: boolean;
@@ -123,10 +126,29 @@ export class AppComponent implements OnInit {
           data => {this.collectionareas = data; this.getWeek(this.collectionareas.features[0].attributes.WEEK);},
           err => console.error(err),
           () => { console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
-          });
+        
+          if (this.week === 'A' && this.isOdd) {
+            this.isRecyclingWeek = 'This week is your Recycling week.';
+            this.isNotRecyclingWeek = false;      
+          } else {
+            this.isRecyclingWeek = 'This week is not your Recycling week.';
+            this.isNotRecyclingWeek = true;
+          }
+        
+        });
 
       }
     }
+
+    // this.isNotRecyclingWeek = false;
+    // console.log('Just before logic of week and isOdd',this.week);
+    // if (this.week === 'A' && this.isOdd) {
+    //   this.isRecyclingWeek = 'This week is your Recycling week.';
+    //   this.isNotRecyclingWeek = false;      
+    // } else {
+    //   this.isRecyclingWeek = 'This week is not your Recycling week.';
+    //   this.isNotRecyclingWeek = true;
+    // }
     // take the final address that has been inputted and get only it's coordinates
     // shouldn't have to do this since we already have all coordinates
     // this.filteraddressService.getGeometry(this.myForm.get('callerAddress').value);
@@ -151,13 +173,52 @@ export class AppComponent implements OnInit {
     this.esriMapComponent.gotoView(this.myForm.get('callerAddress').value);
   }
 
+  // save(model: User, isValid: boolean) {
+  //   model.address = this.myForm.get('callerAddress').value;
+  //   this.submitted = true;
+  //   this.ckSrStatussubmitted = true;
+  //   this._servicerequestService.createServiceRequest(model).subscribe(
+  //     data => this.authResponse = data,
+  //     err => console.error(err),
+  //     () => {
+  //       this.isDone = true;
+  //       this.ckSrStatussubmitted = true;
+  //       if (this.authResponse.requestId === '') {
+  //         console.log('no ServiceRequest ID was returned');
+  //       }
+  //       console.log('this response is ', this.authResponse);
+  //     }
+  //   );
+  // }
+
   save(model: User, isValid: boolean) {
+    this.problemSidDisplay = this.myForm.controls.problemSid.value;
+    if (this.problemSidDisplay === '263551') {
+      this.problemSidDisplay = 'Garbage'
+    } else if (this.problemSidDisplay === '263552') {
+      this.problemSidDisplay = 'Recycling'
+    } else if (this.problemSidDisplay === '263553') {
+      this.problemSidDisplay = 'Yard Waste'
+    }
+
+
     model.address = this.myForm.get('callerAddress').value;
     this.submitted = true;
     this.ckSrStatussubmitted = true;
     this._servicerequestService.createServiceRequest(model).subscribe(
       data => this.authResponse = data,
-      err => console.error(err),
+      (err: HttpErrorResponse) => {
+        if (err.error instanceof Error) {
+          // A client-side or network error occurred. Handle it accordingly.
+          console.log('An error occurred:', err.error.message);
+          this.displayHttpError = 'There was an error message on the client side, please check your connectivity and try again later.';
+        } else {
+          // The backend returned an unsuccessful response code.
+          // The response body may contain clues as to what went wrong,
+          this.displayHttpError = 'There was an error message from the server. Please try again later.';
+          console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
+        }
+      },
       () => {
         this.isDone = true;
         this.ckSrStatussubmitted = true;

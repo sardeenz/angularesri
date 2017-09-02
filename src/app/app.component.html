@@ -1,12 +1,7 @@
 <md-toolbar color="primary">
     <a href="http://www.raleighnc.gov/">
-        <!-- <span>
-            <md-icon svgIcon="city_seal"></md-icon>
-            </span> -->
         <img alt="Official City of Raleigh Seal" class="logo" src="./assets/City-Seal-BW.png">
-
     </a>
-
     <span>Solid Waste Services Missed Pickup</span>
     <button md-icon-button [mdMenuTriggerFor]="menu">   
       <md-icon>more_vert</md-icon>
@@ -14,10 +9,6 @@
 </md-toolbar>
 
 <md-menu #menu="mdMenu">
-    <!-- <button md-menu-item (click)="openDialog('about')">
-        <md-icon>info_outline</md-icon>
-        <span>About</span>
-        </button> -->
     <button md-menu-item (click)="openDialog('help')">
             <md-icon>help</md-icon>
       <span>Need Help?</span>
@@ -32,27 +23,12 @@
             </md-card-title>
         </md-card-header>
         <md-card-content>
-            <!-- <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)"> -->
             <form [formGroup]="myForm" novalidate (ngSubmit)="save(myForm.value, myForm.valid)">
-
-                <!-- <h3>Choose the type of missed collection</h3> -->
-                <!-- <md-button-toggle-group formControlName="problemSid" name="collectionTypes">
-                    <md-button-toggle>Garbage</md-button-toggle>
-                    <md-button-toggle value='263552'>Recycling</md-button-toggle>
-                    <md-button-toggle value='263553'>Yard Waste</md-button-toggle>
-                </md-button-toggle-group> -->
-
                 <md-button-toggle-group name="collectionTypes" formControlName="problemSid">
                     <md-button-toggle *ngFor="let problemSid of problemSids" [value]="problemSid.value">
                         {{problemSid.display}}
                     </md-button-toggle>
                 </md-button-toggle-group>
-
-                <!-- <md-select formControlName="problemSid">
-                    <md-option *ngFor="let problemSid of problemSids" [value]="problemSid.value">
-                        {{problemSid.display}}
-                    </md-option>
-                </md-select> -->
                 <div *ngIf="myForm.controls.problemSid.value == '263551'">
                     <p>
                         <br/> Click <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">here</a> to get more information on Garbage Preparation.
@@ -68,11 +44,6 @@
                         <br/> Click <a href="http://www.raleighnc.gov/home/content/SolidWaste/Articles/GarbagePreparation.html" target="_blank">here</a> to get more information on Yard Waste Preparation.
                     </p>
                 </div>
-                <!--<p>
-                    <button class="map-md-card" md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!myForm.valid || submitted">Submit</button>
-                </p>-->
-
-
                 <h3>Enter the Address of the Missed Pickup Location</h3>
                 <md-input-container class="wider" hintLabel="ex. 123 Main St.">
                     <input mdInput type="text" (change)='recycleDay()' formControlName="callerAddress" [mdAutocomplete]="auto" placeholder="Street Address">
@@ -91,28 +62,12 @@
                         </md-error>
                     </p>
                 </div>
-
-
-
-                <!-- <p>
-                    <md-input-container>
-                        <input mdInput type="text" formControlName="callerCity" placeholder="City">
-                    </md-input-container>
-                </p>
-                <md-input-container>
-                    <input mdInput type="text" formControlName="callerState" placeholder="State">
-                </md-input-container>
-                <p> -->
                 <p>
                     <md-input-container class="wide" hintLabel='Email is optional: Enter your email to recieve updates on your request'>
                         <input mdInput type="text" formControlName="callerEmail" placeholder="Email Address">
                         <md-error *ngIf="myForm.controls.callerEmail.hasError('pattern')">
                             Please enter a valid email address
                         </md-error>
-                        <!-- <md-error *ngIf="myForm.controls.callerEmail.hasError('required')">
-                            Email is required
-                        </md-error> -->
-                        <!-- <md-hint align="start"><strong>Email is not required, but will notify you of updates to your request.</strong> </md-hint> -->
                     </md-input-container>
                 </p>
                 <p>
@@ -131,7 +86,6 @@
                 </md-input-container>
                 <br>
                 <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
-                <!-- <div *ngIf="isDone && authResponse.requestId != ''">Your Service Request ID is {{authResponse.requestId | json}}</div> -->
                 <br>
                 <div *ngIf="isDone && authResponse.requestId != ''">We apologize for the inconvenience. Your Service Request number is {{authResponse.requestId | json}} and your {{problemSidDisplay}} will be collected within two business days, not including weekends. Your container must be at the curb
                     from 7am to 5pm, starting now and until collected.</div>
@@ -160,12 +114,7 @@
             <h3>Check status of an existing Service Request</h3>
             <md-input-container hintLabel='If you have a pending Service Request ID, enter it here'>
                 <input mdInput type="text" formControlName="srInputId" placeholder="Request ID">
-                <!-- <md-error *ngIf="subForm.controls.srInputId.hasError('pattern')">
-                        Please enter a valid email address
-                    </md-error> -->
             </md-input-container>
-            <!-- <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button> -->
-
             <md-progress-bar *ngIf="ckSrStatussubmitted && srStatus === '' && ckStatus" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
             <p *ngIf="srStatus != ''">You Service Request is in '{{srStatus}}' status.</p>
             <div *ngIf="srStatus != 'CLOSED' && srStatus != '' && srStatus != 'COMPLETE'">Your requested item will be collected within two business days, not including weekends.</div>
@@ -179,7 +128,3 @@
     </md-card-actions>
 
 </md-card>
-
-<!-- <md-card class="map-md-card" *ngIf="this.myForm.get('callerAddress').value != ''">
-    <app-esri-map></app-esri-map>
-</md-card> -->

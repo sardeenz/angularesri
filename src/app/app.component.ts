@@ -32,33 +32,8 @@ export class AppComponent implements OnInit {
   isOdd: boolean;
   isRecyclingWeek: string;
   isNotRecyclingWeek: boolean;
-  getWeek(arg0: any): any {
-    this.week = arg0;
-    console.log('getWeek = ', this.week);
-
-    console.log('moment = ', moment().week());
-    this.isOdd = (moment().week() % 2) === 1;
-    console.log('actual week number = ', moment().week());
-    console.log('isOdd = ', this.isOdd);
-
-    // if (this.week === 'A' && this.isOdd) {
-    //   this.isRecyclingWeek = 'This week is your Recycling week.';
-    // } else if (this.week === 'B' && !this.isOdd) {
-
-    // }
-    // this.isNotRecyclingWeek = false;
-    // if (this.week === 'A' && this.isOdd) {
-    //   this.isRecyclingWeek = 'This week is your Recycling week.';
-    //   this.isNotRecyclingWeek = false;      
-    // } else {
-    //   this.isRecyclingWeek = 'This week is not your Recycling week.';
-    //   this.isNotRecyclingWeek = true;
-    // }
-  }
-
   ckSrStatussubmitted: boolean;
   geocodedata: any;
-
   prjCompleteDate: Date;
   prjCompleteStr: string;
   options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
@@ -67,19 +42,15 @@ export class AppComponent implements OnInit {
   submitted: boolean = false; // keep track on whether form is submitted
   isDone: boolean = false;
   ckStatus: boolean = false;
-
   testCandidates = [];
-
   items: Observable<Array<Candidate>>;
   private anyErrors: boolean;
   public subscription;
   public coords;
   public coordsArray = [];
   public week;
-
   cards: Array<number>;
   cardIndex: number;
-
   someAddress = '';
   srStatus = '';
   requestId: any;
@@ -87,13 +58,10 @@ export class AppComponent implements OnInit {
   addressOptions = [];
   //filteredOptions: Observable<string[]>;
   filteredOptions: any;
-
   map: any;
   public authResponse;
   user: User;
   public data;
-  //geodata = new Geodata();
-  //geodata: Geodata;
   collectionareas: Collectionareas;
 
   public problemSids = [
@@ -110,6 +78,16 @@ export class AppComponent implements OnInit {
     iconRegistry.addSvgIcon(
       'city_seal',
       sanitizer.bypassSecurityTrustResourceUrl('assets/favicon.svg'));
+  }
+
+  getWeek(arg0: any): any {
+    this.week = arg0;
+    console.log('getWeek = ', this.week);
+
+    console.log('moment = ', moment().week());
+    this.isOdd = (moment().week() % 2) === 1;
+    console.log('actual week number = ', moment().week());
+    console.log('isOdd = ', this.isOdd);
   }
 
   recycleDay() {

@@ -23,7 +23,7 @@ export class FilteraddressService {
     // .map((Geocode: Geocode) => Geocode);
 
     // TODO: only return 
-        return this.http.get(encodeURI(this.urlGeocoder1) + encodeURIComponent(address) + ('&City=raleigh'))
+        return this.http.get(encodeURI(this.urlGeocoder) + encodeURIComponent(address) + ('&City=raleigh'))
     .map((Geocode: Geocode) => Geocode.candidates);
 
     // console.log('geoAddress = ', encodeURI(this.urlgeocoder) + encodeURIComponent(address));

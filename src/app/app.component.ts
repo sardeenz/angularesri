@@ -1,4 +1,4 @@
-import {HttpErrorResponse} from '@angular/common/http';
+import { HttpErrorResponse } from '@angular/common/http';
 import { ValidateFn } from 'codelyzer/walkerFactory/walkerFn';
 import { FilteraddressService } from './filteraddress.service';
 import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms';
@@ -113,83 +113,34 @@ export class AppComponent implements OnInit {
   }
 
   recycleDay() {
-    console.log('this.testCandidates',this.testCandidates);
+    console.log('this.testCandidates', this.testCandidates);
     //if address from testCandidates exactly matches address from for, get coordindates and pass them to get trash day.
     //console.log('this.testCandidates',this.testCandidates.forEach(this.myForm.get('callerAddress').value === testCandidates.address));
-    
-    for (let addressEntry in this.testCandidates) {
+
+    for (const addressEntry in this.testCandidates) {
       console.log('addressEntry', addressEntry);
       if (this.testCandidates[addressEntry].address === this.myForm.get('callerAddress').value) {
         console.log('we have a match on address, heres its coordinates', this.testCandidates[addressEntry].location);
 
         this.geocodeService.getTrashDay(this.testCandidates[addressEntry].location).subscribe(
-          data => {this.collectionareas = data; this.getWeek(this.collectionareas.features[0].attributes.WEEK);},
+          data => { this.collectionareas = data; this.getWeek(this.collectionareas.features[0].attributes.WEEK); },
           err => console.error(err),
-          () => { console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
-        
-          if (this.week === 'A' && this.isOdd) {
-            this.isRecyclingWeek = 'This week is your Recycling week.';
-            this.isNotRecyclingWeek = false;      
-          } else {
-            this.isRecyclingWeek = 'This week is not your Recycling week.';
-            this.isNotRecyclingWeek = true;
-          }
-        
-        });
+          () => {
+            console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
+
+            if (this.week === 'A' && this.isOdd) {
+              this.isRecyclingWeek = 'This week is your Recycling week.';
+              this.isNotRecyclingWeek = false;
+            } else {
+              this.isRecyclingWeek = 'This week is not your Recycling week.';
+              this.isNotRecyclingWeek = true;
+            }
+
+          });
 
       }
     }
-
-    // this.isNotRecyclingWeek = false;
-    // console.log('Just before logic of week and isOdd',this.week);
-    // if (this.week === 'A' && this.isOdd) {
-    //   this.isRecyclingWeek = 'This week is your Recycling week.';
-    //   this.isNotRecyclingWeek = false;      
-    // } else {
-    //   this.isRecyclingWeek = 'This week is not your Recycling week.';
-    //   this.isNotRecyclingWeek = true;
-    // }
-    // take the final address that has been inputted and get only it's coordinates
-    // shouldn't have to do this since we already have all coordinates
-    // this.filteraddressService.getGeometry(this.myForm.get('callerAddress').value);
-
-    // console.log('count of array = ', this.arrayCnt);
-    // this.coords = this.coordsArray[this.arrayCnt];
-    // console.log('inside recycleDay - this.coords', this.coords);
-    //let recycleAddress = this.myForm.get('callerAddress').value;
-    // this.geocodeService.getTrashDay(this.coords).subscribe(
-    //   data => {this.collectionareas = data; this.getWeek(this.collectionareas.features[0].attributes.WEEK);},
-    //   err => console.error(err),
-    //   () => { console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
-    //   });
-    
-
-    // console.log('inside collectionareas', this.week);
-
-    // this.esriMapComponent.recycleDay(recycleAddress);
   }
-
-  zoomToMap() {
-    this.esriMapComponent.gotoView(this.myForm.get('callerAddress').value);
-  }
-
-  // save(model: User, isValid: boolean) {
-  //   model.address = this.myForm.get('callerAddress').value;
-  //   this.submitted = true;
-  //   this.ckSrStatussubmitted = true;
-  //   this._servicerequestService.createServiceRequest(model).subscribe(
-  //     data => this.authResponse = data,
-  //     err => console.error(err),
-  //     () => {
-  //       this.isDone = true;
-  //       this.ckSrStatussubmitted = true;
-  //       if (this.authResponse.requestId === '') {
-  //         console.log('no ServiceRequest ID was returned');
-  //       }
-  //       console.log('this response is ', this.authResponse);
-  //     }
-  //   );
-  // }
 
   save(model: User, isValid: boolean) {
     this.problemSidDisplay = this.myForm.controls.problemSid.value;
@@ -201,10 +152,10 @@ export class AppComponent implements OnInit {
       this.problemSidDisplay = 'Yard Waste'
     }
 
-
     model.address = this.myForm.get('callerAddress').value;
     this.submitted = true;
     this.ckSrStatussubmitted = true;
+
     this._servicerequestService.createServiceRequest(model).subscribe(
       data => this.authResponse = data,
       (err: HttpErrorResponse) => {
@@ -242,23 +193,17 @@ export class AppComponent implements OnInit {
         }
         this.prjCompleteDate = this.authResponse.Value.PrjCompleteDate;
         this.prjCompleteDate = new Date(this.authResponse.Value.PrjCompleteDate);
-
         this.prjCompleteStr = this.prjCompleteDate.toLocaleDateString("en-US", this.options);
-        //this.prjCompleteDate = new Date(this.prjCompleteDate);
         console.log('sr status from Cityworks = ', this.authResponse.Value);
       });
   }
 
   ngOnInit() {
-    // reset array 
-    //this.candidate.slice(0,1);
-    
     const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const PHONE_REGEX = /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/;
     this.myForm = this._fb.group({
       problemSid: [this.problemSids[0].value],
       callerFirstName: [''],
-      // callerLastName: ['', [<any>Validators.required]],
       callerAddress: ['', <any>Validators.required],
       address: [''],
       callerCity: ['Raleigh'],
@@ -273,66 +218,18 @@ export class AppComponent implements OnInit {
       srInputId: ['', [<any>Validators.maxLength(6), <any>Validators.minLength(6), <any>Validators.required]]
     });
 
-    // this.cards = [0];
-    // this.cardIndex = 0;
-
-    // this.filteredOptions = this.myForm.get('callerAddress').valueChanges.startWith(null)
-    // .map(val => val ? this.filter(val) : console.log('inside slice', val));
-
-    // variable 'x' below is whatever is passed to the observable of valuechanges
+    // ProTip: variable 'x' below is whatever is passed to the observable of valuechanges
     this.items = this.myForm.get('callerAddress').valueChanges
       .debounceTime(300)
       .distinctUntilChanged()
       .switchMap((x) => this.filteraddressService.getGeometry(x));
-    
-    // this is getting the last set of coordinates I think.
+
     this.subscription = this.items.subscribe(
-      // x => x.map(res => this.arrayCnt = this.coordsArray.push(res.location), // also push the res.address from type Candidate
-      x => x.map(res => this.arrayCnt = this.testCandidates.push(res), // also push the res.address from type Candidate
-      
-      this.coords = this.coordsArray[this.arrayCnt]), 
-      // x => x.map(res => console.log('x.map = ', this.arrayCnt = this.coordsArray.push(res.location))),
+      x => x.map(res => this.arrayCnt = this.testCandidates.push(res),
+        this.coords = this.coordsArray[this.arrayCnt]),
       error => this.anyErrors = true,
       () => console.log('finished items subscription')
     );
-    console.log('this.coordsArray = ', this.coordsArray);
-    //this.coords = this.coordsArray[0];
-    console.log('this.coords = ', this.coords);
-  }
-
-  filter(val: string): string[] {
-    // this.geocodeService.getGeometry(val).subscribe(geocodedata => this.geocodedata = geocodedata,
-    this.geocodeService.getGeometry(val).subscribe(geocodedata => this.geocodedata = geocodedata,
-      err => console.error(err),
-      () => {
-        // add a splice here or something to remove stuff from addressOptions array
-        console.log('val = ', val);
-        //this.addressOptions.splice(0,1);
-        for (val in this.geocodedata.candidates) {
-          if (this.geocodedata.candidates[val].attributes.Loc_name == "WakeStreets") {
-            this.addressOptions.push(this.geocodedata.candidates[val].address);
-          }
-        }
-      });
-
-    console.log('this.addressOptions = ', this.addressOptions);
-    return this.addressOptions.filter(addressOption => new RegExp(`^${val}`, 'gi').test(addressOption));
-  }
-
-  // displayFn(val: string): string {
-  //     return val;
-  //  }
-
-  getPreviousCard() {
-    //this.cards.push(this.cards.length + 1);
-    this.cardIndex -= 1;
-    console.log('this previous cards full array', this.cardIndex);
-  }
-
-  getNextCard() {
-    //this.cards.push(this.cards.length + 1);
-    this.cardIndex += 1;
-    console.log('this cards full array', this.cardIndex);
   }
 
   openDialog(page: string) {

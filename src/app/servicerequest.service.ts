@@ -9,12 +9,18 @@ import { User } from './user';
 export class ServicerequestService {
 
   public user: User;
+  results: string[];
 
   // private srUrl = 'http://scfp.raleighnc.gov/cityworks/Services/AMS/Authentication/Authenticate';
   // private fuseUrl = 'http://rhsoaprdapp1.ci.raleigh.nc.us:8183/RaleighAPI/cityworks/createServiceRequest';
 
   private createSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/createServiceRequest/';
-  private getSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/getServiceRequest/';
+  //private getSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/getServiceRequest/';
+
+  private getSRUrl = 'https://apps.raleighnc.gov/getServiceRequest/';
+  
+
+  private getSrGatewayUrl = 'http://localhost:8080/createServiceRequest';
 
 
   public testAuth = JSON.parse('{"LoginName":"pwadmin","Password":"pw2dmin"}');
@@ -35,27 +41,23 @@ export class ServicerequestService {
   constructor(private http: Http) { }
 
   createServiceRequest(user): Observable<string> {
-
-    // for authentication to Cityworks use urlencoded
-    // let headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' }); // ... Set content type to JSON
-    // for Cityworks API we need data= prefix
-    // return this.http.post(this.srUrl, 'data= ' + jsonStr, options).map((res: Response) => res.json());
-
-    console.log('form = ', JSON.stringify(user));
-    let user_request = JSON.stringify(user);
-
+    const user_request = JSON.stringify(user);
     const headers = new Headers({ 'Content-Type': 'application/json' });
     const options = new RequestOptions({ headers: headers }); // Create a request option
-    // return this.http.post(this.srUrl, this.testSr, options).map((res: Response) => res.json());
     return this.http.post(this.createSRUrl, user_request, options).map((res: Response) => res.json());
+  }
 
+  testGateway() {
+    return this.http.get('http://localhost:8080/ip').map((res: Response) => res.json());
   }
 
   getServiceRequest(requestid: string) {
     console.log('getSR url = ', this.getSRUrl + 'requestid');
-    const headers = new Headers({ 'Content-Type': 'application/json' });
-    const options = new RequestOptions({ headers: headers }); // Create a request option
+     const headers = new Headers({ 'Content-Type': 'application/x-www-form-urlencoded' });
+     const options = new RequestOptions({ headers: headers }); // Create a request option
+    
     // return this.http.post(this.srUrl, this.testSr, options).map((res: Response) => res.json());
+    //return this.http.get(this.getSRUrl + requestid, options).map((res: Response) => res.json());
     return this.http.get(this.getSRUrl + requestid, options).map((res: Response) => res.json());
   }
 

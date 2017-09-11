@@ -137,29 +137,29 @@ export class AppComponent implements OnInit {
     this.ckSrStatussubmitted = true;
 
     // testing 123
-    this._servicerequestService.testGateway().subscribe(
-      data => this.authResponse = data,
-      (err: HttpErrorResponse) => {
-        if (err.error instanceof Error) {
-          // A client-side or network error occurred. Handle it accordingly.
-          console.log('An error occurred:', err.error.message);
-          this.displayHttpError = 'There was an error message on the client side, please check your connectivity and try again later.';
-        } else {
-          // The backend returned an unsuccessful response code.
-          // The response body may contain clues as to what went wrong,
-          this.displayHttpError = 'There was an error message from the server. Please try again later.';
-          console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
-        }
-      },
-      () => {
-        this.isDone = true;
-        this.ckSrStatussubmitted = true;
-        if (this.authResponse.requestId === '') {
-          console.log('no ServiceRequest ID was returned');
-        }
-        console.log('this response is ', this.authResponse);
-      }
-    );
+    // this._servicerequestService.testGateway().subscribe(
+    //   data => this.authResponse = data,
+    //   (err: HttpErrorResponse) => {
+    //     if (err.error instanceof Error) {
+    //       // A client-side or network error occurred. Handle it accordingly.
+    //       console.log('An error occurred:', err.error.message);
+    //       this.displayHttpError = 'There was an error message on the client side, please check your connectivity and try again later.';
+    //     } else {
+    //       // The backend returned an unsuccessful response code.
+    //       // The response body may contain clues as to what went wrong,
+    //       this.displayHttpError = 'There was an error message from the server. Please try again later.';
+    //       console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
+    //     }
+    //   },
+    //   () => {
+    //     this.isDone = true;
+    //     this.ckSrStatussubmitted = true;
+    //     if (this.authResponse.requestId === '') {
+    //       console.log('no ServiceRequest ID was returned');
+    //     }
+    //     console.log('this response is ', this.authResponse);
+    //   }
+    // );
 
     this._servicerequestService.createServiceRequest(model).subscribe(
       data => this.authResponse = data,

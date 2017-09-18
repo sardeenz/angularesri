@@ -22,9 +22,11 @@ import * as moment from 'moment';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css']
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  newweek: string;
+  addressFinal = [];
   problemSidDisplay: string;
   public cands: Candidate;
   displayHttpError: string;
@@ -44,6 +46,7 @@ export class AppComponent implements OnInit {
   ckStatus: boolean = false;
   testCandidates = [];
   items: Observable<Array<Candidate>>;
+  newAddress: Observable<Array<Candidate>>;
   private anyErrors: boolean;
   public subscription;
   public coords;
@@ -81,8 +84,8 @@ export class AppComponent implements OnInit {
   }
 
   getWeek(arg0: any): any {
-    this.week = arg0;
-    console.log('getWeek = ', this.week);
+    this.newweek = arg0;
+    console.log('getWeek = ', this.newweek);
 
     console.log('moment = ', moment().week());
     this.isOdd = (moment().week() % 2) === 1;
@@ -92,23 +95,47 @@ export class AppComponent implements OnInit {
 
   recycleDay() {
 
+    console.log('this.addressFinal = ', this.addressFinal[0]);
+
+    // this.items = this.myForm.get('callerAddress').valueChanges
+    //   .debounceTime(300)
+    //   .distinctUntilChanged()
+    //   .switchMap((x) => this.filteraddressService.getGeometry(x));
+
+    // this.subscription = this.items.subscribe(
+    //   x => x.map(res => this.arrayCnt = this.testCandidates.push(res),
+    //     this.coords = this.coordsArray[this.arrayCnt]),
+    //   error => this.anyErrors = true,
+    //   () => console.log('finished items subscription')
+    // );
 
     console.log('this.testCandidates', this.testCandidates);
-    //if address from testCandidates exactly matches address from for, get coordindates and pass them to get trash day.
-    //console.log('this.testCandidates',this.testCandidates.forEach(this.myForm.get('callerAddress').value === testCandidates.address));
+    // if address from testCandidates exactly matches address from for, get coordindates and pass them to get trash day.
 
     for (const addressEntry in this.testCandidates) {
-      console.log('addressEntry', addressEntry);
       if (this.testCandidates[addressEntry].address === this.myForm.get('callerAddress').value) {
         console.log('we have a match on address, heres its coordinates', this.testCandidates[addressEntry].location);
-
+        console.log('addressEntry', addressEntry);
         this.geocodeService.getTrashDay(this.testCandidates[addressEntry].location).subscribe(
-          data => { this.collectionareas = data; this.getWeek(this.collectionareas.features[0].attributes.WEEK); },
+          data => { this.collectionareas = data; 
+            for (var i=0; i < this.collectionareas.features.length; i++){
+              if(this.collectionareas.features[i].attributes.WEEK){
+                  this.newweek = this.collectionareas.features[i].attributes.WEEK;
+                  console.log('newweek in if = ', this.newweek);
+                  this.getWeek(this.newweek);
+              }
+          }
+            // this.getWeek(this.collectionareas.features[0].attributes.WEEK); 
+            
+          },
           err => console.error(err),
           () => {
             console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
 
-            if (this.week === 'A' && this.isOdd) {
+            if (this.newweek === 'A' && this.isOdd) {
+              this.isRecyclingWeek = 'This week is your Recycling week.';
+              this.isNotRecyclingWeek = false;
+            } else if (this.newweek === 'B' && !this.isOdd){
               this.isRecyclingWeek = 'This week is your Recycling week.';
               this.isNotRecyclingWeek = false;
             } else {
@@ -117,9 +144,60 @@ export class AppComponent implements OnInit {
             }
 
           });
+      } else {
+        // go get coords and trashday
+        // this.newAddress = this.filteraddressService.getGeometry(this.myForm.get('callerAddress'));
+        // console.log('newAddress = ', this.newAddress);
 
-      }
-    }
+        // actually using 1st returned coords anyways
+        // console.log('inside else!!!!!!!!!!!!!!');
+        //this.testCandidates.splice(0);
+
+        // this.items = this.myForm.get('callerAddress').valueChanges
+        // .debounceTime(300)
+        // .distinctUntilChanged()
+        // .switchMap((x) => this.filteraddressService.getGeometry(x));
+  
+        //  () => this.addressFinal = this.myForm.get('callerAddress').value);
+      // this.subscription = this.items.subscribe(
+      //   x => x.map(res => this.arrayCnt = this.testCandidates.push(res),
+      //     this.coords = this.coordsArray[this.arrayCnt]),
+      //   error => this.anyErrors = true,
+      //   () => console.log('finished items subscription')
+      // );
+
+
+        this.geocodeService.getTrashDay(this.testCandidates[addressEntry].location).subscribe(
+          data => { this.collectionareas = data; 
+             for (var i=0; i < this.collectionareas.features.length; i++) {
+              if (this.collectionareas.features[i].attributes.WEEK) {
+                  this.newweek = this.collectionareas.features[i].attributes.WEEK;
+                  console.log('newweek in else = ', this.newweek);
+                  this.getWeek(this.newweek);
+              }
+           }
+          
+            //this.getWeek(this.collectionareas.features[0].attributes.WEEK); 
+          
+          },
+          err => console.error(err),
+          () => {
+            // console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
+
+            if (this.newweek === 'A' && this.isOdd) {
+              this.isRecyclingWeek = 'This week is your Recycling week.';
+              this.isNotRecyclingWeek = false;
+            } else if (this.newweek === 'B' && !this.isOdd){
+              this.isRecyclingWeek = 'This week is your Recycling week.';
+              this.isNotRecyclingWeek = true;
+            } else {
+              this.isRecyclingWeek = 'This week is not your Recycling week.';
+              this.isNotRecyclingWeek = true;
+            }
+
+          });
+       }
+    } 
   }
 
   save(model: User, isValid: boolean) {
@@ -222,19 +300,23 @@ export class AppComponent implements OnInit {
     this.subForm = this._fb.group({
       srInputId: ['', [<any>Validators.maxLength(6), <any>Validators.minLength(6), <any>Validators.required]]
     });
-
+    this.testCandidates.splice(0);
+    console.log('this.testCandidates CHF = ', this.testCandidates.length);
     // ProTip: variable 'x' below is whatever is passed to the observable of valuechanges
     this.items = this.myForm.get('callerAddress').valueChanges
       .debounceTime(300)
       .distinctUntilChanged()
       .switchMap((x) => this.filteraddressService.getGeometry(x));
 
+      //  () => this.addressFinal = this.myForm.get('callerAddress').value);
     this.subscription = this.items.subscribe(
       x => x.map(res => this.arrayCnt = this.testCandidates.push(res),
         this.coords = this.coordsArray[this.arrayCnt]),
       error => this.anyErrors = true,
       () => console.log('finished items subscription')
     );
+    this.testCandidates.splice(0);
+    console.log('this.testCandidates CHF = ', this.testCandidates.length);
   }
 
   openDialog(page: string) {

@@ -53,11 +53,20 @@
                         {{ item.address }}
                     </md-option>
                 </md-autocomplete>
-                {{isRecyclingWeek}}
+                <p>
+                    {{isRecyclingWeek}} {{newweek}}
+                </p>
+                <a *ngIf="(newweek === 'A')">
+                     Click <a href="https://www.raleighnc.gov/content/SolidWaste/Documents/Calendars/SWSCalendarAWeekGreen.pdf" target="_blank">here</a> to download your Recycle calendar for week A.
+
+                </a>
+                <a *ngIf="(newweek === 'B')">
+                     Click <a href="https://www.raleighnc.gov/content/SolidWaste/Documents/Calendars/SWSCalendarBWeekBlue.pdf" target="_blank">here</a> to download your Recycle calendar for week B.
+                </a>
 
                 <div *ngIf="myForm.controls.problemSid.value == '263552'">
                     <p>
-                        <md-error *ngIf="(week === 'A' || week === 'B') && isNotRecyclingWeek">
+                        <md-error *ngIf="(newweek === 'A' || newweek === 'B') && isNotRecyclingWeek">
                             You have selected a missed pickup for Recycling, but your Recycling service is not scheduled to be picked up this week. Residential Recycling is collected every other week.
                         </md-error>
                     </p>

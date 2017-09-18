@@ -123,6 +123,7 @@ export class AppComponent implements OnInit {
                   this.newweek = this.collectionareas.features[i].attributes.WEEK;
                   console.log('newweek in if = ', this.newweek);
                   this.getWeek(this.newweek);
+                  this.testCandidates.splice(0);
               }
           }
             // this.getWeek(this.collectionareas.features[0].attributes.WEEK); 
@@ -174,6 +175,7 @@ export class AppComponent implements OnInit {
                   this.newweek = this.collectionareas.features[i].attributes.WEEK;
                   console.log('newweek in else = ', this.newweek);
                   this.getWeek(this.newweek);
+                  this.testCandidates.splice(0);
               }
            }
           
@@ -185,13 +187,13 @@ export class AppComponent implements OnInit {
             // console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
 
             if (this.newweek === 'A' && this.isOdd) {
-              this.isRecyclingWeek = 'This week is your Recycling week.';
+              this.isRecyclingWeek = 'This week is your Recycling week. Your week is week';
               this.isNotRecyclingWeek = false;
             } else if (this.newweek === 'B' && !this.isOdd){
-              this.isRecyclingWeek = 'This week is your Recycling week.';
-              this.isNotRecyclingWeek = true;
+              this.isRecyclingWeek = 'This week is your Recycling week. Your week is week';
+              this.isNotRecyclingWeek = false;
             } else {
-              this.isRecyclingWeek = 'This week is not your Recycling week.';
+              this.isRecyclingWeek = 'This week is not your Recycling week. Your week is week';
               this.isNotRecyclingWeek = true;
             }
 

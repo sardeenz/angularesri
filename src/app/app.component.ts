@@ -25,6 +25,8 @@ import * as moment from 'moment';
   styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
+  srNotFound: boolean;
+  msg: string;
   newweek: string;
   addressFinal = [];
   problemSidDisplay: string;
@@ -109,7 +111,6 @@ export class AppComponent implements OnInit {
     //   () => console.log('finished items subscription')
     // );
 
-    console.log('this.testCandidates', this.testCandidates);
     // if address from testCandidates exactly matches address from for, get coordindates and pass them to get trash day.
 
     for (const addressEntry in this.testCandidates) {
@@ -117,32 +118,49 @@ export class AppComponent implements OnInit {
         console.log('we have a match on address, heres its coordinates', this.testCandidates[addressEntry].location);
         console.log('addressEntry', addressEntry);
         this.geocodeService.getTrashDay(this.testCandidates[addressEntry].location).subscribe(
-          data => { this.collectionareas = data; 
-            for (var i=0; i < this.collectionareas.features.length; i++){
-              if(this.collectionareas.features[i].attributes.WEEK){
-                  this.newweek = this.collectionareas.features[i].attributes.WEEK;
-                  console.log('newweek in if = ', this.newweek);
-                  this.getWeek(this.newweek);
-                  this.testCandidates.splice(0);
+          data => {
+            this.collectionareas = data;
+            for (var i = 0; i < this.collectionareas.features.length; i++) {
+              if (this.collectionareas.features[i].attributes.WEEK) {
+                this.newweek = this.collectionareas.features[i].attributes.WEEK;
+                console.log('newweek in if = ', this.newweek);
+                this.getWeek(this.newweek);
+                this.testCandidates.splice(0);
               }
-          }
+            }
             // this.getWeek(this.collectionareas.features[0].attributes.WEEK); 
-            
+
           },
           err => console.error(err),
           () => {
-            console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
+            //console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
 
+            console.log('newweek below is = ', this.newweek);
             if (this.newweek === 'A' && this.isOdd) {
-              this.isRecyclingWeek = 'This week is your Recycling week.';
+              this.isRecyclingWeek = 'This week is your Recycling week. Your week is week';
               this.isNotRecyclingWeek = false;
-            } else if (this.newweek === 'B' && !this.isOdd){
-              this.isRecyclingWeek = 'This week is your Recycling week.';
+            } else if (this.newweek === 'B' && !this.isOdd) {
+              this.isRecyclingWeek = 'This week is your Recycling week. Your week is week';
               this.isNotRecyclingWeek = false;
+            } else if (this.newweek === undefined) {
+              this.msg = '';
+              this.isRecyclingWeek = 'This week is not your Recycling week.' + this.msg;
+              this.isNotRecyclingWeek = true;
             } else {
-              this.isRecyclingWeek = 'This week is not your Recycling week.';
+              this.isRecyclingWeek = 'This week is not your Recycling week. Your week is week';
               this.isNotRecyclingWeek = true;
             }
+
+            // if (this.newweek === 'A' && this.isOdd) {
+            //   this.isRecyclingWeek = 'This week is your Recycling week.';
+            //   this.isNotRecyclingWeek = false;
+            // } else if (this.newweek === 'B' && !this.isOdd) {
+            //   this.isRecyclingWeek = 'This week is your Recycling week.';
+            //   this.isNotRecyclingWeek = false;
+            // } else {
+            //   this.isRecyclingWeek = 'This week is not your Recycling week.';
+            //   this.isNotRecyclingWeek = true;
+            // }
 
           });
       } else {
@@ -158,48 +176,53 @@ export class AppComponent implements OnInit {
         // .debounceTime(300)
         // .distinctUntilChanged()
         // .switchMap((x) => this.filteraddressService.getGeometry(x));
-  
+
         //  () => this.addressFinal = this.myForm.get('callerAddress').value);
-      // this.subscription = this.items.subscribe(
-      //   x => x.map(res => this.arrayCnt = this.testCandidates.push(res),
-      //     this.coords = this.coordsArray[this.arrayCnt]),
-      //   error => this.anyErrors = true,
-      //   () => console.log('finished items subscription')
-      // );
+        // this.subscription = this.items.subscribe(
+        //   x => x.map(res => this.arrayCnt = this.testCandidates.push(res),
+        //     this.coords = this.coordsArray[this.arrayCnt]),
+        //   error => this.anyErrors = true,
+        //   () => console.log('finished items subscription')
+        // );
 
 
         this.geocodeService.getTrashDay(this.testCandidates[addressEntry].location).subscribe(
-          data => { this.collectionareas = data; 
-             for (var i=0; i < this.collectionareas.features.length; i++) {
+          data => {
+            this.collectionareas = data;
+            for (var i = 0; i < this.collectionareas.features.length; i++) {
               if (this.collectionareas.features[i].attributes.WEEK) {
-                  this.newweek = this.collectionareas.features[i].attributes.WEEK;
-                  console.log('newweek in else = ', this.newweek);
-                  this.getWeek(this.newweek);
-                  this.testCandidates.splice(0);
+                this.newweek = this.collectionareas.features[i].attributes.WEEK;
+                console.log('newweek in else = ', this.newweek);
+                this.getWeek(this.newweek);
+                this.testCandidates.splice(0);
               }
-           }
-          
+            }
+
             //this.getWeek(this.collectionareas.features[0].attributes.WEEK); 
-          
+
           },
           err => console.error(err),
           () => {
             // console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
-
+            console.log('newweek below is = ', this.newweek);
             if (this.newweek === 'A' && this.isOdd) {
               this.isRecyclingWeek = 'This week is your Recycling week. Your week is week';
               this.isNotRecyclingWeek = false;
-            } else if (this.newweek === 'B' && !this.isOdd){
+            } else if (this.newweek === 'B' && !this.isOdd) {
               this.isRecyclingWeek = 'This week is your Recycling week. Your week is week';
               this.isNotRecyclingWeek = false;
+            } else if (this.newweek === undefined) {
+              this.msg = '';
+              this.isRecyclingWeek = 'This week is not your Recycling week.' + this.msg;
+              this.isNotRecyclingWeek = true;
             } else {
               this.isRecyclingWeek = 'This week is not your Recycling week. Your week is week';
               this.isNotRecyclingWeek = true;
             }
 
           });
-       }
-    } 
+      }
+    }
   }
 
   save(model: User, isValid: boolean) {
@@ -272,14 +295,21 @@ export class AppComponent implements OnInit {
       err => console.error(err),
       () => {
         this.ckStatus = true;
-        this.srStatus = this.authResponse.Value.Status;
-        if (this.srStatus === 'INPROG') {
-          this.srStatus = 'In Progress';
+        if (this.authResponse.WarningMessages.length < 1) {
+          this.srStatus = this.authResponse.Value.Status;
+          if (this.srStatus === 'INPROG') {
+            this.srStatus = 'In Progress';
+          }
+          if (this.srStatus === 'CLOSED') {
+            this.srStatus = 'Completed';
+          }
+          this.prjCompleteDate = this.authResponse.Value.PrjCompleteDate;
+          this.prjCompleteDate = new Date(this.authResponse.Value.PrjCompleteDate);
+          this.prjCompleteStr = this.prjCompleteDate.toLocaleDateString("en-US", this.options);
+
+        } else {
+          this.srNotFound = true;
         }
-        this.prjCompleteDate = this.authResponse.Value.PrjCompleteDate;
-        this.prjCompleteDate = new Date(this.authResponse.Value.PrjCompleteDate);
-        this.prjCompleteStr = this.prjCompleteDate.toLocaleDateString("en-US", this.options);
-        console.log('sr status from Cityworks = ', this.authResponse.Value);
       });
   }
 
@@ -310,7 +340,7 @@ export class AppComponent implements OnInit {
       .distinctUntilChanged()
       .switchMap((x) => this.filteraddressService.getGeometry(x));
 
-      //  () => this.addressFinal = this.myForm.get('callerAddress').value);
+    //  () => this.addressFinal = this.myForm.get('callerAddress').value);
     this.subscription = this.items.subscribe(
       x => x.map(res => this.arrayCnt = this.testCandidates.push(res),
         this.coords = this.coordsArray[this.arrayCnt]),

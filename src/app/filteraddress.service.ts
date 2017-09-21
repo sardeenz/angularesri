@@ -12,7 +12,7 @@ export class FilteraddressService {
   private urlGeocoder3 = 'http://maps.raleighnc.gov/arcgis/rest/services/Locators/RPD_Locator/GeocodeServer/findAddressCandidates?SingleLine=&category=&outFields=*&maxLocations=&outSR=4326&searchExtent=&location=&distance=&magicKey=&f=json&Street=';
   
   private urlGeocoder1 = 'http://maps.raleighnc.gov/arcgis/rest/services/Locators/Composite/GeocodeServer/findAddressCandidates?SingleLine=&category=&outFields=&maxLocations=&outSR=4326&searchExtent=&location=&distance=&magicKey=&f=json&Address=';
-  private urlGeocoder = 'http://maps.raleighnc.gov/arcgis/rest/services/Locators/CompositeLocator/GeocodeServer/findAddressCandidates?SingleLine=&category=&outFields=*&maxLocations=&outSR=4326&searchExtent=&location=&distance=&magicKey=&f=json&Street=';
+  private urlGeocoder = 'https://maps.raleighnc.gov/arcgis/rest/services/Locators/CompositeLocator/GeocodeServer/findAddressCandidates?SingleLine=&category=&outFields=*&maxLocations=&outSR=4326&searchExtent=&location=&distance=&magicKey=&f=json&Street=';
 
   constructor(private http: HttpClient) { }
 

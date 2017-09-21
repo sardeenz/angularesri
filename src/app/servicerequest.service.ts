@@ -15,11 +15,11 @@ export class ServicerequestService {
   // private srUrl = 'http://scfp.raleighnc.gov/cityworks/Services/AMS/Authentication/Authenticate';
   // private fuseUrl = 'http://rhsoaprdapp1.ci.raleigh.nc.us:8183/RaleighAPI/cityworks/createServiceRequest';
 
-  //private createSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/createServiceRequest/';
-  private createSRUrl = 'https://apps.raleighnc.gov/createServiceRequest/';
+  private createSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/createServiceRequest/';
+  //private createSRUrl = 'https://apps.raleighnc.gov/createServiceRequest/';
 
-  //private getSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/getServiceRequest/';
-  private getSRUrl = 'https://apps.raleighnc.gov/getServiceRequest/';
+  private getSRUrl = 'http://rhsoatstapp1.ci.raleigh.nc.us:8182/RaleighAPI/cityworks/getServiceRequest/';
+  //private getSRUrl = 'https://apps.raleighnc.gov/getServiceRequest/';
   
 
   private createSrGatewayUrl = 'http://localhost:8080/createServiceRequest';
@@ -50,8 +50,8 @@ export class ServicerequestService {
     
     const options = new RequestOptions(); // Create a request option
     options.headers = new Headers();
-    options.headers.append('Content-Type', 'application/json');
-    options.headers.append('Authorization', 'apiKey 2s65C3hgY9H4Po3Ufj62zI:5xVgdF6KYHnV2bHkkGnl8N');
+     options.headers.append('Content-Type', 'application/json');
+    // options.headers.append('Authorization', 'apiKey 2s65C3hgY9H4Po3Ufj62zI:5xVgdF6KYHnV2bHkkGnl8N');
     
 
     // this works only with httpclient
@@ -74,8 +74,8 @@ export class ServicerequestService {
 
     this.options = new RequestOptions({
       headers: new Headers({
-        'Content-Type': 'application/json',
-        'Authorization': 'apiKey 2s65C3hgY9H4Po3Ufj62zI:5xVgdF6KYHnV2bHkkGnl8N'
+        // 'Content-Type': 'application/json',
+        // 'Authorization': 'apiKey 2s65C3hgY9H4Po3Ufj62zI:5xVgdF6KYHnV2bHkkGnl8N'
         // And more
       })
     });

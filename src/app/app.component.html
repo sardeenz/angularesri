@@ -97,11 +97,11 @@
                 <br>
                 <div *ngIf="isDone && authResponse.requestId == ''">There was a problem generating your Service Request. Please try again. {{authResponse.message}}</div>
                 <br>
-                <div *ngIf="isDone && authResponse.requestId != ''">We apologize for the inconvenience. Your Service Request number is {{authResponse.requestId | json}} and your {{problemSidDisplay}} will be collected within two business days, not including weekends. Your container must be at the curb
-                    from 7am to 5pm, starting now and until collected.</div>
+                <div *ngIf="isDone && authResponse.requestId != ''">We apologize for the inconvenience. Your Service Request number is {{authResponse.requestId | json}}. Your {{problemSidDisplay}} will be collected within two business days, not including weekends. Your container must be at the curb from
+                    7am to 5pm each day until collected.</div>
 
             </form>
-            <md-progress-bar *ngIf="!isDone && submitted && ckSrStatussubmitted && !displayHttpError" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+            <md-progress-bar *ngIf="!isDone && submitted && !displayHttpError" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
             <div>
                 {{displayHttpError}}
             </div>
@@ -127,17 +127,17 @@
             </md-input-container>
             <br>
             <br>
-            <md-progress-bar *ngIf="ckSrStatussubmitted && !srNotFound && !ckStatus" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
+            <md-progress-bar *ngIf="ckSrStatussubmitted && !submitted && srStatus.length < 1 && !srNotFound" class="app-progress" mode="indeterminate" aria-label="Indeterminate progress-bar example"></md-progress-bar>
             <p *ngIf="srNotFound">Could not find any Service Requests with that ID.</p>
             <p *ngIf="srStatus != '' && !srNotFound">You Service Request is in '{{srStatus}}' status.</p>
             <div *ngIf="srStatus != 'Completed' && srStatus != '' && srStatus != 'CLOSED'">Your requested item will be collected within two business days, not including weekends.</div>
 
         </form>
     </md-card-content>
-    <md-card-actions style="margin:0 auto;" class="map-md-card">
-        <form class="map-md-card" [formGroup]="subForm" novalidate (ngSubmit)="checkSRStatus()">
-            <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
-        </form>
-    </md-card-actions>
+    <!-- <md-card-actions style="margin:0 auto;" class="map-md-card"> -->
+    <form class="map-md-card" [formGroup]="subForm" novalidate (ngSubmit)="checkSRStatus()">
+        <button md-raised-button color="primary" type="submit" class="btn btn-success" [disabled]="!subForm.valid || submitted">Submit</button>
+    </form>
+    <!-- </md-card-actions> -->
 
 </md-card>

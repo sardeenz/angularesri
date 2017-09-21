@@ -45,7 +45,7 @@ export class AppComponent implements OnInit {
   public subForm: FormGroup; // tiny model driven form
   submitted: boolean = false; // keep track on whether form is submitted
   isDone: boolean = false;
-  ckStatus: boolean = false;
+  ckStatus: boolean;
   testCandidates = [];
   items: Observable<Array<Candidate>>;
   newAddress: Observable<Array<Candidate>>;
@@ -237,7 +237,7 @@ export class AppComponent implements OnInit {
 
     model.address = this.myForm.get('callerAddress').value;
     this.submitted = true;
-    this.ckSrStatussubmitted = true;
+    // this.ckSrStatussubmitted = true;
 
     // testing 123
     // this._servicerequestService.testGateway().subscribe(
@@ -294,7 +294,7 @@ export class AppComponent implements OnInit {
     this._servicerequestService.getServiceRequest(this.subForm.get('srInputId').value).subscribe(data => this.authResponse = data,
       err => console.error(err),
       () => {
-        this.ckStatus = true;
+        this.ckSrStatussubmitted = true;
         if (this.authResponse.WarningMessages.length < 1) {
           this.srStatus = this.authResponse.Value.Status;
           if (this.srStatus === 'INPROG') {
@@ -316,6 +316,7 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     const EMAIL_REGEX = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     const PHONE_REGEX = /^\(?(\d{3})\)?[ .-]?(\d{3})[ .-]?(\d{4})$/;
+    this.ckSrStatussubmitted = false;
     this.myForm = this._fb.group({
       problemSid: [this.problemSids[0].value],
       callerFirstName: [''],

@@ -87,43 +87,27 @@ export class AppComponent implements OnInit {
 
   getWeek(arg0: any): any {
     this.newweek = arg0;
-    console.log('getWeek = ', this.newweek);
+    // console.log('getWeek = ', this.newweek);
 
-    console.log('moment = ', moment().week());
+    // console.log('moment = ', moment().week());
     this.isOdd = (moment().week() % 2) === 1;
-    console.log('actual week number = ', moment().week());
-    console.log('isOdd = ', this.isOdd);
+    // console.log('actual week number = ', moment().week());
+    // console.log('isOdd = ', this.isOdd);
   }
 
   recycleDay() {
 
-    console.log('this.addressFinal = ', this.addressFinal[0]);
-
-    // this.items = this.myForm.get('callerAddress').valueChanges
-    //   .debounceTime(300)
-    //   .distinctUntilChanged()
-    //   .switchMap((x) => this.filteraddressService.getGeometry(x));
-
-    // this.subscription = this.items.subscribe(
-    //   x => x.map(res => this.arrayCnt = this.testCandidates.push(res),
-    //     this.coords = this.coordsArray[this.arrayCnt]),
-    //   error => this.anyErrors = true,
-    //   () => console.log('finished items subscription')
-    // );
-
-    // if address from testCandidates exactly matches address from for, get coordindates and pass them to get trash day.
-
     for (const addressEntry in this.testCandidates) {
       if (this.testCandidates[addressEntry].address === this.myForm.get('callerAddress').value) {
-        console.log('we have a match on address, heres its coordinates', this.testCandidates[addressEntry].location);
-        console.log('addressEntry', addressEntry);
+        // console.log('we have a match on address, heres its coordinates', this.testCandidates[addressEntry].location);
+        // console.log('addressEntry', addressEntry);
         this.geocodeService.getTrashDay(this.testCandidates[addressEntry].location).subscribe(
           data => {
             this.collectionareas = data;
             for (var i = 0; i < this.collectionareas.features.length; i++) {
               if (this.collectionareas.features[i].attributes.WEEK) {
                 this.newweek = this.collectionareas.features[i].attributes.WEEK;
-                console.log('newweek in if = ', this.newweek);
+                // console.log('newweek in if = ', this.newweek);
                 this.getWeek(this.newweek);
                 this.testCandidates.splice(0);
               }
@@ -135,7 +119,7 @@ export class AppComponent implements OnInit {
           () => {
             //console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
 
-            console.log('newweek below is = ', this.newweek);
+            // console.log('newweek below is = ', this.newweek);
             if (this.newweek === 'A' && this.isOdd) {
               this.isRecyclingWeek = 'This week is your Recycling week. Your week is week';
               this.isNotRecyclingWeek = false;
@@ -150,41 +134,8 @@ export class AppComponent implements OnInit {
               this.isRecyclingWeek = 'This week is not your Recycling week. Your week is week';
               this.isNotRecyclingWeek = true;
             }
-
-            // if (this.newweek === 'A' && this.isOdd) {
-            //   this.isRecyclingWeek = 'This week is your Recycling week.';
-            //   this.isNotRecyclingWeek = false;
-            // } else if (this.newweek === 'B' && !this.isOdd) {
-            //   this.isRecyclingWeek = 'This week is your Recycling week.';
-            //   this.isNotRecyclingWeek = false;
-            // } else {
-            //   this.isRecyclingWeek = 'This week is not your Recycling week.';
-            //   this.isNotRecyclingWeek = true;
-            // }
-
           });
       } else {
-        // go get coords and trashday
-        // this.newAddress = this.filteraddressService.getGeometry(this.myForm.get('callerAddress'));
-        // console.log('newAddress = ', this.newAddress);
-
-        // actually using 1st returned coords anyways
-        // console.log('inside else!!!!!!!!!!!!!!');
-        //this.testCandidates.splice(0);
-
-        // this.items = this.myForm.get('callerAddress').valueChanges
-        // .debounceTime(300)
-        // .distinctUntilChanged()
-        // .switchMap((x) => this.filteraddressService.getGeometry(x));
-
-        //  () => this.addressFinal = this.myForm.get('callerAddress').value);
-        // this.subscription = this.items.subscribe(
-        //   x => x.map(res => this.arrayCnt = this.testCandidates.push(res),
-        //     this.coords = this.coordsArray[this.arrayCnt]),
-        //   error => this.anyErrors = true,
-        //   () => console.log('finished items subscription')
-        // );
-
 
         this.geocodeService.getTrashDay(this.testCandidates[addressEntry].location).subscribe(
           data => {
@@ -192,19 +143,16 @@ export class AppComponent implements OnInit {
             for (var i = 0; i < this.collectionareas.features.length; i++) {
               if (this.collectionareas.features[i].attributes.WEEK) {
                 this.newweek = this.collectionareas.features[i].attributes.WEEK;
-                console.log('newweek in else = ', this.newweek);
+                // console.log('newweek in else = ', this.newweek);
                 this.getWeek(this.newweek);
                 this.testCandidates.splice(0);
               }
             }
-
-            //this.getWeek(this.collectionareas.features[0].attributes.WEEK); 
-
           },
           err => console.error(err),
           () => {
             // console.log('done inside getTrashday call', this.week = this.collectionareas.features[0].attributes.WEEK);
-            console.log('newweek below is = ', this.newweek);
+            // console.log('newweek below is = ', this.newweek);
             if (this.newweek === 'A' && this.isOdd) {
               this.isRecyclingWeek = 'This week is your Recycling week. Your week is week';
               this.isNotRecyclingWeek = false;
@@ -237,45 +185,18 @@ export class AppComponent implements OnInit {
 
     model.address = this.myForm.get('callerAddress').value;
     this.submitted = true;
-    // this.ckSrStatussubmitted = true;
-
-    // testing 123
-    // this._servicerequestService.testGateway().subscribe(
-    //   data => this.authResponse = data,
-    //   (err: HttpErrorResponse) => {
-    //     if (err.error instanceof Error) {
-    //       // A client-side or network error occurred. Handle it accordingly.
-    //       console.log('An error occurred:', err.error.message);
-    //       this.displayHttpError = 'There was an error message on the client side, please check your connectivity and try again later.';
-    //     } else {
-    //       // The backend returned an unsuccessful response code.
-    //       // The response body may contain clues as to what went wrong,
-    //       this.displayHttpError = 'There was an error message from the server. Please try again later.';
-    //       console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
-    //     }
-    //   },
-    //   () => {
-    //     this.isDone = true;
-    //     this.ckSrStatussubmitted = true;
-    //     if (this.authResponse.requestId === '') {
-    //       console.log('no ServiceRequest ID was returned');
-    //     }
-    //     console.log('this response is ', this.authResponse);
-    //   }
-    // );
-
     this._servicerequestService.createServiceRequest(model).subscribe(
       data => this.authResponse = data,
       (err: HttpErrorResponse) => {
         if (err.error instanceof Error) {
           // A client-side or network error occurred. Handle it accordingly.
-          console.log('An error occurred:', err.error.message);
+          // console.log('An error occurred:', err.error.message);
           this.displayHttpError = 'There was an error message on the client side, please check your connectivity and try again later.';
         } else {
           // The backend returned an unsuccessful response code.
           // The response body may contain clues as to what went wrong,
           this.displayHttpError = 'There was an error message from the server. Please try again later.';
-          console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
+          // console.log(`Backend returned code ${err.status}, body was: ${err.error}`);
         }
       },
       () => {
@@ -334,7 +255,7 @@ export class AppComponent implements OnInit {
       srInputId: ['', [<any>Validators.maxLength(6), <any>Validators.minLength(6), <any>Validators.required]]
     });
     this.testCandidates.splice(0);
-    console.log('this.testCandidates CHF = ', this.testCandidates.length);
+    // console.log('this.testCandidates CHF = ', this.testCandidates.length);
     // ProTip: variable 'x' below is whatever is passed to the observable of valuechanges
     this.items = this.myForm.get('callerAddress').valueChanges
       .debounceTime(300)
@@ -349,7 +270,7 @@ export class AppComponent implements OnInit {
       () => console.log('finished items subscription')
     );
     this.testCandidates.splice(0);
-    console.log('this.testCandidates CHF = ', this.testCandidates.length);
+    // console.log('this.testCandidates CHF = ', this.testCandidates.length);
   }
 
   openDialog(page: string) {

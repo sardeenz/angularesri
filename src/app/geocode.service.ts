@@ -47,9 +47,9 @@ export class GeocodeService {
     // let geometry = geometryx.concat(','.concat(geometryy));
     let geometry = JSON.stringify(data);
     
-    console.log('geometry w/ xy---------------------------', geometry);
+    // console.log('geometry w/ xy---------------------------', geometry);
 
-    console.log('geometerryyyyURL = ', encodeURI(this.urlTrashDay + geometry + this.urlparms));
+    // console.log('geometerryyyyURL = ', encodeURI(this.urlTrashDay + geometry + this.urlparms));
     return this.http.get(encodeURI(this.urlTrashDay + geometry + this.urlparms)).map((res: Response) => res.json())
       .catch((error: any) => Observable.throw(error.json().error || 'Server error'));
   }
